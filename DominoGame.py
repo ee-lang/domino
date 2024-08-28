@@ -2,15 +2,7 @@ from dataclasses import dataclass
 from typing import List, Tuple, Optional
 import argparse
 import random
-
-@dataclass
-class DominoGameState:
-	played_set: set  # set of played pieces
-	ends: Tuple[int, int]  # (left_end, right_end). (-1, -1) if empty
-	next_player: int  # int[0-3]. next player to move
-	player_tile_counts: List[int]  # number of tiles for each player
-	history: List[Tuple[int, Optional[Tuple[Tuple[int, int], str]]]]  # list of (player, move)
-	variant: str  # "cuban" or "venezuelan"
+from DominoGameState import DominoGameState
 
 class DominoGame:
 	def __init__(self, players, variant="cuban"):

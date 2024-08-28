@@ -1,10 +1,10 @@
-# from DominoGame import DominoGameState, available_moves
+from DominoGameState import DominoGameState
 from typing import List, Tuple, Optional
 from collections import Counter, defaultdict
 
 
 class DominoPlayer:
-	def next_move(self, game_state, player_hand):
+	def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]):
 		raise NotImplementedError('Not implemented.')
 
 	def end_round(self, scores: List[int], team: int):
