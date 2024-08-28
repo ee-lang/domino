@@ -38,10 +38,11 @@ class DominoGame:
 		Note:
 		- For the Cuban variant: max_pip is 9, hand_size is 10.
 		- For the Venezuelan variant: max_pip is 6, hand_size is 7.
+		- For the International variant: max_pip is 6, hand_size is 7.
 		"""
 		if self.variant == "cuban":
 			return 9, 10
-		elif self.variant == "venezuelan":
+		elif self.variant in ["venezuelan", "international"]:
 			return 6, 7
 		else:
 			raise ValueError("Unsupported domino variant")
@@ -49,13 +50,32 @@ class DominoGame:
 	def determine_first_player(self):
 		if self.variant == "cuban":
 			return random.randint(0, 3)
-		elif self.variant == "venezuelan":
+		elif self.variant in ["venezuelan", "international"]:
 			for i, hand in enumerate(self.player_hands):
 				if (6, 6) in hand:
 					return i
 			raise ValueError("No player has the double-6 tile. This should not happen in Venezuelan variant.")
 		else:
 			raise ValueError("Unsupported domino variant")
+
+	# def play_game(self):
+	# 	print(f"Game starts with {self.variant.capitalize()} rules.")
+	# 	while max(self.scores) < 100:
+	# 		round_winner, round_score = self.play_round()
+	# 		print(f"\nRound {self.current_round} ended.")
+	# 		print(f"Round winner: {'Team 1' if round_winner % 2 == 0 else 'Team 2'} (Player {round_winner})")
+	# 		print(f"Round score: {round_score}")
+	# 		print(f"Total scores: Team 1 - {self.scores[0]}, Team 2 - {self.scores[1]}")
+			
+	# 		self.current_round += 1
+	# 		self.starting_player = self.determine_next_starting_player(round_winner)
+	# 		print(f"Next starting player: Player {self.starting_player}")
+		
+	# 	winning_team = 0 if self.scores[0] >= 100 else 1
+	# 	print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
+		
+	# 	winning_team = 0 if self.scores[0] >= 100 else 1
+	# 	print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
 
 	def play_game(self):
 		print(f"Game starts with {self.variant.capitalize()} rules.")
@@ -65,16 +85,14 @@ class DominoGame:
 			print(f"Round winner: {'Team 1' if round_winner % 2 == 0 else 'Team 2'} (Player {round_winner})")
 			print(f"Round score: {round_score}")
 			print(f"Total scores: Team 1 - {self.scores[0]}, Team 2 - {self.scores[1]}")
-			
+
 			self.current_round += 1
 			self.starting_player = self.determine_next_starting_player(round_winner)
 			print(f"Next starting player: Player {self.starting_player}")
-		
+
 		winning_team = 0 if self.scores[0] >= 100 else 1
 		print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
-		
-		winning_team = 0 if self.scores[0] >= 100 else 1
-		print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
+
 
 	def play_round(self):
 		print(f"\nStarting Round {self.current_round + 1}")
@@ -82,8 +100,8 @@ class DominoGame:
 		print(f"All players have been dealt {self.hand_size} tiles.")
 		print(f"Starting player: Player {self.starting_player}")
 		
-		if self.variant == "venezuelan" and self.current_round == 0:
-			print("Venezuelan rules: The first player must start with the double 6.")
+		if self.variant in ["venezuelan", "international"] and self.current_round == 0:
+			print("The first player must start with the double 6.")
 		
 		while not self.is_round_over():
 			player_index = self.game_state.next_player
@@ -99,8 +117,8 @@ class DominoGame:
 					print(f"Player {player_index} plays {move}")
 			else:
 				print(f"Illegal move by player {player_index}: {move}")
-				if self.variant == "venezuelan" and self.current_round == 0 and len(self.game_state.history) == 0:
-					print("The first move in Venezuelan dominoes must be the double 6.")
+				if self.variant in ["venezuelan", "international"] and self.current_round == 0 and len(self.game_state.history) == 0:
+					print("The first move must be the double 6.")
 				continue  # Skip to the next iteration, keeping the same player's turn
 		
 		print("\nRound over. Final hands:")
@@ -151,7 +169,7 @@ class DominoGame:
 		return False
 
 	def is_legal_move(self, game_state, player_hand, move):
-		if self.variant == "venezuelan" and self.current_round == 0 and len(game_state.history) == 0:
+		if self.variant in ["venezuelan", "international"] and self.current_round == 0 and len(game_state.history) == 0:
 			return self.is_legal_first_move_venezuelan(move)
 		
 		if move is None:
@@ -210,16 +228,41 @@ class DominoGame:
 		print(f"New board state: {new_ends}")
 		print(f"Tiles remaining per player: {new_tile_counts}")
 
+	# def calculate_round_score(self):
+	# 	p_tiles = [sum(sum(piece) for piece in hand) for hand in self.player_hands]
+	# 	print(f"Remaining tiles values: {p_tiles}")
+		
+	# 	winner = next((i for i in range(4) if len(self.player_hands[i]) == 0), -1)
+		
+	# 	if winner != -1:
+	# 		# A player won by playing all their tiles
+	# 		winning_team = winner % 2
+	# 		points = sum(p_tiles[1-winning_team::2])
+	# 		print(f"Player {winner} won by playing all tiles")
+	# 		return winning_team, points
+	# 	else:
+	# 		# The game got blocked
+	# 		print("The round ended in a block")
+	# 		if self.variant == "cuban":
+	# 			return self.calculate_cuban_blocked_score(p_tiles)
+	# 		elif self.variant == "venezuelan":
+	# 			return self.calculate_venezuelan_blocked_score(p_tiles)
+
 	def calculate_round_score(self):
 		p_tiles = [sum(sum(piece) for piece in hand) for hand in self.player_hands]
 		print(f"Remaining tiles values: {p_tiles}")
-		
+
 		winner = next((i for i in range(4) if len(self.player_hands[i]) == 0), -1)
-		
+
 		if winner != -1:
 			# A player won by playing all their tiles
 			winning_team = winner % 2
-			points = sum(p_tiles[1-winning_team::2])
+			if self.variant == "international":
+				# In International variant, sum all the pips that were out
+				points = sum(p_tiles)
+			else:
+				# For other variants, sum the opponent's pips
+				points = sum(p_tiles[1-winning_team::2])
 			print(f"Player {winner} won by playing all tiles")
 			return winning_team, points
 		else:
@@ -229,6 +272,10 @@ class DominoGame:
 				return self.calculate_cuban_blocked_score(p_tiles)
 			elif self.variant == "venezuelan":
 				return self.calculate_venezuelan_blocked_score(p_tiles)
+			elif self.variant == "international":
+				return self.calculate_international_blocked_score(p_tiles)
+
+
 
 	def calculate_cuban_blocked_score(self, p_tiles):
 		p02_tiles = min(p_tiles[0], p_tiles[2])
@@ -254,6 +301,19 @@ class DominoGame:
 		print(f"Winner: Team {winner + 1}, Points: {points}")
 		return winner, points
 
+	def calculate_international_blocked_score(self, p_tiles):
+		p02_tiles = p_tiles[0] + p_tiles[2]
+		p13_tiles = p_tiles[1] + p_tiles[3]
+		print(f"International scoring - Team 1 total: {p02_tiles}, Team 2 total: {p13_tiles}")
+		if p02_tiles == p13_tiles:
+			print("The round is tied")
+			return -1, 0  # Tie
+		winner = 0 if p02_tiles < p13_tiles else 1
+		points = sum(p_tiles)
+		print(f"Winner: Team {winner + 1}, Points: {points}")
+		return winner, points
+
+
 	def determine_next_starting_player(self, round_winner):
 		if self.variant == "cuban":
 			if round_winner == -1:  # Tie
@@ -262,16 +322,30 @@ class DominoGame:
 			next_starter = random.choice([round_winner, (round_winner + 2) % 4])
 			print(f"Cuban rules: Randomly chose Player {next_starter} from winning team to start next round")
 			return next_starter
-		elif self.variant == "venezuelan":
+		elif self.variant in ["venezuelan", "international"]:
 			next_starter = (self.starting_player + 1) % 4
-			print(f"Venezuelan rules: Player {next_starter} starts next round")
+			print(f"Venezuelan/International rules: Player {next_starter} starts next round")
 			return next_starter
+
+# def main():
+# 	from DominoPlayer import HumanPlayer, RandomPlayer
+	
+# 	parser = argparse.ArgumentParser(description="Play a game of Dominoes")
+# 	parser.add_argument("variant", choices=["cuban", "venezuelan"], help="Choose the domino variant to play")
+# 	args = parser.parse_args()
+
+# 	players = [HumanPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
+# 	game = DominoGame(players, variant=args.variant)
+# 	game.play_game()
+
+# if __name__ == "__main__":
+# 	main()
 
 def main():
 	from DominoPlayer import HumanPlayer, RandomPlayer
-	
+
 	parser = argparse.ArgumentParser(description="Play a game of Dominoes")
-	parser.add_argument("variant", choices=["cuban", "venezuelan"], help="Choose the domino variant to play")
+	parser.add_argument("variant", choices=["cuban", "venezuelan", "international"], help="Choose the domino variant to play")
 	args = parser.parse_args()
 
 	players = [HumanPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
