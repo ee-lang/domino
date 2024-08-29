@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import List, Tuple, Optional
 import argparse
 import random
@@ -71,7 +70,7 @@ class DominoGame:
 
 	def play_game(self):
 		print(f"Game starts with {self.variant.capitalize()} rules.")
-		while max(self.scores) < 100:
+		while max(self.scores) < (100 if self.variant!='international' else 150):
 			round_winner, round_score = self.play_round()
 			print(f"\nRound {self.current_round} ended.")
 			print(f"Round winner: {'Team 1' if round_winner % 2 == 0 else 'Team 2'} (Player {round_winner})")
@@ -82,7 +81,7 @@ class DominoGame:
 			self.starting_player = self.determine_next_starting_player(round_winner)
 			print(f"Next starting player: Player {self.starting_player}")
 
-		winning_team = 0 if self.scores[0] >= 100 else 1
+		winning_team = 0 if self.scores[0] >= (100 if self.variant!='international' else 150) else 1
 		print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
 
 
@@ -134,7 +133,8 @@ class DominoGame:
 		for i in range(4):
 			self.player_hands[i], all_pieces = self.draw_hand(all_pieces)
 		
-		self.starting_player = self.determine_first_player()
+		if self.current_round == 0:
+			self.starting_player = self.determine_first_player()
 		
 		self.game_state = DominoGameState(
 			set(),
@@ -335,12 +335,14 @@ class DominoGame:
 
 def main():
 	from DominoPlayer import HumanPlayer, RandomPlayer
+	from HumanPlayerWithAnalytics import HumanPlayerWithAnalytics
 
 	parser = argparse.ArgumentParser(description="Play a game of Dominoes")
 	parser.add_argument("variant", choices=["cuban", "venezuelan", "international"], help="Choose the domino variant to play")
 	args = parser.parse_args()
 
-	players = [HumanPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
+	# players = [HumanPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
+	players = [HumanPlayerWithAnalytics(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
 	game = DominoGame(players, variant=args.variant)
 	game.play_game()
 

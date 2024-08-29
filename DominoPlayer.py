@@ -7,7 +7,7 @@ class DominoPlayer:
 	def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]):
 		raise NotImplementedError('Not implemented.')
 
-	def end_round(self, scores: List[int], team: int):
+	def end_round(self, scores: list[int], team: int):
 		"""
 		Called at the end of each round with the scores and team information.
 
@@ -43,7 +43,8 @@ class HumanPlayer(DominoPlayer):
 
 				max_pips = 9 if game_state.variant == "cuban" else 6
 				hand_stats = stats(player_hand, max_pips)
-				print('HumanPlayer.hand_stats:', sorted([(k, v) for k, v in hand_stats.items()], key=lambda x: x[1], reverse=True))				
+				sorted_hands_freq = sorted([(k, v) for k, v in hand_stats.items()], key=lambda x: x[1], reverse=True)
+				print('HumanPlayer.hand_stats:', [f'{k}: {v}' for k,v in sorted_hands_freq])				
 
 				# Display the number of tiles each player has
 				print('Number of tiles per player:', game_state.player_tile_counts)
@@ -74,14 +75,14 @@ class HumanPlayer(DominoPlayer):
 		print(f"HumanPlayer: Your team (Team {team + 1}) score: {scores[team]}")
 		print("HumanPlayer: Reset missing tiles for the next round.")
 
-	def get_unplayed_tiles(self, game_state, player_hand):
+	def get_unplayed_tiles(self, game_state, player_hand)-> list[tuple[int,int]]:
 		max_pip = 9 if game_state.variant == "cuban" else 6
 		all_tiles = set((i, j) for i in range(max_pip + 1) for j in range(i, max_pip + 1))
 		played_tiles = game_state.played_set
 		return sorted(list(all_tiles - set(player_hand) - played_tiles))
 
 	def count_remaining_pips(self, unplayed_tiles):
-		pip_counts = Counter()
+		pip_counts: dict[int,int] = Counter()
 		for tile in unplayed_tiles:
 			pip_counts[tile[0]] += 1
 			if tile[0] != tile[1]:
@@ -161,7 +162,7 @@ def available_moves(game_state, player_hand):
 	return list(filter(lambda h: r_end in h or l_end in h, player_hand))
 
 def stats(player_hand, max_pips):
-	counter = defaultdict(int)
+	counter: dict[int, int] = defaultdict(int)
 	for tile in player_hand:
 		counter[tile[0]] += 1
 		if tile[0] != tile[1]:
