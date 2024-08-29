@@ -11,7 +11,7 @@ class DominoGame:
 		self.scores = [0, 0]  # Team scores
 		self.current_round = 0
 		self.player_hands = []
-		self.starting_player = None
+		self.starting_player = 0
 		print(f"Starting a new {self.variant.capitalize()} Domino game!")
 
 	def get_variant_params(self):
@@ -38,7 +38,7 @@ class DominoGame:
 		else:
 			raise ValueError("Unsupported domino variant")
 
-	def determine_first_player(self):
+	def determine_first_player(self)-> int:
 		if self.variant == "cuban":
 			return random.randint(0, 3)
 		elif self.variant in ["venezuelan", "international"]:
@@ -336,13 +336,15 @@ class DominoGame:
 def main():
 	from DominoPlayer import HumanPlayer, RandomPlayer
 	from HumanPlayerWithAnalytics import HumanPlayerWithAnalytics
+	from analytic_agent_player import AnalyticAgentPlayer
 
 	parser = argparse.ArgumentParser(description="Play a game of Dominoes")
 	parser.add_argument("variant", choices=["cuban", "venezuelan", "international"], help="Choose the domino variant to play")
 	args = parser.parse_args()
 
 	# players = [HumanPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
-	players = [HumanPlayerWithAnalytics(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
+	# players = [HumanPlayerWithAnalytics(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
+	players = [AnalyticAgentPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
 	game = DominoGame(players, variant=args.variant)
 	game.play_game()
 

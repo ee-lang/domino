@@ -15,26 +15,35 @@ class AnalyticAgentPlayer(HumanPlayer):
         self.move_history = []
         self.tile_count_history = defaultdict(list)
         self.round_scores = []
+        self.first_game = True
 
-    def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]]) -> tuple[tuple[int,int], str] | None:
-        self.update_missing_tiles(game_state)
-        
+    def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]], verbose=True) -> tuple[tuple[int,int], str] | None:
+        if self.first_game:
+            # Check if the move is forced
+            if game_state.variant in {'international','venezuelan'} and len(game_state.history)==0:
+                self.first_game = False
+                print('Playing mandatory (6,6) opening on the first game.')
+                return (6,6),'l'
+
         unplayed_tiles = self.get_unplayed_tiles(game_state, player_hand)
         _unplayed_tiles = DominoTile.loi_to_domino_tiles(unplayed_tiles)
-        
+
         _player_hand = DominoTile.loi_to_domino_tiles(player_hand)
-        
+
         _moves = history_to_domino_tiles_history(game_state.history)
         _remaining_tiles = set(_unplayed_tiles)
         _initial_player_tiles = {p: 7 for p in PlayerPosition}
         _starting_player = PlayerPosition(game_state.history[0][0]) if len(game_state.history)>0 else PlayerPosition.SOUTH
-        
+
         current_player, _final_remaining_tiles, _board_ends, _player_tiles_count, _knowledge_tracker = domino_game_state_our_perspective(
             _remaining_tiles, _moves, _initial_player_tiles, current_player=_starting_player)
-        
+
+        if verbose:
+            self.print_verbose_info(player_hand, _unplayed_tiles, _knowledge_tracker, _player_tiles_count, _starting_player)
+
         num_samples = 1000 if len(game_state.history) > 8 else 100 if len(game_state.history) > 4 else 25 if len(game_state.history) > 0 else 1
-        best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, num_samples, verbose=True)
-        
+        best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, num_samples, verbose=verbose)
+
         if best_move is None:
             return None
         else:
@@ -42,10 +51,23 @@ class AnalyticAgentPlayer(HumanPlayer):
             side = 'l' if is_left else 'r'
             return (tile.top, tile.bottom), side
 
+    def print_verbose_info(self, player_hand, unplayed_tiles, knowledge_tracker, player_tiles_count, starting_player):
+        print("\n--- Verbose Information ---")
+        print(f"Starting player: {starting_player.name}")
+        print(f"Player's hand: {player_hand}")
+        print(f"Remaining tiles: {unplayed_tiles}")
+        print("\nCommon knowledge of missing suits:")
+        for player in PlayerPosition:
+            print(f"  {player.name}: {knowledge_tracker.common_knowledge_missing_suits[player]}")
+        print("\nRemaining tiles for each player:")
+        for player, count in player_tiles_count.items():
+            print(f"  {player.name}: {count}")
+        print("----------------------------\n")
+
     def get_best_move(self, final_south_hand: set[DominoTile], remaining_tiles: set[DominoTile], 
                       knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], 
                       board_ends: tuple[int|None,int|None], num_samples = 1000, verbose = False) -> tuple[DominoTile, bool] | None:
-        
+
         inferred_knowledge: dict[PlayerPosition, set[DominoTile]] = {
             player: set() for player in PlayerPosition
         }
@@ -114,7 +136,7 @@ class AnalyticAgentPlayer(HumanPlayer):
 
     def print_move_statistics(self, move_scores: dict, num_samples: int):
         print(f"\nMove Statistics (based on {num_samples} samples):")
-        
+
         # Calculate statistics for each move
         move_statistics = {}
         for move, scores in move_scores.items():

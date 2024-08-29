@@ -46,9 +46,7 @@ class HumanPlayerWithAnalytics(HumanPlayer):
                 print('Number of tiles per player:', game_state.player_tile_counts)
 
                 # Reconstruct the game state till now
-                # print('GameState.history', game_state.history)
                 _moves = history_to_domino_tiles_history(game_state.history)
-                # print('GameState._moves', _moves)
                 _remaining_tiles = set(_unplayed_tiles)
                 # _initial_player_tiles = {p: game_state.player_tile_counts[p.value] for p in PlayerPosition}
                 _initial_player_tiles = {p: 7 for p in PlayerPosition}

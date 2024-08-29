@@ -257,12 +257,13 @@ def calculate_tile_probabilities(
             'E': not_with['N'].intersection(not_with['W']),
             'W': not_with['N'].intersection(not_with['E'])
         }
-        if any(len(s)>0 for s in known_with.values()):
-            # Remove any from not_with
-            for p, p_set in not_with.items():
-                not_with[p] = not_with[p] - not_with['N'].union(not_with['E']).union(not_with['W'])
+        not_with_local = copy.deepcopy(not_with)
+        # If found a duplication in not_with, it's added now to known_with and need to be removed from not_with
+        if any(len(s)>0 for s in known_with.values()): 
+            for p, p_set in not_with_local.items():
+                not_with_local[p] = not_with_local[p] - known_with['N'].union(known_with['E']).union(known_with['W'])
 
-        scenarios = generate_scenarios(player_tiles, not_with, known_with)
+        scenarios = generate_scenarios(player_tiles, not_with_local, known_with)
 
         total_probability: float = 0.0
         for s in scenarios:
@@ -270,27 +271,45 @@ def calculate_tile_probabilities(
             assigned_tiles = s.total_tiles()
             total_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
 
-        not_with_local = copy.deepcopy(not_with)
         for player in ['N', 'E', 'W']:
-            if tile in set.union(*not_with.values()):
-                if player in not_with and tile in not_with[player]:
-                    probabilities[tile][player] = 0.0
-                    continue
-                # not_with_local = copy.deepcopy(not_with)
-                for p in [p for p in 'NEW' if p!=player]:
-                    if p in not_with_local and tile in not_with_local[p]:
-                        not_with_local[p].remove(tile)
+            # if tile in set.union(*not_with_local.values()):
+            if player in not_with and tile in not_with[player]:
+                probabilities[tile][player] = 0.0
+                continue
+            if player in known_with and tile in known_with[player]:
+                probabilities[tile][player] = 1.0
+                continue
+            
+            # remove the not_with restriction from the local copy to be able to assign the tile to one of the allowed players
+            not_with_local = copy.deepcopy(not_with)
+            for p in [p for p in 'NEW' if p!=player]:
+                if p in not_with_local and tile in not_with_local[p]:
+                    not_with_local[p].remove(tile)
 
             if player in known_with:
                 known_with_local = copy.deepcopy(known_with)
                 known_with_local[player].add(tile)
             else:
                 known_with_local = {player: {tile}}
+
             scenarios = generate_scenarios(player_tiles, not_with_local, known_with_local)
 
             if total_probability > 0:
                 tile_probability: float = 0.0
                 for s in scenarios:
+                    try:                
+                        assert len(s.N.intersection(s.W))==0 and len(s.N.intersection(s.E))==0 and len(s.E.intersection(s.W))==0
+                    except AssertionError as ae:
+                        print('tile',tile)
+                        print('player',player)
+                        print('scenario error', s)
+                        # print('(player_tiles, not_with_local, known_with_local)',(player_tiles, not_with_local, known_with_local))
+                        print('player_tiles',player_tiles)
+                        print('not_with',not_with)
+                        print('not_with_local',not_with_local)
+                        print('known_with',known_with)            
+                        print('known_with_local',known_with_local)
+                        raise ae
                     if tile in getattr(s, player):
                         # assigned_tiles = sum(len(e) for e in s)
                         assigned_tiles = s.total_tiles()
@@ -302,7 +321,13 @@ def calculate_tile_probabilities(
         except AssertionError as ae:
             print('tile',tile)
             print('probabilities[tile]',probabilities[tile])
+            print('not_with',not_with)
+            print('not_with_local',not_with_local)
+            print('known_with',known_with)            
+            print('known_with_local',known_with_local)            
             print('prob.sum', sum(probabilities[tile][player] for player in probabilities[tile]))
+            print('scenarios',scenarios)
+            print('player_tiles',player_tiles)
             raise ae
 
     return probabilities    

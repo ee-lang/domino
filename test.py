@@ -30,8 +30,9 @@
 # local_not_with {'E': {1|3}, 'N': set(), 'W': {1|3}}
 
 
-from domino_probability_calc import calculate_tile_probabilities, PlayerTiles
+from domino_probability_calc import calculate_tile_probabilities, PlayerTiles,generate_scenarios
 from domino_game_analyzer import DominoTile
+import copy
 
 def test_calculate_probabilities():
     # Define remaining tiles
@@ -61,5 +62,22 @@ def test_calculate_probabilities():
             print(f"  P({player} has {tile}) = {prob:.6f}")
         print()
 
+
+def test_generate_scenarios():
+    player_tiles = [DominoTile(5,6)]
+    not_with = {'E': set(), 'N': set(), 'W': {DominoTile(5,6)}}
+    known_with = {'N': set(), 'E': set(), 'W': set()}
+    player_tiles =  PlayerTiles(N=5, E=6, W=6)
+    scenarios = generate_scenarios(player_tiles, not_with, known_with)
+    print(scenarios)
+    print("known_with['N'].union(known_with['E']).union(known_with['W'])",known_with['N'].union(known_with['E']).union(known_with['W']))
+    not_with_local = copy.deepcopy(not_with)
+    # If found a duplication in not_with, it's added now to known_with and need to be removed from not_with
+    if any(len(s)>0 for s in known_with.values()): 
+        for p, p_set in not_with_local.items():
+            not_with_local[p] = not_with_local[p] - known_with['N'].union(known_with['E']).union(known_with['W'])
+    print('not_with_local',not_with_local)
+
 if __name__ == "__main__":
-    test_calculate_probabilities()
+    # test_calculate_probabilities()
+    test_generate_scenarios()
