@@ -30,7 +30,7 @@
 # local_not_with {'E': {1|3}, 'N': set(), 'W': {1|3}}
 
 
-from domino_probability_calc import calculate_tile_probabilities, PlayerTiles,generate_scenarios
+from domino_probability_calc import calculate_tile_probabilities, PlayerTiles,generate_scenarios, generate_sample
 from domino_game_analyzer import DominoTile
 import copy
 
@@ -62,6 +62,49 @@ def test_calculate_probabilities():
             print(f"  P({player} has {tile}) = {prob:.6f}")
         print()
 
+def test_calculate_probabilities2():
+# tile 0|6
+# probabilities[tile] {'N': 0.3333333333333333, 'E': 0.0, 'W': 0.0}
+# not_with {'E': set(), 'N': {5|6, 1|4}, 'W': {1|4}}
+# not_with_local {'E': set(), 'N': {5|6, 1|4}, 'W': {1|4}}
+# known_with_local {'W': {0|6}}
+# prob.sum 0.3333333333333333
+# scenarios []
+# player_tiles PlayerTiles(N=1, E=1, W=1)
+    # Remaining tiles: [0|0, 0|1, 0|2, 0|6, 1|3, 1|4, 1|5, 1|6, 2|2, 2|3, 2|6, 3|3, 5|6]
+
+    remaining_tiles = set([
+        DominoTile(0, 0), DominoTile(0, 1), DominoTile(0, 2), DominoTile(0, 6),
+        DominoTile(1, 3), DominoTile(1, 4), DominoTile(1, 5), DominoTile(1, 6),
+        DominoTile(2, 2), DominoTile(2, 3), DominoTile(2, 6), DominoTile(3, 3),
+        DominoTile(5, 6)
+        # DominoTile(2, 4), DominoTile(3, 6)  # Tiles in human player's hand
+    ])
+
+    # Define not_with based on _knowledge_tracker
+    not_with = {
+        'E': set(),
+        'N': {DominoTile(5, 6), DominoTile(1, 4)},
+        'W': {DominoTile(1, 4)}
+    }
+
+    # Define player_tiles (assuming 7 tiles per player at the start)
+    player_tiles = PlayerTiles(N=1, E=1, W=1)
+
+    # Call calculate_tile_probabilities
+    # probabilities = calculate_tile_probabilities(remaining_tiles, not_with, player_tiles)
+    # Print the results
+    # for tile, probs in probabilities.items():
+    #     print(f"Tile {tile}:")
+    #     for player, prob in probs.items():
+    #         print(f"  P({player} has {tile}) = {prob:.6f}")
+    #     print()
+
+    player_tiles = PlayerTiles(N=4, E=4, W=5)
+    sample = generate_sample(remaining_tiles, not_with, player_tiles)
+    print('sample',sample)
+
+
 
 def test_generate_scenarios():
     player_tiles = [DominoTile(5,6)]
@@ -79,5 +122,5 @@ def test_generate_scenarios():
     print('not_with_local',not_with_local)
 
 if __name__ == "__main__":
-    # test_calculate_probabilities()
-    test_generate_scenarios()
+    test_calculate_probabilities2()
+    # test_generate_scenarios()

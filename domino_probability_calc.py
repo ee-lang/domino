@@ -54,7 +54,6 @@ def calculate_scenario_probability(
     n_tiles = player_tiles.N - len(scenario.N)
     e_tiles = player_tiles.E - len(scenario.E)
     w_tiles = player_tiles.W - len(scenario.W)
-
     return (comb(total_tiles, n_tiles) * 
             comb(total_tiles - n_tiles, e_tiles))
 
@@ -241,104 +240,221 @@ def generate_scenarios(
 #     return probabilities
 
 
-# Assumption is that the same tile can be in not_with with two (or more) different players. If it's with two players, that should go to the known_tiles
+# # Assumption is that the same tile can be in not_with with two (or more) different players. If it's with two players, that should go to the known_tiles
+# def calculate_tile_probabilities(
+#     remaining_tiles: list[DominoTile],
+#     not_with: dict[str, set[DominoTile]],
+#     player_tiles: PlayerTiles
+# ) -> dict[DominoTile, dict[str, float]]:
+#     total_tiles = len(remaining_tiles)
+#     probabilities: dict[DominoTile, dict[str, float]] = {tile: {'N': 0.0, 'E': 0.0, 'W': 0.0} for tile in remaining_tiles}
+#     if total_tiles == 0: return probabilities
+
+#     # known_with: dict[str, set[DominoTile]] = {}
+#     known_with: dict[str, set[DominoTile]] = {
+#         'N': not_with['W'].intersection(not_with['E']),
+#         'E': not_with['N'].intersection(not_with['W']),
+#         'W': not_with['N'].intersection(not_with['E'])
+#     }
+#     sanitized_not_with = copy.deepcopy(not_with)
+#     # If found a duplication in not_with, it's added now to known_with and need to be removed from not_with
+#     if any(len(s)>0 for s in known_with.values()): 
+#         for p, p_set in sanitized_not_with.items():
+#             sanitized_not_with[p] = sanitized_not_with[p] - known_with['N'].union(known_with['E']).union(known_with['W'])
+
+#     scenarios = generate_scenarios(player_tiles, sanitized_not_with, known_with)
+
+#     total_probability: float = 0.0
+#     for s in scenarios:
+#         # assigned_tiles = sum(len(e) for e in s)
+#         assigned_tiles = s.total_tiles()
+#         total_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
+
+#     for tile in remaining_tiles:
+
+#         # # known_with: dict[str, set[DominoTile]] = {}
+#         # known_with: dict[str, set[DominoTile]] = {
+#         #     'N': not_with['W'].intersection(not_with['E']),
+#         #     'E': not_with['N'].intersection(not_with['W']),
+#         #     'W': not_with['N'].intersection(not_with['E'])
+#         # }
+#         # sanitized_not_with = copy.deepcopy(not_with)
+#         # # If found a duplication in not_with, it's added now to known_with and need to be removed from not_with
+#         # if any(len(s)>0 for s in known_with.values()): 
+#         #     for p, p_set in sanitized_not_with.items():
+#         #         sanitized_not_with[p] = sanitized_not_with[p] - known_with['N'].union(known_with['E']).union(known_with['W'])
+
+#         # scenarios = generate_scenarios(player_tiles, sanitized_not_with, known_with)
+
+#         # total_probability: float = 0.0
+#         # for s in scenarios:
+#         #     # assigned_tiles = sum(len(e) for e in s)
+#         #     assigned_tiles = s.total_tiles()
+#         #     total_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
+
+#         for player in ['N', 'E', 'W']:
+#             # if tile in set.union(*not_with_local.values()):
+#             if player in not_with and tile in not_with[player]:
+#                 probabilities[tile][player] = 0.0
+#                 continue
+#             if player in known_with and tile in known_with[player]:
+#                 probabilities[tile][player] = 1.0
+#                 continue
+            
+#             # remove the not_with restriction from the local copy to be able to assign the tile to one of the allowed players
+#             not_with_local = copy.deepcopy(sanitized_not_with)
+#             for p in [p for p in 'NEW' if p!=player]:
+#                 if p in not_with_local and tile in not_with_local[p]:
+#                     not_with_local[p].remove(tile)
+
+#             if player in known_with:
+#                 known_with_local = copy.deepcopy(known_with)
+#                 known_with_local[player].add(tile)
+#             else:
+#                 known_with_local = {player: {tile}}
+
+#             scenarios = generate_scenarios(player_tiles, not_with_local, known_with_local)
+
+#             if total_probability > 0:
+#                 tile_probability: float = 0.0
+#                 for s in scenarios:
+#                     # try:                
+#                     #     assert len(s.N.intersection(s.W))==0 and len(s.N.intersection(s.E))==0 and len(s.E.intersection(s.W))==0
+#                     # except AssertionError as ae:
+#                     #     print('tile',tile)
+#                     #     print('player',player)
+#                     #     print('scenario error', s)
+#                     #     # print('(player_tiles, not_with_local, known_with_local)',(player_tiles, not_with_local, known_with_local))
+#                     #     print('player_tiles',player_tiles)
+#                     #     print('not_with',not_with)
+#                     #     print('sanitized_not_with',sanitized_not_with)
+#                     #     print('not_with_local',not_with_local)
+#                     #     print('known_with',known_with)            
+#                     #     print('known_with_local',known_with_local)
+#                     #     raise ae
+#                     if tile in getattr(s, player):
+#                         # assigned_tiles = sum(len(e) for e in s)
+#                         assigned_tiles = s.total_tiles()
+#                         tile_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
+
+#                 probabilities[tile][player] = tile_probability / total_probability
+#         try:
+#             assert abs(1.0 - sum(probabilities[tile][player] for player in probabilities[tile])) < 1e-5
+#         except AssertionError as ae:
+#             print('tile',tile)
+#             print('probabilities[tile]',probabilities[tile])
+#             print('not_with',not_with)
+#             print('not_with_local',not_with_local)
+#             print('known_with',known_with)            
+#             print('known_with_local',known_with_local)            
+#             print('prob.sum', sum(probabilities[tile][player] for player in probabilities[tile]))
+#             print('scenarios',scenarios)
+#             print('player_tiles',player_tiles)
+#             raise ae
+
+#     return probabilities    
+
+# Assumption is that the same tile can be in not_with with two (or more) different players. If it's with two players, that should go to the known_with
+# known_with information is also not passed because there's no need to calculate probs for that tile.
+# The function won't check for contradictory known_with and not_with information, in those cases it will return incorrect probabilities or fail
 def calculate_tile_probabilities(
     remaining_tiles: list[DominoTile],
     not_with: dict[str, set[DominoTile]],
+    # known_with: dict[str, set[DominoTile]],
     player_tiles: PlayerTiles
 ) -> dict[DominoTile, dict[str, float]]:
     total_tiles = len(remaining_tiles)
     probabilities: dict[DominoTile, dict[str, float]] = {tile: {'N': 0.0, 'E': 0.0, 'W': 0.0} for tile in remaining_tiles}
     if total_tiles == 0: return probabilities
 
-    # known_with: dict[str, set[DominoTile]] = {}
-    known_with: dict[str, set[DominoTile]] = {
-        'N': not_with['W'].intersection(not_with['E']),
-        'E': not_with['N'].intersection(not_with['W']),
-        'W': not_with['N'].intersection(not_with['E'])
-    }
-    sanitized_not_with = copy.deepcopy(not_with)
-    # If found a duplication in not_with, it's added now to known_with and need to be removed from not_with
-    if any(len(s)>0 for s in known_with.values()): 
-        for p, p_set in sanitized_not_with.items():
-            sanitized_not_with[p] = sanitized_not_with[p] - known_with['N'].union(known_with['E']).union(known_with['W'])
+    # all_known_with_tiles = set(remaining_tiles).intersection(set.union(*known_with.values()) if len(known_with) > 0 else set())
+    
+    # # Handle first known tiles
+    # for tile in all_known_with_tiles:
+    #     for player in ['N', 'E', 'W']:
+    #         if player in known_with and tile in known_with[player]:
+    #             probabilities[tile][player] = 1.0
+    #         else:
+    #             probabilities[tile][player] = 0.0
 
-    scenarios = generate_scenarios(player_tiles, sanitized_not_with, known_with)
+    # Now filter for tiles that are not set
+    # _remaining_tiles = [t for t in remaining_tiles if t not in all_known_with_tiles]
+    # _remaining_tiles = remaining_tiles
+    # total_tiles = len(_remaining_tiles)
+    # print('total_tiles post update', total_tiles)
+    # if total_tiles == 0: return probabilities
+
+    # # Adjust player tiles removing the assigned (known) tiles
+    # _player_tiles = PlayerTiles(
+    #     N = player_tiles.N-(len(known_with['N']) if 'N' in known_with else 0),
+    #     E = player_tiles.E-(len(known_with['E']) if 'E' in known_with else 0),
+    #     W = player_tiles.W-(len(known_with['W']) if 'W' in known_with else 0)
+    #     )
+
+    scenarios = generate_scenarios(player_tiles, not_with, {})
 
     total_probability: float = 0.0
     for s in scenarios:
-        # assigned_tiles = sum(len(e) for e in s)
         assigned_tiles = s.total_tiles()
+        s_prob = calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
         total_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
+    # print('updated _player_tiles', _player_tiles)
+    # print('base scenarios', scenarios)
+    # print('total outcomes', total_probability)
+
+    assert total_probability > 0.0
 
     for tile in remaining_tiles:
 
-        # # known_with: dict[str, set[DominoTile]] = {}
-        # known_with: dict[str, set[DominoTile]] = {
-        #     'N': not_with['W'].intersection(not_with['E']),
-        #     'E': not_with['N'].intersection(not_with['W']),
-        #     'W': not_with['N'].intersection(not_with['E'])
-        # }
-        # sanitized_not_with = copy.deepcopy(not_with)
-        # # If found a duplication in not_with, it's added now to known_with and need to be removed from not_with
-        # if any(len(s)>0 for s in known_with.values()): 
-        #     for p, p_set in sanitized_not_with.items():
-        #         sanitized_not_with[p] = sanitized_not_with[p] - known_with['N'].union(known_with['E']).union(known_with['W'])
-
-        # scenarios = generate_scenarios(player_tiles, sanitized_not_with, known_with)
-
-        # total_probability: float = 0.0
-        # for s in scenarios:
-        #     # assigned_tiles = sum(len(e) for e in s)
-        #     assigned_tiles = s.total_tiles()
-        #     total_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
-
         for player in ['N', 'E', 'W']:
-            # if tile in set.union(*not_with_local.values()):
             if player in not_with and tile in not_with[player]:
                 probabilities[tile][player] = 0.0
                 continue
-            if player in known_with and tile in known_with[player]:
-                probabilities[tile][player] = 1.0
-                continue
-            
+            # if tile in all_known_with_tiles:
+            #     if player in known_with and tile in known_with[player]:
+            #         probabilities[tile][player] = 1.0
+            #     else:
+            #         probabilities[tile][player] = 0.0
+            #     continue
             # remove the not_with restriction from the local copy to be able to assign the tile to one of the allowed players
-            not_with_local = copy.deepcopy(sanitized_not_with)
+            not_with_local = copy.deepcopy(not_with)
             for p in [p for p in 'NEW' if p!=player]:
                 if p in not_with_local and tile in not_with_local[p]:
                     not_with_local[p].remove(tile)
 
-            if player in known_with:
-                known_with_local = copy.deepcopy(known_with)
-                known_with_local[player].add(tile)
-            else:
-                known_with_local = {player: {tile}}
+            # if player in known_with:
+            #     known_with_local = copy.deepcopy(known_with)
+            #     known_with_local[player].add(tile)
+            # else:
+            #     known_with_local = {player: {tile}}
+
+            known_with_local = {player: {tile}}
 
             scenarios = generate_scenarios(player_tiles, not_with_local, known_with_local)
+            # print('scenarios',scenarios)
+            # if total_probability > 0:
+            tile_probability: float = 0.0
+            for s in scenarios:
+                # try:                
+                #     assert len(s.N.intersection(s.W))==0 and len(s.N.intersection(s.E))==0 and len(s.E.intersection(s.W))==0
+                # except AssertionError as ae:
+                #     print('tile',tile)
+                #     print('player',player)
+                #     print('scenario error', s)
+                #     # print('(player_tiles, not_with_local, known_with_local)',(player_tiles, not_with_local, known_with_local))
+                #     print('player_tiles',player_tiles)
+                #     print('not_with',not_with)
+                #     print('sanitized_not_with',sanitized_not_with)
+                #     print('not_with_local',not_with_local)
+                #     print('known_with',known_with)            
+                #     print('known_with_local',known_with_local)
+                #     raise ae
+                if tile in getattr(s, player):
+                    # assigned_tiles = sum(len(e) for e in s)
+                    assigned_tiles = s.total_tiles()
+                    tile_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
 
-            if total_probability > 0:
-                tile_probability: float = 0.0
-                for s in scenarios:
-                    # try:                
-                    #     assert len(s.N.intersection(s.W))==0 and len(s.N.intersection(s.E))==0 and len(s.E.intersection(s.W))==0
-                    # except AssertionError as ae:
-                    #     print('tile',tile)
-                    #     print('player',player)
-                    #     print('scenario error', s)
-                    #     # print('(player_tiles, not_with_local, known_with_local)',(player_tiles, not_with_local, known_with_local))
-                    #     print('player_tiles',player_tiles)
-                    #     print('not_with',not_with)
-                    #     print('sanitized_not_with',sanitized_not_with)
-                    #     print('not_with_local',not_with_local)
-                    #     print('known_with',known_with)            
-                    #     print('known_with_local',known_with_local)
-                    #     raise ae
-                    if tile in getattr(s, player):
-                        # assigned_tiles = sum(len(e) for e in s)
-                        assigned_tiles = s.total_tiles()
-                        tile_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
-
-                probabilities[tile][player] = tile_probability / total_probability
+            probabilities[tile][player] = tile_probability / total_probability
         try:
             assert abs(1.0 - sum(probabilities[tile][player] for player in probabilities[tile])) < 1e-5
         except AssertionError as ae:
@@ -346,14 +462,26 @@ def calculate_tile_probabilities(
             print('probabilities[tile]',probabilities[tile])
             print('not_with',not_with)
             print('not_with_local',not_with_local)
-            print('known_with',known_with)            
+            # print('known_with',known_with)            
             print('known_with_local',known_with_local)            
             print('prob.sum', sum(probabilities[tile][player] for player in probabilities[tile]))
             print('scenarios',scenarios)
             print('player_tiles',player_tiles)
+            print('remaining_tiles',remaining_tiles)
             raise ae
 
     return probabilities    
+
+
+def no_duplicates_in_not_with(not_with: dict[str, set[DominoTile]])-> bool:
+    N_set = not_with.get('N',set())
+    E_set = not_with.get('E',set())
+    W_set = not_with.get('W',set())
+    NE_set = N_set.intersection(E_set)
+    WE_set = W_set.intersection(E_set)
+    NW_set = N_set.intersection(W_set)
+    return len(WE_set) == 0 and len(NE_set) == 0 and len(NW_set) == 0
+
 
 def print_probabilities(probabilities: Dict[str, Dict[str, float]]):
     for tile, probs in probabilities.items():
@@ -362,21 +490,63 @@ def print_probabilities(probabilities: Dict[str, Dict[str, float]]):
             print(f"  P({player} has {tile}) = {prob:.6f}")
         print()
 
+# Assumption: no tile should be at the same time in known_with and not_with
+# def generate_sample(
+#     remaining_tiles: list[DominoTile],
+#     not_with: dict[str, set[DominoTile]],
+#     known_with: dict[str, set[DominoTile]],
+#     player_tiles: PlayerTiles
+# ) -> dict[str, set[DominoTile]]:
 def generate_sample(
-    remaining_tiles: list[DominoTile],
+    remaining_tiles: set[DominoTile],
     not_with: dict[str, set[DominoTile]],
-    known_with: dict[str, set[DominoTile]],
+    # known_with: dict[str, set[DominoTile]],
     player_tiles: PlayerTiles
 ) -> dict[str, set[DominoTile]]:
 
     assert len(remaining_tiles) == sum(e for e in player_tiles)
     assert 'S' not in not_with
+    assert all(p in not_with for p in 'NEW')
+    assert all(isinstance(not_with[p],set) for p in 'NEW')
+
+    # if there's a tile with the current player and nobody else has that suit, remove that from not_with
+    door_tiles = set.intersection(*not_with.values()) if not_with else set()
+
+    assert len(door_tiles.intersection(remaining_tiles)) == 0, 'Tile in remaining_tiles and not with any player!'
 
     # Create local copies of not_with and known_with
     local_not_with = copy.deepcopy(not_with)
-    local_known_with = copy.deepcopy(known_with)
+    local_known_with = {}
+
+    if len(door_tiles) > 0:
+        for p, p_set in local_not_with.items():
+            local_not_with[p] = local_not_with[p] - door_tiles
+
+    # If found a duplication in not_with, it's added now to known_with and need to be removed from not_with
+    N_set = local_not_with.get('N',set())
+    E_set = local_not_with.get('E',set())
+    W_set = local_not_with.get('W',set())
+    NE_set = N_set.intersection(E_set)
+    WE_set = W_set.intersection(E_set)
+    NW_set = N_set.intersection(W_set)
+    if len(WE_set) > 0:
+        local_known_with['N'] = WE_set
+        local_not_with['W'] -= WE_set 
+        local_not_with['E'] -= WE_set 
+    if len(NE_set) > 0:
+        local_known_with['W'] = NE_set
+        local_not_with['N'] -= NE_set 
+        local_not_with['E'] -= NE_set 
+    if len(NW_set) > 0:
+        local_known_with['E'] = NW_set
+        local_not_with['N'] -= NW_set 
+        local_not_with['W'] -= NW_set 
+
+
 
     sample = {player: set(local_known_with.get(player, set())) for player in ['N', 'E', 'W']}
+    # sample = {player: set() for player in ['N', 'E', 'W']}
+
     remaining_counts = {
         player: getattr(player_tiles, player) - len(sample[player])
         for player in ['N', 'E', 'W']
@@ -394,9 +564,14 @@ def generate_sample(
             sample[last_player].update(unassigned_tiles)
             return sample
         
-        # TODO: pass known_with and remove known_with construction from calculate_tile_probabilities
         # Recalculate probabilities
+        try:
+            assert no_duplicates_in_not_with(local_not_with)
+        except AssertionError as ae:
+            print('local_not_with',local_not_with)
+            raise ae
         probabilities = calculate_tile_probabilities(unassigned_tiles, local_not_with, PlayerTiles(**remaining_counts))
+        # probabilities = calculate_tile_probabilities(unassigned_tiles, local_not_with, local_known_with, PlayerTiles(**remaining_counts))
 
         tile = random.choice(unassigned_tiles)
         tile_probs = probabilities[tile]
@@ -408,17 +583,6 @@ def generate_sample(
         if len(valid_players)==1:
             chosen_player = valid_players[0]
         else:
-            # if not valid_players:
-            #     # If no valid players, redistribute probabilities
-            #     total_prob = sum(tile_probs[p] for p in ['N', 'E', 'W'] if remaining_counts[p] > 0)
-            #     if total_prob == 0:
-            #         # If all probabilities are 0, assign equal probabilities
-            #         valid_players = [p for p in ['N', 'E', 'W'] if remaining_counts[p] > 0]
-            #         tile_probs = {p: 1/len(valid_players) for p in valid_players}
-            #     else:
-            #         # Normalize probabilities
-            #         tile_probs = {p: tile_probs[p] / total_prob if remaining_counts[p] > 0 else 0 for p in ['N', 'E', 'W']}
-
             chosen_player = random.choices(valid_players, weights=[tile_probs[p] for p in valid_players])[0]
 
         # Assign the tile
@@ -426,11 +590,12 @@ def generate_sample(
         remaining_counts[chosen_player] -= 1
         unassigned_tiles.remove(tile)
 
-        # Update local_not_with and local_known_with
+        # Update local_not_with
         for player in ['N', 'E', 'W']:
             if player in local_not_with and tile in local_not_with[player]:
                 local_not_with[player].remove(tile)
-        local_known_with.setdefault(chosen_player, set()).add(tile)
+            # if player in local_known_with and tile in local_known_with[player]:
+            #     local_known_with[player].remove(tile)
 
     return sample    
 
@@ -481,7 +646,8 @@ def main():
 
     # Example usage of generate_sample
     for _ in range(1000):
-        sample = generate_sample(remaining_tiles_converted, not_with_converted, known_with, player_tiles)
+        # sample = generate_sample(remaining_tiles_converted, not_with_converted, known_with, player_tiles)
+        sample = generate_sample(set(remaining_tiles_converted), not_with_converted, player_tiles)
         break
     print("Generated sample:")
     for player, tiles in sample.items():

@@ -91,7 +91,7 @@ class DominoGame:
 		games_tied = 0  # Number of tied games
 		round_scores = []  # List to store scores for each round
 		
-		winning_score = 100 if self.variant != 'international' else 1500
+		winning_score = 100 if self.variant != 'international' else 1
 		
 		while max(self.scores) < winning_score:
 			round_winner, round_score = self.play_round()
