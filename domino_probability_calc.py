@@ -354,42 +354,17 @@ def generate_scenarios(
 
 #     return probabilities    
 
-# Assumption is that the same tile can be in not_with with two (or more) different players. If it's with two players, that should go to the known_with
+# Assumption is that the same tile can not be in not_with with two (or more) different players. If it's with two players, that should go to the known_with
 # known_with information is also not passed because there's no need to calculate probs for that tile.
 # The function won't check for contradictory known_with and not_with information, in those cases it will return incorrect probabilities or fail
 def calculate_tile_probabilities(
     remaining_tiles: list[DominoTile],
     not_with: dict[str, set[DominoTile]],
-    # known_with: dict[str, set[DominoTile]],
     player_tiles: PlayerTiles
 ) -> dict[DominoTile, dict[str, float]]:
     total_tiles = len(remaining_tiles)
     probabilities: dict[DominoTile, dict[str, float]] = {tile: {'N': 0.0, 'E': 0.0, 'W': 0.0} for tile in remaining_tiles}
     if total_tiles == 0: return probabilities
-
-    # all_known_with_tiles = set(remaining_tiles).intersection(set.union(*known_with.values()) if len(known_with) > 0 else set())
-    
-    # # Handle first known tiles
-    # for tile in all_known_with_tiles:
-    #     for player in ['N', 'E', 'W']:
-    #         if player in known_with and tile in known_with[player]:
-    #             probabilities[tile][player] = 1.0
-    #         else:
-    #             probabilities[tile][player] = 0.0
-
-    # Now filter for tiles that are not set
-    # _remaining_tiles = [t for t in remaining_tiles if t not in all_known_with_tiles]
-    # _remaining_tiles = remaining_tiles
-    # total_tiles = len(_remaining_tiles)
-    # print('total_tiles post update', total_tiles)
-    # if total_tiles == 0: return probabilities
-
-    # # Adjust player tiles removing the assigned (known) tiles
-    # _player_tiles = PlayerTiles(
-    #     N = player_tiles.N-(len(known_with['N']) if 'N' in known_with else 0),
-    #     E = player_tiles.E-(len(known_with['E']) if 'E' in known_with else 0),
-    #     W = player_tiles.W-(len(known_with['W']) if 'W' in known_with else 0)
-    #     )
 
     scenarios = generate_scenarios(player_tiles, not_with, {})
 
@@ -398,63 +373,46 @@ def calculate_tile_probabilities(
         assigned_tiles = s.total_tiles()
         s_prob = calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
         total_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
-    # print('updated _player_tiles', _player_tiles)
-    # print('base scenarios', scenarios)
-    # print('total outcomes', total_probability)
+
 
     assert total_probability > 0.0
+    
+    # Using only one copy
+    # not_with_local = copy.deepcopy(not_with)
+    
+    # Aliasing the original
+    not_with_local = not_with
 
     for tile in remaining_tiles:
 
         for player in ['N', 'E', 'W']:
+            not_with_local_mutated = False
             if player in not_with and tile in not_with[player]:
                 probabilities[tile][player] = 0.0
                 continue
-            # if tile in all_known_with_tiles:
-            #     if player in known_with and tile in known_with[player]:
-            #         probabilities[tile][player] = 1.0
-            #     else:
-            #         probabilities[tile][player] = 0.0
-            #     continue
             # remove the not_with restriction from the local copy to be able to assign the tile to one of the allowed players
-            not_with_local = copy.deepcopy(not_with)
+            # trying to mutate it for performance reasons
+            # not_with_local = copy.deepcopy(not_with)
             for p in [p for p in 'NEW' if p!=player]:
-                if p in not_with_local and tile in not_with_local[p]:
+                # if p in not_with_local and tile in not_with_local[p]:
+                if tile in not_with_local[p]:
                     not_with_local[p].remove(tile)
-
-            # if player in known_with:
-            #     known_with_local = copy.deepcopy(known_with)
-            #     known_with_local[player].add(tile)
-            # else:
-            #     known_with_local = {player: {tile}}
-
+                    not_with_local_mutated = True
+                    other_player = p
             known_with_local = {player: {tile}}
 
             scenarios = generate_scenarios(player_tiles, not_with_local, known_with_local)
-            # print('scenarios',scenarios)
-            # if total_probability > 0:
             tile_probability: float = 0.0
             for s in scenarios:
-                # try:                
-                #     assert len(s.N.intersection(s.W))==0 and len(s.N.intersection(s.E))==0 and len(s.E.intersection(s.W))==0
-                # except AssertionError as ae:
-                #     print('tile',tile)
-                #     print('player',player)
-                #     print('scenario error', s)
-                #     # print('(player_tiles, not_with_local, known_with_local)',(player_tiles, not_with_local, known_with_local))
-                #     print('player_tiles',player_tiles)
-                #     print('not_with',not_with)
-                #     print('sanitized_not_with',sanitized_not_with)
-                #     print('not_with_local',not_with_local)
-                #     print('known_with',known_with)            
-                #     print('known_with_local',known_with_local)
-                #     raise ae
                 if tile in getattr(s, player):
-                    # assigned_tiles = sum(len(e) for e in s)
                     assigned_tiles = s.total_tiles()
                     tile_probability += calculate_scenario_probability(s, player_tiles, total_tiles-assigned_tiles)
 
             probabilities[tile][player] = tile_probability / total_probability
+            # Add back the tile if necessary
+            if not_with_local_mutated:
+                not_with_local[other_player].add(tile)
+
         try:
             assert abs(1.0 - sum(probabilities[tile][player] for player in probabilities[tile])) < 1e-5
         except AssertionError as ae:
