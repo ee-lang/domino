@@ -68,25 +68,105 @@ class DominoGame:
 	# 	winning_team = 0 if self.scores[0] >= 100 else 1
 	# 	print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
 
+	# def play_game(self):
+	# 	print(f"Game starts with {self.variant.capitalize()} rules.")
+	# 	while max(self.scores) < (100 if self.variant!='international' else 150):
+	# 		round_winner, round_score = self.play_round()
+	# 		print(f"\nRound {self.current_round} ended.")
+	# 		print(f"Round winner: {'Team 1' if round_winner % 2 == 0 else 'Team 2'} (Player {round_winner})")
+	# 		print(f"Round score: {round_score}")
+	# 		print(f"Total scores: Team 1 - {self.scores[0]}, Team 2 - {self.scores[1]}")
+
+	# 		self.current_round += 1
+	# 		self.starting_player = self.determine_next_starting_player(round_winner)
+	# 		print(f"Next starting player: Player {self.starting_player}")
+
+	# 	winning_team = 0 if self.scores[0] >= (100 if self.variant!='international' else 150) else 1
+	# 	print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
+
 	def play_game(self):
 		print(f"Game starts with {self.variant.capitalize()} rules.")
-		while max(self.scores) < (100 if self.variant!='international' else 150):
+		
+		games_won = [0, 0]  # Games won by each team
+		games_tied = 0  # Number of tied games
+		round_scores = []  # List to store scores for each round
+		
+		winning_score = 100 if self.variant != 'international' else 1500
+		
+		while max(self.scores) < winning_score:
 			round_winner, round_score = self.play_round()
+
+			# Call end_round for each player
+			for i, player in enumerate(self.players):
+				player.end_round(self.scores, i % 2)
+			
 			print(f"\nRound {self.current_round} ended.")
 			print(f"Round winner: {'Team 1' if round_winner % 2 == 0 else 'Team 2'} (Player {round_winner})")
 			print(f"Round score: {round_score}")
+			
+			# Update scores and round_scores
+			if round_winner != -1:  # Not a tie
+				self.scores[round_winner % 2] += round_score
+				round_scores.append((round_winner % 2, round_score))
+				games_won[round_winner % 2] += 1
+			else:  # Tie
+				round_scores.append((-1, 0))
+				games_tied += 1
+			
 			print(f"Total scores: Team 1 - {self.scores[0]}, Team 2 - {self.scores[1]}")
-
+			
+			# Print round statistics
+			self.print_round_statistics(games_won, games_tied, round_scores)
+			
 			self.current_round += 1
 			self.starting_player = self.determine_next_starting_player(round_winner)
 			print(f"Next starting player: Player {self.starting_player}")
 
-		winning_team = 0 if self.scores[0] >= (100 if self.variant!='international' else 150) else 1
+		winning_team = 0 if self.scores[0] >= winning_score else 1
 		print(f"\nGame over! Team {winning_team + 1} wins with a score of {self.scores[winning_team]}!")
+		
+		# Print final game statistics
+		self.print_final_game_statistics(games_won, games_tied, round_scores)
 
+	def print_round_statistics(self, games_won, games_tied, round_scores):
+		print("\nRound Statistics:")
+		print(f"Games won: Team 1 - {games_won[0]}, Team 2 - {games_won[1]}")
+		print(f"Games tied: {games_tied}")
+		
+		team1_points = sum(score if team == 0 else -score for team, score in round_scores if team != -1)
+		team2_points = sum(score if team == 1 else -score for team, score in round_scores if team != -1)
+		
+		print(f"Cumulative points: Team 1 - {team1_points}, Team 2 - {team2_points}")
+		
+		if self.current_round > 0:
+			avg_score_team1 = team1_points / self.current_round
+			avg_score_team2 = team2_points / self.current_round
+			print(f"Average score per round: Team 1 - {avg_score_team1:.2f}, Team 2 - {avg_score_team2:.2f}")
+
+	def print_final_game_statistics(self, games_won, games_tied, round_scores):
+		print("\nFinal Game Statistics:")
+		print(f"Total rounds played: {self.current_round}")
+		print(f"Games won: Team 1 - {games_won[0]}, Team 2 - {games_won[1]}")
+		print(f"Games tied: {games_tied}")
+		
+		team1_points = sum(score if team == 0 else -score for team, score in round_scores if team != -1)
+		team2_points = sum(score if team == 1 else -score for team, score in round_scores if team != -1)
+		
+		print(f"Total cumulative points: Team 1 - {team1_points}, Team 2 - {team2_points}")
+		
+		avg_score_team1 = team1_points / self.current_round
+		avg_score_team2 = team2_points / self.current_round
+		print(f"Average score per round: Team 1 - {avg_score_team1:.2f}, Team 2 - {avg_score_team2:.2f}")
+		
+		print("\nRound-by-round scores:")
+		for i, (team, score) in enumerate(round_scores, 1):
+			if team == -1:
+				print(f"Round {i}: Tie")
+			else:
+				print(f"Round {i}: Team {team + 1} won {score} points")
 
 	def play_round(self):
-		print(f"\nStarting Round {self.current_round + 1}")
+		print(f"\nStarting Round {self.current_round}")
 		self.initialize_round()
 		print(f"All players have been dealt {self.hand_size} tiles.")
 		print(f"Starting player: Player {self.starting_player}")
@@ -118,12 +198,12 @@ class DominoGame:
 		
 		round_winner, round_score = self.calculate_round_score()
 		
-		# Update scores
-		self.scores[round_winner % 2] += round_score
+		# # Update scores
+		# self.scores[round_winner % 2] += round_score
 		
-		# Call end_round for each player
-		for i, player in enumerate(self.players):
-			player.end_round(self.scores, i % 2)
+		# # Call end_round for each player
+		# for i, player in enumerate(self.players):
+		# 	player.end_round(self.scores, i % 2)
 		
 		return round_winner, round_score
 
@@ -344,7 +424,8 @@ def main():
 
 	# players = [HumanPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
 	# players = [HumanPlayerWithAnalytics(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
-	players = [AnalyticAgentPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
+	# players = [AnalyticAgentPlayer(), RandomPlayer(), RandomPlayer(), RandomPlayer()]
+	players = [AnalyticAgentPlayer(), RandomPlayer(), AnalyticAgentPlayer(position = 2), RandomPlayer()]
 	game = DominoGame(players, variant=args.variant)
 	game.play_game()
 

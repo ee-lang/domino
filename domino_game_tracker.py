@@ -314,7 +314,14 @@ def generate_sample_from_game_state(
     )
 
     # Assert that the lengths match
-    assert len(remaining_tiles) == sum(e for e in player_tiles)
+    try:
+        assert len(remaining_tiles) == sum(e for e in player_tiles)
+    except AssertionError as ae:
+        print('remaining_tiles',remaining_tiles)
+        print('len(remaining_tiles)',len(remaining_tiles))
+        print('player_tiles',player_tiles)
+        print('sum(e for e in player_tiles)',sum(e for e in player_tiles))
+        raise ae
 
     # Generate a sample
     sample = generate_sample(list(remaining_tiles), not_with, known_with, player_tiles)

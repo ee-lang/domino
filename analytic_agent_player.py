@@ -10,12 +10,13 @@ import copy
 from tqdm import tqdm
 
 class AnalyticAgentPlayer(HumanPlayer):
-    def __init__(self):
+    def __init__(self, position = 0):
         super().__init__()
         self.move_history = []
         self.tile_count_history = defaultdict(list)
         self.round_scores = []
         self.first_game = True
+        self.position = position
 
     def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]], verbose=True) -> tuple[tuple[int,int], str] | None:
         if self.first_game:
@@ -24,6 +25,8 @@ class AnalyticAgentPlayer(HumanPlayer):
                 self.first_game = False
                 print('Playing mandatory (6,6) opening on the first game.')
                 return (6,6),'l'
+            else:
+                self.first_game = False
 
         unplayed_tiles = self.get_unplayed_tiles(game_state, player_hand)
         _unplayed_tiles = DominoTile.loi_to_domino_tiles(unplayed_tiles)
@@ -33,7 +36,7 @@ class AnalyticAgentPlayer(HumanPlayer):
         _moves = history_to_domino_tiles_history(game_state.history)
         _remaining_tiles = set(_unplayed_tiles)
         _initial_player_tiles = {p: 7 for p in PlayerPosition}
-        _starting_player = PlayerPosition(game_state.history[0][0]) if len(game_state.history)>0 else PlayerPosition.SOUTH
+        _starting_player = PlayerPosition((game_state.history[0][0] - self.position)%4) if len(game_state.history)>0 else PlayerPosition.SOUTH
 
         current_player, _final_remaining_tiles, _board_ends, _player_tiles_count, _knowledge_tracker = domino_game_state_our_perspective(
             _remaining_tiles, _moves, _initial_player_tiles, current_player=_starting_player)
