@@ -1,0 +1,2671 @@
+Starting a new International Domino game!
+Game starts with International rules.
+
+Starting Round 0
+All players have been dealt 7 tiles.
+Starting player: Player 0
+The first player must start with the double 6.
+
+Player 0's turn
+Current board: (-1, -1)
+Playing mandatory (6,6) opening on the first game.
+First move: (6, 6)
+New board state: (6, 6)
+Tiles remaining per player: [6, 7, 7, 7]
+Player 0 plays ((6, 6), 'l')
+
+Player 1's turn
+Current board: (6, 6)
+Played (3, 6) on the left side
+New board state: (3, 6)
+Tiles remaining per player: [6, 6, 7, 7]
+Player 1 plays ((3, 6), 'l')
+
+Player 2's turn
+Current board: (3, 6)
+Played (3, 5) on the left side
+New board state: (5, 6)
+Tiles remaining per player: [6, 6, 6, 7]
+Player 2 plays ((3, 5), 'l')
+
+Player 3's turn
+Current board: (5, 6)
+Played (0, 6) on the right side
+New board state: (5, 0)
+Tiles remaining per player: [6, 6, 6, 6]
+Player 3 plays ((0, 6), 'r')
+
+Player 0's turn
+Current board: (5, 0)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 6), (3, 4), (4, 6), (4, 5), (0, 1), (2, 4)]
+Remaining tiles: [0|0, 0|2, 0|3, 0|4, 0|5, 1|1, 1|2, 1|3, 1|4, 1|5, 2|2, 2|3, 2|5, 2|6, 3|3, 4|4, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 6
+  EAST: 6
+  NORTH: 6
+  WEST: 6
+----------------------------
+
+
+Move Statistics (based on 25 samples):
+
+Move: Play 4|5 on the left
+  Count: 25
+  Mean Score: 5.0800
+  Standard Deviation: 31.2195
+  Median Score: 16.0000
+  Mode Score: 34.0000
+  Min Score: -47.0000
+  Max Score: 54.0000
+
+Move: Play 0|1 on the right
+  Count: 25
+  Mean Score: 0.5600
+  Standard Deviation: 40.2400
+  Median Score: 19.0000
+  Mode Score: 21.0000
+  Min Score: -86.0000
+  Max Score: 86.0000
+
+Best Move Overall:
+Best move: Play 4|5 on the left
+Mean Expected Score: 5.0800
+Played (4, 5) on the left side
+New board state: (4, 0)
+Tiles remaining per player: [5, 6, 6, 6]
+Player 0 plays ((4, 5), 'l')
+
+Player 1's turn
+Current board: (4, 0)
+Played (0, 5) on the right side
+New board state: (4, 5)
+Tiles remaining per player: [5, 5, 6, 6]
+Player 1 plays ((0, 5), 'r')
+
+Player 2's turn
+Current board: (4, 5)
+Played (0, 4) on the left side
+New board state: (0, 5)
+Tiles remaining per player: [5, 5, 5, 6]
+Player 2 plays ((0, 4), 'l')
+
+Player 3's turn
+Current board: (0, 5)
+Played (5, 6) on the right side
+New board state: (0, 6)
+Tiles remaining per player: [5, 5, 5, 5]
+Player 3 plays ((5, 6), 'r')
+
+Player 0's turn
+Current board: (0, 6)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 6), (3, 4), (4, 6), (0, 1), (2, 4)]
+Remaining tiles: [0|0, 0|2, 0|3, 1|1, 1|2, 1|3, 1|4, 1|5, 2|2, 2|3, 2|5, 2|6, 3|3, 4|4, 5|5]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 5
+  EAST: 5
+  NORTH: 5
+  WEST: 5
+----------------------------
+
+
+Move Statistics (based on 100 samples):
+
+Move: Play 4|6 on the right
+  Count: 100
+  Mean Score: 21.1300
+  Standard Deviation: 24.0935
+  Median Score: 25.0000
+  Mode Score: 25.0000
+  Min Score: -42.0000
+  Max Score: 72.0000
+
+Move: Play 0|1 on the left
+  Count: 100
+  Mean Score: 16.0200
+  Standard Deviation: 30.4691
+  Median Score: 22.0000
+  Mode Score: 24.0000
+  Min Score: -72.0000
+  Max Score: 62.0000
+
+Move: Play 1|6 on the right
+  Count: 100
+  Mean Score: 3.9600
+  Standard Deviation: 35.3007
+  Median Score: 19.0000
+  Mode Score: 21.0000
+  Min Score: -74.0000
+  Max Score: 68.0000
+
+Best Move Overall:
+Best move: Play 4|6 on the right
+Mean Expected Score: 21.1300
+Played (4, 6) on the right side
+New board state: (0, 4)
+Tiles remaining per player: [4, 5, 5, 5]
+Player 0 plays ((4, 6), 'r')
+
+Player 1's turn
+Current board: (0, 4)
+Played (1, 4) on the right side
+New board state: (0, 1)
+Tiles remaining per player: [4, 4, 5, 5]
+Player 1 plays ((1, 4), 'r')
+
+Player 2's turn
+Current board: (0, 1)
+Played (1, 2) on the right side
+New board state: (0, 2)
+Tiles remaining per player: [4, 4, 4, 5]
+Player 2 plays ((1, 2), 'r')
+
+Player 3's turn
+Current board: (0, 2)
+Played (0, 2) on the left side
+New board state: (2, 2)
+Tiles remaining per player: [4, 4, 4, 4]
+Player 3 plays ((0, 2), 'l')
+
+Player 0's turn
+Current board: (2, 2)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 6), (3, 4), (0, 1), (2, 4)]
+Remaining tiles: [0|0, 0|3, 1|1, 1|3, 1|5, 2|2, 2|3, 2|5, 2|6, 3|3, 4|4, 5|5]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 4
+  EAST: 4
+  NORTH: 4
+  WEST: 4
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 2|4 on the left
+  Count: 1000
+  Mean Score: 19.4040
+  Standard Deviation: 25.2387
+  Median Score: 25.0000
+  Mode Score: 16.0000
+  Min Score: -52.0000
+  Max Score: 58.0000
+
+Best Move Overall:
+Best move: Play 2|4 on the left
+Mean Expected Score: 19.4040
+Played (2, 4) on the left side
+New board state: (4, 2)
+Tiles remaining per player: [3, 4, 4, 4]
+Player 0 plays ((2, 4), 'l')
+
+Player 1's turn
+Current board: (4, 2)
+Played (4, 4) on the left side
+New board state: (4, 2)
+Tiles remaining per player: [3, 3, 4, 4]
+Player 1 plays ((4, 4), 'l')
+
+Player 2's turn
+Current board: (4, 2)
+Played (2, 2) on the right side
+New board state: (4, 2)
+Tiles remaining per player: [3, 3, 3, 4]
+Player 2 plays ((2, 2), 'r')
+
+Player 3's turn
+Current board: (4, 2)
+Player passed
+New board state: (4, 2)
+Tiles remaining per player: [3, 3, 3, 4]
+Player 3 passes
+
+Player 0's turn
+Current board: (4, 2)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 6), (3, 4), (0, 1)]
+Remaining tiles: [0|0, 0|3, 1|1, 1|3, 1|5, 2|3, 2|5, 2|6, 3|3, 5|5]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: {2, 4}
+
+Remaining tiles for each player:
+  SOUTH: 3
+  EAST: 3
+  NORTH: 3
+  WEST: 4
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 3|4 on the left
+  Count: 1000
+  Mean Score: -1.3360
+  Standard Deviation: 24.5919
+  Median Score: 10.0000
+  Mode Score: -40.0000
+  Min Score: -42.0000
+  Max Score: 42.0000
+
+Best Move Overall:
+Best move: Play 3|4 on the left
+Mean Expected Score: -1.3360
+Played (3, 4) on the left side
+New board state: (3, 2)
+Tiles remaining per player: [2, 3, 3, 4]
+Player 0 plays ((3, 4), 'l')
+
+Player 1's turn
+Current board: (3, 2)
+Played (2, 6) on the right side
+New board state: (3, 6)
+Tiles remaining per player: [2, 2, 3, 4]
+Player 1 plays ((2, 6), 'r')
+
+Player 2's turn
+Current board: (3, 6)
+Played (3, 3) on the left side
+New board state: (3, 6)
+Tiles remaining per player: [2, 2, 2, 4]
+Player 2 plays ((3, 3), 'l')
+
+Player 3's turn
+Current board: (3, 6)
+Played (1, 3) on the left side
+New board state: (1, 6)
+Tiles remaining per player: [2, 2, 2, 3]
+Player 3 plays ((1, 3), 'l')
+
+Player 0's turn
+Current board: (1, 6)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 6), (0, 1)]
+Remaining tiles: [0|0, 0|3, 1|1, 1|5, 2|3, 2|5, 5|5]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: {2, 4}
+
+Remaining tiles for each player:
+  SOUTH: 2
+  EAST: 2
+  NORTH: 2
+  WEST: 3
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 0|1 on the left
+  Count: 1000
+  Mean Score: 29.3540
+  Standard Deviation: 1.8022
+  Median Score: 30.0000
+  Mode Score: 30.0000
+  Min Score: 25.0000
+  Max Score: 33.0000
+
+Move: Play 1|6 on the left
+  Count: 1000
+  Mean Score: 28.0500
+  Standard Deviation: 18.6435
+  Median Score: 34.0000
+  Mode Score: 34.0000
+  Min Score: -34.0000
+  Max Score: 34.0000
+
+Move: Play 1|6 on the right
+  Count: 1000
+  Mean Score: 23.2460
+  Standard Deviation: 4.3412
+  Median Score: 25.0000
+  Mode Score: 25.0000
+  Min Score: 15.0000
+  Max Score: 31.0000
+
+Best Move Overall:
+Best move: Play 0|1 on the left
+Mean Expected Score: 29.3540
+Played (0, 1) on the left side
+New board state: (0, 6)
+Tiles remaining per player: [1, 2, 2, 3]
+Player 0 plays ((0, 1), 'l')
+
+Player 1's turn
+Current board: (0, 6)
+Player passed
+New board state: (0, 6)
+Tiles remaining per player: [1, 2, 2, 3]
+Player 1 passes
+
+Player 2's turn
+Current board: (0, 6)
+Played (0, 0) on the left side
+New board state: (0, 6)
+Tiles remaining per player: [1, 2, 1, 3]
+Player 2 plays ((0, 0), 'l')
+
+Player 3's turn
+Current board: (0, 6)
+Played (0, 3) on the left side
+New board state: (3, 6)
+Tiles remaining per player: [1, 2, 1, 2]
+Player 3 plays ((0, 3), 'l')
+
+Player 0's turn
+Current board: (3, 6)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 6)]
+Remaining tiles: [1|1, 1|5, 2|3, 2|5, 5|5]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {0, 6}
+  NORTH: set()
+  WEST: {2, 4}
+
+Remaining tiles for each player:
+  SOUTH: 1
+  EAST: 2
+  NORTH: 1
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 1|6 on the right
+  Count: 1000
+  Mean Score: 30.0000
+  Standard Deviation: 0.0000
+  Median Score: 30.0000
+  Mode Score: 30.0000
+  Min Score: 30.0000
+  Max Score: 30.0000
+
+Best Move Overall:
+Best move: Play 1|6 on the right
+Mean Expected Score: 30.0000
+Played (1, 6) on the right side
+New board state: (3, 1)
+Tiles remaining per player: [0, 2, 1, 2]
+Player 0 plays ((1, 6), 'r')
+
+Round over. Final hands:
+Player 0: []
+Player 1: [(2, 3), (1, 5)]
+Player 2: [(2, 5)]
+Player 3: [(1, 1), (5, 5)]
+Remaining tiles values: [0, 11, 7, 12]
+Player 0 won by playing all tiles
+HumanPlayer: Round ended. Scores - Team 1: 0, Team 2: 0
+HumanPlayer: Your team (Team 1) score: 0
+HumanPlayer: Reset missing tiles for the next round.
+
+Round 0 ended.
+Round winner: Team 1 (Player 0)
+Round score: 30
+Total scores: Team 1 - 30, Team 2 - 0
+
+Round Statistics:
+Games won: Team 1 - 1, Team 2 - 0
+Games tied: 0
+Cumulative points: Team 1 - 30, Team 2 - -30
+Venezuelan/International rules: Player 1 starts next round
+Next starting player: Player 1
+
+Starting Round 1
+All players have been dealt 7 tiles.
+Starting player: Player 1
+
+Player 1's turn
+Current board: (-1, -1)
+First move: (0, 1)
+New board state: (0, 1)
+Tiles remaining per player: [7, 6, 7, 7]
+Player 1 plays ((0, 1), 'l')
+
+Player 2's turn
+Current board: (0, 1)
+Played (1, 5) on the right side
+New board state: (0, 5)
+Tiles remaining per player: [7, 6, 6, 7]
+Player 2 plays ((1, 5), 'r')
+
+Player 3's turn
+Current board: (0, 5)
+Played (5, 5) on the right side
+New board state: (0, 5)
+Tiles remaining per player: [7, 6, 6, 6]
+Player 3 plays ((5, 5), 'r')
+
+Player 0's turn
+Current board: (0, 5)
+
+--- Verbose Information ---
+Starting player: EAST
+Player's hand: [(0, 2), (1, 2), (3, 3), (2, 6), (2, 2), (1, 1), (0, 0)]
+Remaining tiles: [0|3, 0|4, 0|5, 0|6, 1|3, 1|4, 1|6, 2|3, 2|4, 2|5, 3|4, 3|5, 3|6, 4|4, 4|5, 4|6, 5|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 7
+  EAST: 6
+  NORTH: 6
+  WEST: 6
+----------------------------
+
+
+Move Statistics (based on 25 samples):
+
+Move: Play 0|0 on the left
+  Count: 25
+  Mean Score: -17.5800
+  Standard Deviation: 24.9390
+  Median Score: -28.0000
+  Mode Score: -32.0000
+  Min Score: -58.0000
+  Max Score: 38.0000
+
+Move: Play 0|2 on the left
+  Count: 25
+  Mean Score: -23.2400
+  Standard Deviation: 24.4528
+  Median Score: -28.0000
+  Mode Score: -34.0000
+  Min Score: -66.0000
+  Max Score: 38.0000
+
+Best Move Overall:
+Best move: Play 0|0 on the left
+Mean Expected Score: -17.5800
+Played (0, 0) on the left side
+New board state: (0, 5)
+Tiles remaining per player: [6, 6, 6, 6]
+Player 0 plays ((0, 0), 'l')
+
+Player 1's turn
+Current board: (0, 5)
+Played (2, 5) on the right side
+New board state: (0, 2)
+Tiles remaining per player: [6, 5, 6, 6]
+Player 1 plays ((2, 5), 'r')
+
+Player 2's turn
+Current board: (0, 2)
+Played (0, 3) on the left side
+New board state: (3, 2)
+Tiles remaining per player: [6, 5, 5, 6]
+Player 2 plays ((0, 3), 'l')
+
+Player 3's turn
+Current board: (3, 2)
+Played (3, 4) on the left side
+New board state: (4, 2)
+Tiles remaining per player: [6, 5, 5, 5]
+Player 3 plays ((3, 4), 'l')
+
+Player 0's turn
+Current board: (4, 2)
+
+--- Verbose Information ---
+Starting player: EAST
+Player's hand: [(0, 2), (1, 2), (3, 3), (2, 6), (2, 2), (1, 1)]
+Remaining tiles: [0|4, 0|5, 0|6, 1|3, 1|4, 1|6, 2|3, 2|4, 3|5, 3|6, 4|4, 4|5, 4|6, 5|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 6
+  EAST: 5
+  NORTH: 5
+  WEST: 5
+----------------------------
+
+
+Move Statistics (based on 100 samples):
+
+Move: Play 2|2 on the right
+  Count: 100
+  Mean Score: -16.5300
+  Standard Deviation: 30.5556
+  Median Score: -24.0000
+  Mode Score: -22.0000
+  Min Score: -66.0000
+  Max Score: 53.0000
+
+Move: Play 1|2 on the right
+  Count: 100
+  Mean Score: -27.3400
+  Standard Deviation: 33.1337
+  Median Score: -32.5000
+  Mode Score: -26.0000
+  Min Score: -76.0000
+  Max Score: 72.0000
+
+Move: Play 2|6 on the right
+  Count: 100
+  Mean Score: -28.0200
+  Standard Deviation: 26.2317
+  Median Score: -31.0000
+  Mode Score: -28.0000
+  Min Score: -86.0000
+  Max Score: 88.0000
+
+Move: Play 0|2 on the right
+  Count: 100
+  Mean Score: -29.7500
+  Standard Deviation: 35.6502
+  Median Score: -31.5000
+  Mode Score: -27.0000
+  Min Score: -106.0000
+  Max Score: 96.0000
+
+Best Move Overall:
+Best move: Play 2|2 on the right
+Mean Expected Score: -16.5300
+Played (2, 2) on the right side
+New board state: (4, 2)
+Tiles remaining per player: [5, 5, 5, 5]
+Player 0 plays ((2, 2), 'r')
+
+Player 1's turn
+Current board: (4, 2)
+Played (4, 4) on the left side
+New board state: (4, 2)
+Tiles remaining per player: [5, 4, 5, 5]
+Player 1 plays ((4, 4), 'l')
+
+Player 2's turn
+Current board: (4, 2)
+Played (4, 5) on the left side
+New board state: (5, 2)
+Tiles remaining per player: [5, 4, 4, 5]
+Player 2 plays ((4, 5), 'l')
+
+Player 3's turn
+Current board: (5, 2)
+Played (2, 4) on the right side
+New board state: (5, 4)
+Tiles remaining per player: [5, 4, 4, 4]
+Player 3 plays ((2, 4), 'r')
+
+Player 0's turn
+Current board: (5, 4)
+
+--- Verbose Information ---
+Starting player: EAST
+Player's hand: [(0, 2), (1, 2), (3, 3), (2, 6), (1, 1)]
+Remaining tiles: [0|4, 0|5, 0|6, 1|3, 1|4, 1|6, 2|3, 3|5, 3|6, 4|6, 5|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 5
+  EAST: 4
+  NORTH: 4
+  WEST: 4
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Pass
+  Count: 1000
+  Mean Score: -5.1830
+  Standard Deviation: 34.7734
+  Median Score: -19.5000
+  Mode Score: -32.0000
+  Min Score: -76.0000
+  Max Score: 74.0000
+
+Best Move Overall:
+Best move: Pass
+Mean Expected Score: -5.1830
+Player passed
+New board state: (5, 4)
+Tiles remaining per player: [5, 4, 4, 4]
+Player 0 passes
+
+Player 1's turn
+Current board: (5, 4)
+Played (0, 5) on the left side
+New board state: (0, 4)
+Tiles remaining per player: [5, 3, 4, 4]
+Player 1 plays ((0, 5), 'l')
+
+Player 2's turn
+Current board: (0, 4)
+Played (0, 6) on the left side
+New board state: (6, 4)
+Tiles remaining per player: [5, 3, 3, 4]
+Player 2 plays ((0, 6), 'l')
+
+Player 3's turn
+Current board: (6, 4)
+Played (5, 6) on the left side
+New board state: (5, 4)
+Tiles remaining per player: [5, 3, 3, 3]
+Player 3 plays ((5, 6), 'l')
+
+Player 0's turn
+Current board: (5, 4)
+
+--- Verbose Information ---
+Starting player: EAST
+Player's hand: [(0, 2), (1, 2), (3, 3), (2, 6), (1, 1)]
+Remaining tiles: [0|4, 1|3, 1|4, 1|6, 2|3, 3|5, 3|6, 4|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: {4, 5}
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 5
+  EAST: 3
+  NORTH: 3
+  WEST: 3
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Pass
+  Count: 1000
+  Mean Score: -6.0890
+  Standard Deviation: 37.7232
+  Median Score: -21.0000
+  Mode Score: -40.0000
+  Min Score: -68.0000
+  Max Score: 66.0000
+
+Best Move Overall:
+Best move: Pass
+Mean Expected Score: -6.0890
+Player passed
+New board state: (5, 4)
+Tiles remaining per player: [5, 3, 3, 3]
+Player 0 passes
+
+Player 1's turn
+Current board: (5, 4)
+Played (4, 6) on the right side
+New board state: (5, 6)
+Tiles remaining per player: [5, 2, 3, 3]
+Player 1 plays ((4, 6), 'r')
+
+Player 2's turn
+Current board: (5, 6)
+Played (3, 5) on the left side
+New board state: (3, 6)
+Tiles remaining per player: [5, 2, 2, 3]
+Player 2 plays ((3, 5), 'l')
+
+Player 3's turn
+Current board: (3, 6)
+Played (2, 3) on the left side
+New board state: (2, 6)
+Tiles remaining per player: [5, 2, 2, 2]
+Player 3 plays ((2, 3), 'l')
+
+Player 0's turn
+Current board: (2, 6)
+
+--- Verbose Information ---
+Starting player: EAST
+Player's hand: [(0, 2), (1, 2), (3, 3), (2, 6), (1, 1)]
+Remaining tiles: [0|4, 1|3, 1|4, 1|6, 3|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: {4, 5}
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 5
+  EAST: 2
+  NORTH: 2
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 2|6 on the right
+  Count: 1000
+  Mean Score: 3.4930
+  Standard Deviation: 32.7674
+  Median Score: 0.0000
+  Mode Score: 40.0000
+  Min Score: -40.0000
+  Max Score: 40.0000
+
+Move: Play 2|6 on the left
+  Count: 1000
+  Mean Score: -4.9090
+  Standard Deviation: 20.9616
+  Median Score: -16.0000
+  Mode Score: -16.0000
+  Min Score: -31.0000
+  Max Score: 31.0000
+
+Move: Play 1|2 on the left
+  Count: 1000
+  Mean Score: -15.8700
+  Standard Deviation: 27.0796
+  Median Score: -28.0000
+  Mode Score: -37.0000
+  Min Score: -41.0000
+  Max Score: 40.0000
+
+Move: Play 0|2 on the left
+  Count: 1000
+  Mean Score: -22.1270
+  Standard Deviation: 26.4662
+  Median Score: -32.0000
+  Mode Score: -44.0000
+  Min Score: -44.0000
+  Max Score: 46.0000
+
+Best Move Overall:
+Best move: Play 2|6 on the right
+Mean Expected Score: 3.4930
+Played (2, 6) on the right side
+New board state: (2, 2)
+Tiles remaining per player: [4, 2, 2, 2]
+Player 0 plays ((2, 6), 'r')
+
+Player 1's turn
+Current board: (2, 2)
+Player passed
+New board state: (2, 2)
+Tiles remaining per player: [4, 2, 2, 2]
+Player 1 passes
+
+Player 2's turn
+Current board: (2, 2)
+Player passed
+New board state: (2, 2)
+Tiles remaining per player: [4, 2, 2, 2]
+Player 2 passes
+
+Player 3's turn
+Current board: (2, 2)
+Player passed
+New board state: (2, 2)
+Tiles remaining per player: [4, 2, 2, 2]
+Player 3 passes
+
+Player 0's turn
+Current board: (2, 2)
+
+--- Verbose Information ---
+Starting player: EAST
+Player's hand: [(0, 2), (1, 2), (3, 3), (1, 1)]
+Remaining tiles: [0|4, 1|3, 1|4, 1|6, 3|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: {4, 5}
+  EAST: {2}
+  NORTH: {2}
+  WEST: {2}
+
+Remaining tiles for each player:
+  SOUTH: 4
+  EAST: 2
+  NORTH: 2
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 0|2 on the left
+  Count: 1000
+  Mean Score: -5.9890
+  Standard Deviation: 31.8499
+  Median Score: -22.0000
+  Mode Score: 40.0000
+  Min Score: -40.0000
+  Max Score: 40.0000
+
+Move: Play 1|2 on the left
+  Count: 1000
+  Mean Score: -6.3730
+  Standard Deviation: 30.0454
+  Median Score: -21.0000
+  Mode Score: -40.0000
+  Min Score: -40.0000
+  Max Score: 40.0000
+
+Best Move Overall:
+Best move: Play 0|2 on the left
+Mean Expected Score: -5.9890
+Played (0, 2) on the left side
+New board state: (0, 2)
+Tiles remaining per player: [3, 2, 2, 2]
+Player 0 plays ((0, 2), 'l')
+
+Player 1's turn
+Current board: (0, 2)
+Played (0, 4) on the left side
+New board state: (4, 2)
+Tiles remaining per player: [3, 1, 2, 2]
+Player 1 plays ((0, 4), 'l')
+
+Player 2's turn
+Current board: (4, 2)
+Player passed
+New board state: (4, 2)
+Tiles remaining per player: [3, 1, 2, 2]
+Player 2 passes
+
+Player 3's turn
+Current board: (4, 2)
+Played (1, 4) on the left side
+New board state: (1, 2)
+Tiles remaining per player: [3, 1, 2, 1]
+Player 3 plays ((1, 4), 'l')
+
+Player 0's turn
+Current board: (1, 2)
+
+--- Verbose Information ---
+Starting player: EAST
+Player's hand: [(1, 2), (3, 3), (1, 1)]
+Remaining tiles: [1|3, 1|6, 3|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: {4, 5}
+  EAST: {2}
+  NORTH: {2, 4}
+  WEST: {2}
+
+Remaining tiles for each player:
+  SOUTH: 3
+  EAST: 1
+  NORTH: 2
+  WEST: 1
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 1|1 on the left
+  Count: 1000
+  Mean Score: -24.7250
+  Standard Deviation: 16.2897
+  Median Score: -25.0000
+  Mode Score: -22.0000
+  Min Score: -37.0000
+  Max Score: 25.0000
+
+Move: Play 1|2 on the left
+  Count: 1000
+  Mean Score: -24.8000
+  Standard Deviation: 31.3998
+  Median Score: -40.0000
+  Mode Score: -40.0000
+  Min Score: -40.0000
+  Max Score: 40.0000
+
+Move: Play 1|2 on the right
+  Count: 1000
+  Mean Score: -30.4310
+  Standard Deviation: 4.7712
+  Median Score: -29.0000
+  Mode Score: -29.0000
+  Min Score: -36.0000
+  Max Score: -21.0000
+
+Best Move Overall:
+Best move: Play 1|1 on the left
+Mean Expected Score: -24.7250
+Played (1, 1) on the left side
+New board state: (1, 2)
+Tiles remaining per player: [2, 1, 2, 1]
+Player 0 plays ((1, 1), 'l')
+
+Player 1's turn
+Current board: (1, 2)
+Played (1, 3) on the left side
+New board state: (3, 2)
+Tiles remaining per player: [2, 0, 2, 1]
+Player 1 plays ((1, 3), 'l')
+
+Round over. Final hands:
+Player 0: [(1, 2), (3, 3)]
+Player 1: []
+Player 2: [(3, 6), (6, 6)]
+Player 3: [(1, 6)]
+Remaining tiles values: [9, 0, 21, 7]
+Player 1 won by playing all tiles
+HumanPlayer: Round ended. Scores - Team 1: 30, Team 2: 0
+HumanPlayer: Your team (Team 1) score: 30
+HumanPlayer: Reset missing tiles for the next round.
+
+Round 1 ended.
+Round winner: Team 2 (Player 1)
+Round score: 37
+Total scores: Team 1 - 30, Team 2 - 37
+
+Round Statistics:
+Games won: Team 1 - 1, Team 2 - 1
+Games tied: 0
+Cumulative points: Team 1 - -7, Team 2 - 7
+Average score per round: Team 1 - -7.00, Team 2 - 7.00
+Venezuelan/International rules: Player 2 starts next round
+Next starting player: Player 2
+
+Starting Round 2
+All players have been dealt 7 tiles.
+Starting player: Player 2
+
+Player 2's turn
+Current board: (-1, -1)
+First move: (2, 4)
+New board state: (2, 4)
+Tiles remaining per player: [7, 7, 6, 7]
+Player 2 plays ((2, 4), 'l')
+
+Player 3's turn
+Current board: (2, 4)
+Played (1, 4) on the right side
+New board state: (2, 1)
+Tiles remaining per player: [7, 7, 6, 6]
+Player 3 plays ((1, 4), 'r')
+
+Player 0's turn
+Current board: (2, 1)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(4, 5), (2, 5), (1, 3), (2, 2), (1, 2), (1, 6), (3, 5)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|3, 0|4, 0|5, 0|6, 1|1, 1|5, 2|3, 2|6, 3|3, 3|4, 3|6, 4|4, 4|6, 5|5, 5|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 7
+  EAST: 7
+  NORTH: 6
+  WEST: 6
+----------------------------
+
+
+Move Statistics (based on 25 samples):
+
+Move: Play 2|2 on the left
+  Count: 25
+  Mean Score: 22.9667
+  Standard Deviation: 26.1584
+  Median Score: 28.0000
+  Mode Score: 24.0000
+  Min Score: -47.0000
+  Max Score: 58.0000
+
+Move: Play 1|2 on the left
+  Count: 25
+  Mean Score: 8.0667
+  Standard Deviation: 32.6888
+  Median Score: 23.0000
+  Mode Score: 31.0000
+  Min Score: -56.0000
+  Max Score: 72.0000
+
+Move: Play 1|2 on the right
+  Count: 25
+  Mean Score: 7.1280
+  Standard Deviation: 39.7040
+  Median Score: 16.0000
+  Mode Score: 16.0000
+  Min Score: -54.0000
+  Max Score: 82.0000
+
+Move: Play 2|5 on the left
+  Count: 25
+  Mean Score: 5.1133
+  Standard Deviation: 33.0093
+  Median Score: 11.0000
+  Mode Score: 27.0000
+  Min Score: -56.0000
+  Max Score: 66.0000
+
+Move: Play 1|3 on the right
+  Count: 25
+  Mean Score: 0.0600
+  Standard Deviation: 28.6659
+  Median Score: 3.5000
+  Mode Score: -18.0000
+  Min Score: -44.0000
+  Max Score: 54.0000
+
+Move: Play 1|6 on the right
+  Count: 25
+  Mean Score: -12.6000
+  Standard Deviation: 27.8253
+  Median Score: -19.0000
+  Mode Score: -12.0000
+  Min Score: -62.0000
+  Max Score: 40.0000
+
+Best Move Overall:
+Best move: Play 2|2 on the left
+Mean Expected Score: 22.9667
+Played (2, 2) on the left side
+New board state: (2, 1)
+Tiles remaining per player: [6, 7, 6, 6]
+Player 0 plays ((2, 2), 'l')
+
+Player 1's turn
+Current board: (2, 1)
+Played (2, 3) on the left side
+New board state: (3, 1)
+Tiles remaining per player: [6, 6, 6, 6]
+Player 1 plays ((2, 3), 'l')
+
+Player 2's turn
+Current board: (3, 1)
+Player passed
+New board state: (3, 1)
+Tiles remaining per player: [6, 6, 6, 6]
+Player 2 passes
+
+Player 3's turn
+Current board: (3, 1)
+Played (3, 4) on the left side
+New board state: (4, 1)
+Tiles remaining per player: [6, 6, 6, 5]
+Player 3 plays ((3, 4), 'l')
+
+Player 0's turn
+Current board: (4, 1)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(4, 5), (2, 5), (1, 3), (1, 2), (1, 6), (3, 5)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|3, 0|4, 0|5, 0|6, 1|1, 1|5, 2|6, 3|3, 3|6, 4|4, 4|6, 5|5, 5|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: {1, 3}
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 6
+  EAST: 6
+  NORTH: 6
+  WEST: 5
+----------------------------
+
+
+Move Statistics (based on 100 samples):
+
+Move: Play 1|2 on the right
+  Count: 100
+  Mean Score: 14.4800
+  Standard Deviation: 33.0902
+  Median Score: 21.0000
+  Mode Score: 31.0000
+  Min Score: -76.0000
+  Max Score: 94.0000
+
+Move: Play 4|5 on the left
+  Count: 100
+  Mean Score: 9.7000
+  Standard Deviation: 31.3203
+  Median Score: 20.0000
+  Mode Score: 27.0000
+  Min Score: -64.0000
+  Max Score: 62.0000
+
+Move: Play 1|6 on the right
+  Count: 100
+  Mean Score: 4.7700
+  Standard Deviation: 33.3200
+  Median Score: 16.0000
+  Mode Score: 30.0000
+  Min Score: -96.0000
+  Max Score: 66.0000
+
+Move: Play 1|3 on the right
+  Count: 100
+  Mean Score: -8.1200
+  Standard Deviation: 37.9575
+  Median Score: -11.0000
+  Mode Score: -23.0000
+  Min Score: -96.0000
+  Max Score: 78.0000
+
+Best Move Overall:
+Best move: Play 1|2 on the right
+Mean Expected Score: 14.4800
+Played (1, 2) on the right side
+New board state: (4, 2)
+Tiles remaining per player: [5, 6, 6, 5]
+Player 0 plays ((1, 2), 'r')
+
+Player 1's turn
+Current board: (4, 2)
+Played (0, 4) on the left side
+New board state: (0, 2)
+Tiles remaining per player: [5, 5, 6, 5]
+Player 1 plays ((0, 4), 'l')
+
+Player 2's turn
+Current board: (0, 2)
+Played (2, 6) on the right side
+New board state: (0, 6)
+Tiles remaining per player: [5, 5, 5, 5]
+Player 2 plays ((2, 6), 'r')
+
+Player 3's turn
+Current board: (0, 6)
+Played (0, 3) on the left side
+New board state: (3, 6)
+Tiles remaining per player: [5, 5, 5, 4]
+Player 3 plays ((0, 3), 'l')
+
+Player 0's turn
+Current board: (3, 6)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(4, 5), (2, 5), (1, 3), (1, 6), (3, 5)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|5, 0|6, 1|1, 1|5, 3|3, 3|6, 4|4, 4|6, 5|5, 5|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: {1, 3}
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 5
+  EAST: 5
+  NORTH: 5
+  WEST: 4
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 3|5 on the left
+  Count: 1000
+  Mean Score: 6.5130
+  Standard Deviation: 33.3903
+  Median Score: 21.0000
+  Mode Score: 26.0000
+  Min Score: -76.0000
+  Max Score: 66.0000
+
+Move: Play 1|3 on the left
+  Count: 1000
+  Mean Score: -0.5170
+  Standard Deviation: 39.4776
+  Median Score: 16.5000
+  Mode Score: 26.0000
+  Min Score: -98.0000
+  Max Score: 84.0000
+
+Move: Play 1|6 on the right
+  Count: 1000
+  Mean Score: -11.6410
+  Standard Deviation: 37.7039
+  Median Score: -19.0000
+  Mode Score: 20.0000
+  Min Score: -86.0000
+  Max Score: 72.0000
+
+Best Move Overall:
+Best move: Play 3|5 on the left
+Mean Expected Score: 6.5130
+Played (3, 5) on the left side
+New board state: (5, 6)
+Tiles remaining per player: [4, 5, 5, 4]
+Player 0 plays ((3, 5), 'l')
+
+Player 1's turn
+Current board: (5, 6)
+Played (3, 6) on the right side
+New board state: (5, 3)
+Tiles remaining per player: [4, 4, 5, 4]
+Player 1 plays ((3, 6), 'r')
+
+Player 2's turn
+Current board: (5, 3)
+Played (5, 6) on the left side
+New board state: (6, 3)
+Tiles remaining per player: [4, 4, 4, 4]
+Player 2 plays ((5, 6), 'l')
+
+Player 3's turn
+Current board: (6, 3)
+Played (3, 3) on the right side
+New board state: (6, 3)
+Tiles remaining per player: [4, 4, 4, 3]
+Player 3 plays ((3, 3), 'r')
+
+Player 0's turn
+Current board: (6, 3)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(4, 5), (2, 5), (1, 3), (1, 6)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|5, 0|6, 1|1, 1|5, 4|4, 4|6, 5|5, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: {1, 3}
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 4
+  EAST: 4
+  NORTH: 4
+  WEST: 3
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 1|6 on the left
+  Count: 1000
+  Mean Score: -6.2140
+  Standard Deviation: 44.1737
+  Median Score: 0.0000
+  Mode Score: -64.0000
+  Min Score: -67.0000
+  Max Score: 66.0000
+
+Move: Play 1|3 on the right
+  Count: 1000
+  Mean Score: -7.2620
+  Standard Deviation: 27.4342
+  Median Score: -17.0000
+  Mode Score: -32.0000
+  Min Score: -64.0000
+  Max Score: 54.0000
+
+Best Move Overall:
+Best move: Play 1|6 on the left
+Mean Expected Score: -6.2140
+Played (1, 6) on the left side
+New board state: (1, 3)
+Tiles remaining per player: [3, 4, 4, 3]
+Player 0 plays ((1, 6), 'l')
+
+Player 1's turn
+Current board: (1, 3)
+Played (1, 1) on the left side
+New board state: (1, 3)
+Tiles remaining per player: [3, 3, 4, 3]
+Player 1 plays ((1, 1), 'l')
+
+Player 2's turn
+Current board: (1, 3)
+Player passed
+New board state: (1, 3)
+Tiles remaining per player: [3, 3, 4, 3]
+Player 2 passes
+
+Player 3's turn
+Current board: (1, 3)
+Played (1, 5) on the left side
+New board state: (5, 3)
+Tiles remaining per player: [3, 3, 4, 2]
+Player 3 plays ((1, 5), 'l')
+
+Player 0's turn
+Current board: (5, 3)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(4, 5), (2, 5), (1, 3)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|5, 0|6, 4|4, 4|6, 5|5, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: {1, 3}
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 3
+  EAST: 3
+  NORTH: 4
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 4|5 on the left
+  Count: 1000
+  Mean Score: -1.6410
+  Standard Deviation: 31.0180
+  Median Score: -19.0000
+  Mode Score: -24.0000
+  Min Score: -44.0000
+  Max Score: 44.0000
+
+Move: Play 1|3 on the right
+  Count: 1000
+  Mean Score: -5.9100
+  Standard Deviation: 41.1326
+  Median Score: -24.0000
+  Mode Score: -54.0000
+  Min Score: -64.0000
+  Max Score: 60.0000
+
+Move: Play 2|5 on the left
+  Count: 1000
+  Mean Score: -11.7630
+  Standard Deviation: 46.3990
+  Median Score: -27.0000
+  Mode Score: -60.0000
+  Min Score: -60.0000
+  Max Score: 60.0000
+
+Best Move Overall:
+Best move: Play 4|5 on the left
+Mean Expected Score: -1.6410
+Played (4, 5) on the left side
+New board state: (4, 3)
+Tiles remaining per player: [2, 3, 4, 2]
+Player 0 plays ((4, 5), 'l')
+
+Player 1's turn
+Current board: (4, 3)
+Player passed
+New board state: (4, 3)
+Tiles remaining per player: [2, 3, 4, 2]
+Player 1 passes
+
+Player 2's turn
+Current board: (4, 3)
+Played (4, 6) on the left side
+New board state: (6, 3)
+Tiles remaining per player: [2, 3, 3, 2]
+Player 2 plays ((4, 6), 'l')
+
+Player 3's turn
+Current board: (6, 3)
+Player passed
+New board state: (6, 3)
+Tiles remaining per player: [2, 3, 3, 2]
+Player 3 passes
+
+Player 0's turn
+Current board: (6, 3)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(2, 5), (1, 3)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|5, 0|6, 4|4, 5|5, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {3, 4}
+  NORTH: {1, 3}
+  WEST: {3, 6}
+
+Remaining tiles for each player:
+  SOUTH: 2
+  EAST: 3
+  NORTH: 3
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 1|3 on the right
+  Count: 1000
+  Mean Score: 5.2520
+  Standard Deviation: 30.9243
+  Median Score: 23.0000
+  Mode Score: -32.0000
+  Min Score: -44.0000
+  Max Score: 41.0000
+
+Best Move Overall:
+Best move: Play 1|3 on the right
+Mean Expected Score: 5.2520
+Played (1, 3) on the right side
+New board state: (6, 1)
+Tiles remaining per player: [1, 3, 3, 2]
+Player 0 plays ((1, 3), 'r')
+
+Player 1's turn
+Current board: (6, 1)
+Played (0, 1) on the right side
+New board state: (6, 0)
+Tiles remaining per player: [1, 2, 3, 2]
+Player 1 plays ((0, 1), 'r')
+
+Player 2's turn
+Current board: (6, 0)
+Played (0, 2) on the right side
+New board state: (6, 2)
+Tiles remaining per player: [1, 2, 2, 2]
+Player 2 plays ((0, 2), 'r')
+
+Player 3's turn
+Current board: (6, 2)
+Player passed
+New board state: (6, 2)
+Tiles remaining per player: [1, 2, 2, 2]
+Player 3 passes
+
+Player 0's turn
+Current board: (6, 2)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(2, 5)]
+Remaining tiles: [0|0, 0|5, 0|6, 4|4, 5|5, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {3, 4}
+  NORTH: {1, 3}
+  WEST: {2, 3, 6}
+
+Remaining tiles for each player:
+  SOUTH: 1
+  EAST: 2
+  NORTH: 2
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 2|5 on the right
+  Count: 1000
+  Mean Score: 41.0000
+  Standard Deviation: 0.0000
+  Median Score: 41.0000
+  Mode Score: 41.0000
+  Min Score: 41.0000
+  Max Score: 41.0000
+
+Best Move Overall:
+Best move: Play 2|5 on the right
+Mean Expected Score: 41.0000
+Played (2, 5) on the right side
+New board state: (6, 5)
+Tiles remaining per player: [0, 2, 2, 2]
+Player 0 plays ((2, 5), 'r')
+
+Round over. Final hands:
+Player 0: []
+Player 1: [(5, 5), (6, 6)]
+Player 2: [(0, 6), (4, 4)]
+Player 3: [(0, 0), (0, 5)]
+Remaining tiles values: [0, 22, 14, 5]
+Player 0 won by playing all tiles
+HumanPlayer: Round ended. Scores - Team 1: 30, Team 2: 37
+HumanPlayer: Your team (Team 1) score: 30
+HumanPlayer: Reset missing tiles for the next round.
+
+Round 2 ended.
+Round winner: Team 1 (Player 0)
+Round score: 41
+Total scores: Team 1 - 71, Team 2 - 37
+
+Round Statistics:
+Games won: Team 1 - 2, Team 2 - 1
+Games tied: 0
+Cumulative points: Team 1 - 34, Team 2 - -34
+Average score per round: Team 1 - 17.00, Team 2 - -17.00
+Venezuelan/International rules: Player 3 starts next round
+Next starting player: Player 3
+
+Starting Round 3
+All players have been dealt 7 tiles.
+Starting player: Player 3
+
+Player 3's turn
+Current board: (-1, -1)
+First move: (2, 4)
+New board state: (2, 4)
+Tiles remaining per player: [7, 7, 7, 6]
+Player 3 plays ((2, 4), 'l')
+
+Player 0's turn
+Current board: (2, 4)
+
+--- Verbose Information ---
+Starting player: WEST
+Player's hand: [(1, 4), (0, 6), (6, 6), (4, 4), (3, 5), (1, 3), (0, 1)]
+Remaining tiles: [0|0, 0|2, 0|3, 0|4, 0|5, 1|1, 1|2, 1|5, 1|6, 2|2, 2|3, 2|5, 2|6, 3|3, 3|4, 3|6, 4|5, 4|6, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 7
+  EAST: 7
+  NORTH: 7
+  WEST: 6
+----------------------------
+
+
+Move Statistics (based on 25 samples):
+
+Move: Play 4|4 on the right
+  Count: 25
+  Mean Score: -1.5933
+  Standard Deviation: 34.6321
+  Median Score: 5.0000
+  Mode Score: 28.0000
+  Min Score: -66.0000
+  Max Score: 82.0000
+
+Move: Play 1|4 on the right
+  Count: 25
+  Mean Score: -16.3400
+  Standard Deviation: 35.0026
+  Median Score: -20.0000
+  Mode Score: -38.0000
+  Min Score: -96.0000
+  Max Score: 41.0000
+
+Best Move Overall:
+Best move: Play 4|4 on the right
+Mean Expected Score: -1.5933
+Played (4, 4) on the right side
+New board state: (2, 4)
+Tiles remaining per player: [6, 7, 7, 6]
+Player 0 plays ((4, 4), 'r')
+
+Player 1's turn
+Current board: (2, 4)
+Played (2, 3) on the left side
+New board state: (3, 4)
+Tiles remaining per player: [6, 6, 7, 6]
+Player 1 plays ((2, 3), 'l')
+
+Player 2's turn
+Current board: (3, 4)
+Played (4, 6) on the right side
+New board state: (3, 6)
+Tiles remaining per player: [6, 6, 6, 6]
+Player 2 plays ((4, 6), 'r')
+
+Player 3's turn
+Current board: (3, 6)
+Played (3, 3) on the left side
+New board state: (3, 6)
+Tiles remaining per player: [6, 6, 6, 5]
+Player 3 plays ((3, 3), 'l')
+
+Player 0's turn
+Current board: (3, 6)
+
+--- Verbose Information ---
+Starting player: WEST
+Player's hand: [(1, 4), (0, 6), (6, 6), (3, 5), (1, 3), (0, 1)]
+Remaining tiles: [0|0, 0|2, 0|3, 0|4, 0|5, 1|1, 1|2, 1|5, 1|6, 2|2, 2|5, 2|6, 3|4, 3|6, 4|5, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 6
+  EAST: 6
+  NORTH: 6
+  WEST: 5
+----------------------------
+
+
+Move Statistics (based on 100 samples):
+
+Move: Play 6|6 on the right
+  Count: 100
+  Mean Score: 9.6100
+  Standard Deviation: 25.4618
+  Median Score: 18.0000
+  Mode Score: 0.0000
+  Min Score: -76.0000
+  Max Score: 68.0000
+
+Move: Play 0|6 on the right
+  Count: 100
+  Mean Score: -2.7900
+  Standard Deviation: 30.9027
+  Median Score: -6.0000
+  Mode Score: -26.0000
+  Min Score: -82.0000
+  Max Score: 84.0000
+
+Move: Play 1|3 on the left
+  Count: 100
+  Mean Score: -5.1900
+  Standard Deviation: 29.3139
+  Median Score: -9.5000
+  Mode Score: 18.0000
+  Min Score: -68.0000
+  Max Score: 56.0000
+
+Move: Play 3|5 on the left
+  Count: 100
+  Mean Score: -6.8200
+  Standard Deviation: 26.3348
+  Median Score: -13.0000
+  Mode Score: -16.0000
+  Min Score: -72.0000
+  Max Score: 48.0000
+
+Best Move Overall:
+Best move: Play 6|6 on the right
+Mean Expected Score: 9.6100
+Played (6, 6) on the right side
+New board state: (3, 6)
+Tiles remaining per player: [5, 6, 6, 5]
+Player 0 plays ((6, 6), 'r')
+
+Player 1's turn
+Current board: (3, 6)
+Played (3, 6) on the left side
+New board state: (6, 6)
+Tiles remaining per player: [5, 5, 6, 5]
+Player 1 plays ((3, 6), 'l')
+
+Player 2's turn
+Current board: (6, 6)
+Played (2, 6) on the left side
+New board state: (2, 6)
+Tiles remaining per player: [5, 5, 5, 5]
+Player 2 plays ((2, 6), 'l')
+
+Player 3's turn
+Current board: (2, 6)
+Played (2, 2) on the left side
+New board state: (2, 6)
+Tiles remaining per player: [5, 5, 5, 4]
+Player 3 plays ((2, 2), 'l')
+
+Player 0's turn
+Current board: (2, 6)
+
+--- Verbose Information ---
+Starting player: WEST
+Player's hand: [(1, 4), (0, 6), (3, 5), (1, 3), (0, 1)]
+Remaining tiles: [0|0, 0|2, 0|3, 0|4, 0|5, 1|1, 1|2, 1|5, 1|6, 2|5, 3|4, 4|5, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 5
+  EAST: 5
+  NORTH: 5
+  WEST: 4
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 0|6 on the right
+  Count: 1000
+  Mean Score: -2.2860
+  Standard Deviation: 31.2618
+  Median Score: 0.0000
+  Mode Score: 18.0000
+  Min Score: -76.0000
+  Max Score: 76.0000
+
+Best Move Overall:
+Best move: Play 0|6 on the right
+Mean Expected Score: -2.2860
+Played (0, 6) on the right side
+New board state: (2, 0)
+Tiles remaining per player: [4, 5, 5, 4]
+Player 0 plays ((0, 6), 'r')
+
+Player 1's turn
+Current board: (2, 0)
+Played (0, 3) on the right side
+New board state: (2, 3)
+Tiles remaining per player: [4, 4, 5, 4]
+Player 1 plays ((0, 3), 'r')
+
+Player 2's turn
+Current board: (2, 3)
+Played (1, 2) on the left side
+New board state: (1, 3)
+Tiles remaining per player: [4, 4, 4, 4]
+Player 2 plays ((1, 2), 'l')
+
+Player 3's turn
+Current board: (1, 3)
+Player passed
+New board state: (1, 3)
+Tiles remaining per player: [4, 4, 4, 4]
+Player 3 passes
+
+Player 0's turn
+Current board: (1, 3)
+
+--- Verbose Information ---
+Starting player: WEST
+Player's hand: [(1, 4), (3, 5), (1, 3), (0, 1)]
+Remaining tiles: [0|0, 0|2, 0|4, 0|5, 1|1, 1|5, 1|6, 2|5, 3|4, 4|5, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: {1, 3}
+
+Remaining tiles for each player:
+  SOUTH: 4
+  EAST: 4
+  NORTH: 4
+  WEST: 4
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 1|3 on the left
+  Count: 1000
+  Mean Score: 24.0090
+  Standard Deviation: 27.0410
+  Median Score: 25.0000
+  Mode Score: 60.0000
+  Min Score: -56.0000
+  Max Score: 60.0000
+
+Move: Play 1|3 on the right
+  Count: 1000
+  Mean Score: 17.3680
+  Standard Deviation: 23.6796
+  Median Score: 24.0000
+  Mode Score: 24.0000
+  Min Score: -60.0000
+  Max Score: 68.0000
+
+Move: Play 1|4 on the left
+  Count: 1000
+  Mean Score: 7.8040
+  Standard Deviation: 29.9682
+  Median Score: 19.0000
+  Mode Score: -54.0000
+  Min Score: -54.0000
+  Max Score: 62.0000
+
+Move: Play 3|5 on the right
+  Count: 1000
+  Mean Score: 5.0010
+  Standard Deviation: 24.9839
+  Median Score: 14.0000
+  Mode Score: -18.0000
+  Min Score: -50.0000
+  Max Score: 62.0000
+
+Move: Play 0|1 on the left
+  Count: 1000
+  Mean Score: 3.8020
+  Standard Deviation: 33.3387
+  Median Score: 18.0000
+  Mode Score: -62.0000
+  Min Score: -62.0000
+  Max Score: 62.0000
+
+Best Move Overall:
+Best move: Play 1|3 on the left
+Mean Expected Score: 24.0090
+Played (1, 3) on the left side
+New board state: (3, 3)
+Tiles remaining per player: [3, 4, 4, 4]
+Player 0 plays ((1, 3), 'l')
+
+Player 1's turn
+Current board: (3, 3)
+Player passed
+New board state: (3, 3)
+Tiles remaining per player: [3, 4, 4, 4]
+Player 1 passes
+
+Player 2's turn
+Current board: (3, 3)
+Played (3, 4) on the left side
+New board state: (4, 3)
+Tiles remaining per player: [3, 4, 3, 4]
+Player 2 plays ((3, 4), 'l')
+
+Player 3's turn
+Current board: (4, 3)
+Played (0, 4) on the left side
+New board state: (0, 3)
+Tiles remaining per player: [3, 4, 3, 3]
+Player 3 plays ((0, 4), 'l')
+
+Player 0's turn
+Current board: (0, 3)
+
+--- Verbose Information ---
+Starting player: WEST
+Player's hand: [(1, 4), (3, 5), (0, 1)]
+Remaining tiles: [0|0, 0|2, 0|5, 1|1, 1|5, 1|6, 2|5, 4|5, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {3}
+  NORTH: set()
+  WEST: {1, 3}
+
+Remaining tiles for each player:
+  SOUTH: 3
+  EAST: 4
+  NORTH: 3
+  WEST: 3
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 0|1 on the left
+  Count: 1000
+  Mean Score: 11.6660
+  Standard Deviation: 25.5166
+  Median Score: 19.0000
+  Mode Score: 16.0000
+  Min Score: -46.0000
+  Max Score: 48.0000
+
+Move: Play 3|5 on the right
+  Count: 1000
+  Mean Score: -5.6870
+  Standard Deviation: 22.3517
+  Median Score: -10.0000
+  Mode Score: -10.0000
+  Min Score: -56.0000
+  Max Score: 44.0000
+
+Best Move Overall:
+Best move: Play 0|1 on the left
+Mean Expected Score: 11.6660
+Played (0, 1) on the left side
+New board state: (1, 3)
+Tiles remaining per player: [2, 4, 3, 3]
+Player 0 plays ((0, 1), 'l')
+
+Player 1's turn
+Current board: (1, 3)
+Played (1, 6) on the left side
+New board state: (6, 3)
+Tiles remaining per player: [2, 3, 3, 3]
+Player 1 plays ((1, 6), 'l')
+
+Player 2's turn
+Current board: (6, 3)
+Player passed
+New board state: (6, 3)
+Tiles remaining per player: [2, 3, 3, 3]
+Player 2 passes
+
+Player 3's turn
+Current board: (6, 3)
+Player passed
+New board state: (6, 3)
+Tiles remaining per player: [2, 3, 3, 3]
+Player 3 passes
+
+Player 0's turn
+Current board: (6, 3)
+
+--- Verbose Information ---
+Starting player: WEST
+Player's hand: [(1, 4), (3, 5)]
+Remaining tiles: [0|0, 0|2, 0|5, 1|1, 1|5, 2|5, 4|5, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {3}
+  NORTH: {3, 6}
+  WEST: {1, 3, 6}
+
+Remaining tiles for each player:
+  SOUTH: 2
+  EAST: 3
+  NORTH: 3
+  WEST: 3
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 3|5 on the right
+  Count: 1000
+  Mean Score: 0.6200
+  Standard Deviation: 27.3130
+  Median Score: 13.0000
+  Mode Score: 25.0000
+  Min Score: -46.0000
+  Max Score: 30.0000
+
+Best Move Overall:
+Best move: Play 3|5 on the right
+Mean Expected Score: 0.6200
+Played (3, 5) on the right side
+New board state: (6, 5)
+Tiles remaining per player: [1, 3, 3, 3]
+Player 0 plays ((3, 5), 'r')
+
+Player 1's turn
+Current board: (6, 5)
+Played (5, 6) on the right side
+New board state: (6, 6)
+Tiles remaining per player: [1, 2, 3, 3]
+Player 1 plays ((5, 6), 'r')
+
+Player 2's turn
+Current board: (6, 6)
+Player passed
+New board state: (6, 6)
+Tiles remaining per player: [1, 2, 3, 3]
+Player 2 passes
+
+Player 3's turn
+Current board: (6, 6)
+Player passed
+New board state: (6, 6)
+Tiles remaining per player: [1, 2, 3, 3]
+Player 3 passes
+
+Player 0's turn
+Current board: (6, 6)
+
+--- Verbose Information ---
+Starting player: WEST
+Player's hand: [(1, 4)]
+Remaining tiles: [0|0, 0|2, 0|5, 1|1, 1|5, 2|5, 4|5, 5|5]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {3}
+  NORTH: {3, 6}
+  WEST: {1, 3, 6}
+
+Remaining tiles for each player:
+  SOUTH: 1
+  EAST: 2
+  NORTH: 3
+  WEST: 3
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Pass
+  Count: 1000
+  Mean Score: 24.3340
+  Standard Deviation: 35.8022
+  Median Score: 46.0000
+  Mode Score: 46.0000
+  Min Score: -46.0000
+  Max Score: 46.0000
+
+Best Move Overall:
+Best move: Pass
+Mean Expected Score: 24.3340
+Player passed
+New board state: (6, 6)
+Tiles remaining per player: [1, 2, 3, 3]
+Player 0 passes
+
+Player 1's turn
+Current board: (6, 6)
+Player passed
+New board state: (6, 6)
+Tiles remaining per player: [1, 2, 3, 3]
+Player 1 passes
+
+Round over. Final hands:
+Player 0: [(1, 4)]
+Player 1: [(4, 5), (2, 5)]
+Player 2: [(0, 0), (1, 5), (1, 1)]
+Player 3: [(0, 2), (0, 5), (5, 5)]
+Remaining tiles values: [5, 16, 8, 17]
+The round ended in a block
+International scoring - Team 1 total: 13, Team 2 total: 33
+Winner: Team 1, Points: 46
+HumanPlayer: Round ended. Scores - Team 1: 71, Team 2: 37
+HumanPlayer: Your team (Team 1) score: 71
+HumanPlayer: Reset missing tiles for the next round.
+
+Round 3 ended.
+Round winner: Team 1 (Player 0)
+Round score: 46
+Total scores: Team 1 - 117, Team 2 - 37
+
+Round Statistics:
+Games won: Team 1 - 3, Team 2 - 1
+Games tied: 0
+Cumulative points: Team 1 - 80, Team 2 - -80
+Average score per round: Team 1 - 26.67, Team 2 - -26.67
+Venezuelan/International rules: Player 0 starts next round
+Next starting player: Player 0
+
+Starting Round 4
+All players have been dealt 7 tiles.
+Starting player: Player 0
+
+Player 0's turn
+Current board: (-1, -1)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(0, 5), (5, 5), (2, 2), (5, 6), (2, 5), (1, 2), (2, 6)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|3, 0|4, 0|6, 1|1, 1|3, 1|4, 1|5, 1|6, 2|3, 2|4, 3|3, 3|4, 3|5, 3|6, 4|4, 4|5, 4|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: set()
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 7
+  EAST: 7
+  NORTH: 7
+  WEST: 7
+----------------------------
+
+
+Move Statistics (based on 1 samples):
+
+Move: Play 5|5 on the left
+  Count: 1
+  Mean Score: -70.0000
+  Standard Deviation: 0.0000
+  Median Score: -70.0000
+  Mode Score: -70.0000
+  Min Score: -70.0000
+  Max Score: -70.0000
+
+Move: Play 2|5 on the left
+  Count: 1
+  Mean Score: -82.0000
+  Standard Deviation: 0.0000
+  Median Score: -82.0000
+  Mode Score: -82.0000
+  Min Score: -82.0000
+  Max Score: -82.0000
+
+Move: Play 2|2 on the left
+  Count: 1
+  Mean Score: -86.0000
+  Standard Deviation: 0.0000
+  Median Score: -86.0000
+  Mode Score: -86.0000
+  Min Score: -86.0000
+  Max Score: -86.0000
+
+Move: Play 2|6 on the left
+  Count: 1
+  Mean Score: -88.0000
+  Standard Deviation: 0.0000
+  Median Score: -88.0000
+  Mode Score: -88.0000
+  Min Score: -88.0000
+  Max Score: -88.0000
+
+Move: Play 5|6 on the left
+  Count: 1
+  Mean Score: -88.0000
+  Standard Deviation: 0.0000
+  Median Score: -88.0000
+  Mode Score: -88.0000
+  Min Score: -88.0000
+  Max Score: -88.0000
+
+Move: Play 1|2 on the left
+  Count: 1
+  Mean Score: -104.0000
+  Standard Deviation: 0.0000
+  Median Score: -104.0000
+  Mode Score: -104.0000
+  Min Score: -104.0000
+  Max Score: -104.0000
+
+Move: Play 0|5 on the left
+  Count: 1
+  Mean Score: -108.0000
+  Standard Deviation: 0.0000
+  Median Score: -108.0000
+  Mode Score: -108.0000
+  Min Score: -108.0000
+  Max Score: -108.0000
+
+Best Move Overall:
+Best move: Play 5|5 on the left
+Mean Expected Score: -70.0000
+First move: (5, 5)
+New board state: (5, 5)
+Tiles remaining per player: [6, 7, 7, 7]
+Player 0 plays ((5, 5), 'l')
+
+Player 1's turn
+Current board: (5, 5)
+Player passed
+New board state: (5, 5)
+Tiles remaining per player: [6, 7, 7, 7]
+Player 1 passes
+
+Player 2's turn
+Current board: (5, 5)
+Played (1, 5) on the left side
+New board state: (1, 5)
+Tiles remaining per player: [6, 7, 6, 7]
+Player 2 plays ((1, 5), 'l')
+
+Player 3's turn
+Current board: (1, 5)
+Played (1, 3) on the left side
+New board state: (3, 5)
+Tiles remaining per player: [6, 7, 6, 6]
+Player 3 plays ((1, 3), 'l')
+
+Player 0's turn
+Current board: (3, 5)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(0, 5), (2, 2), (5, 6), (2, 5), (1, 2), (2, 6)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|3, 0|4, 0|6, 1|1, 1|4, 1|6, 2|3, 2|4, 3|3, 3|4, 3|5, 3|6, 4|4, 4|5, 4|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {5}
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 6
+  EAST: 7
+  NORTH: 6
+  WEST: 6
+----------------------------
+
+
+Move Statistics (based on 25 samples):
+
+Move: Play 2|5 on the right
+  Count: 25
+  Mean Score: -10.7400
+  Standard Deviation: 37.9207
+  Median Score: -25.0000
+  Mode Score: -26.0000
+  Min Score: -78.0000
+  Max Score: 84.0000
+
+Move: Play 0|5 on the right
+  Count: 25
+  Mean Score: -21.1800
+  Standard Deviation: 36.8700
+  Median Score: -38.0000
+  Mode Score: 22.0000
+  Min Score: -74.0000
+  Max Score: 40.0000
+
+Move: Play 5|6 on the right
+  Count: 25
+  Mean Score: -27.0400
+  Standard Deviation: 35.0791
+  Median Score: -26.0000
+  Mode Score: -26.0000
+  Min Score: -88.0000
+  Max Score: 30.0000
+
+Best Move Overall:
+Best move: Play 2|5 on the right
+Mean Expected Score: -10.7400
+Played (2, 5) on the right side
+New board state: (3, 2)
+Tiles remaining per player: [5, 7, 6, 6]
+Player 0 plays ((2, 5), 'r')
+
+Player 1's turn
+Current board: (3, 2)
+Played (3, 4) on the left side
+New board state: (4, 2)
+Tiles remaining per player: [5, 6, 6, 6]
+Player 1 plays ((3, 4), 'l')
+
+Player 2's turn
+Current board: (4, 2)
+Played (4, 5) on the left side
+New board state: (5, 2)
+Tiles remaining per player: [5, 6, 5, 6]
+Player 2 plays ((4, 5), 'l')
+
+Player 3's turn
+Current board: (5, 2)
+Played (3, 5) on the left side
+New board state: (3, 2)
+Tiles remaining per player: [5, 6, 5, 5]
+Player 3 plays ((3, 5), 'l')
+
+Player 0's turn
+Current board: (3, 2)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(0, 5), (2, 2), (5, 6), (1, 2), (2, 6)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|3, 0|4, 0|6, 1|1, 1|4, 1|6, 2|3, 2|4, 3|3, 3|6, 4|4, 4|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {5}
+  NORTH: set()
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 5
+  EAST: 6
+  NORTH: 5
+  WEST: 5
+----------------------------
+
+
+Move Statistics (based on 100 samples):
+
+Move: Play 2|2 on the right
+  Count: 100
+  Mean Score: 4.8100
+  Standard Deviation: 33.6523
+  Median Score: 18.0000
+  Mode Score: 21.0000
+  Min Score: -74.0000
+  Max Score: 74.0000
+
+Move: Play 1|2 on the right
+  Count: 100
+  Mean Score: -9.9700
+  Standard Deviation: 29.7061
+  Median Score: -15.5000
+  Mode Score: -18.0000
+  Min Score: -72.0000
+  Max Score: 60.0000
+
+Move: Play 2|6 on the right
+  Count: 100
+  Mean Score: -10.0100
+  Standard Deviation: 26.5560
+  Median Score: -17.5000
+  Mode Score: -36.0000
+  Min Score: -84.0000
+  Max Score: 74.0000
+
+Best Move Overall:
+Best move: Play 2|2 on the right
+Mean Expected Score: 4.8100
+Played (2, 2) on the right side
+New board state: (3, 2)
+Tiles remaining per player: [4, 6, 5, 5]
+Player 0 plays ((2, 2), 'r')
+
+Player 1's turn
+Current board: (3, 2)
+Played (2, 4) on the right side
+New board state: (3, 4)
+Tiles remaining per player: [4, 5, 5, 5]
+Player 1 plays ((2, 4), 'r')
+
+Player 2's turn
+Current board: (3, 4)
+Player passed
+New board state: (3, 4)
+Tiles remaining per player: [4, 5, 5, 5]
+Player 2 passes
+
+Player 3's turn
+Current board: (3, 4)
+Played (0, 4) on the right side
+New board state: (3, 0)
+Tiles remaining per player: [4, 5, 5, 4]
+Player 3 plays ((0, 4), 'r')
+
+Player 0's turn
+Current board: (3, 0)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(0, 5), (5, 6), (1, 2), (2, 6)]
+Remaining tiles: [0|0, 0|1, 0|2, 0|3, 0|6, 1|1, 1|4, 1|6, 2|3, 3|3, 3|6, 4|4, 4|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {5}
+  NORTH: {3, 4}
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 4
+  EAST: 5
+  NORTH: 5
+  WEST: 4
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 0|5 on the right
+  Count: 1000
+  Mean Score: 7.1830
+  Standard Deviation: 38.1546
+  Median Score: 18.0000
+  Mode Score: -62.0000
+  Min Score: -62.0000
+  Max Score: 78.0000
+
+Best Move Overall:
+Best move: Play 0|5 on the right
+Mean Expected Score: 7.1830
+Played (0, 5) on the right side
+New board state: (3, 5)
+Tiles remaining per player: [3, 5, 5, 4]
+Player 0 plays ((0, 5), 'r')
+
+Player 1's turn
+Current board: (3, 5)
+Played (2, 3) on the left side
+New board state: (2, 5)
+Tiles remaining per player: [3, 4, 5, 4]
+Player 1 plays ((2, 3), 'l')
+
+Player 2's turn
+Current board: (2, 5)
+Played (0, 2) on the left side
+New board state: (0, 5)
+Tiles remaining per player: [3, 4, 4, 4]
+Player 2 plays ((0, 2), 'l')
+
+Player 3's turn
+Current board: (0, 5)
+Played (0, 3) on the left side
+New board state: (3, 5)
+Tiles remaining per player: [3, 4, 4, 3]
+Player 3 plays ((0, 3), 'l')
+
+Player 0's turn
+Current board: (3, 5)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(5, 6), (1, 2), (2, 6)]
+Remaining tiles: [0|0, 0|1, 0|6, 1|1, 1|4, 1|6, 3|3, 3|6, 4|4, 4|6, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {5}
+  NORTH: {3, 4}
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 3
+  EAST: 4
+  NORTH: 4
+  WEST: 3
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 5|6 on the right
+  Count: 1000
+  Mean Score: -13.3150
+  Standard Deviation: 37.5913
+  Median Score: -22.0000
+  Mode Score: -62.0000
+  Min Score: -62.0000
+  Max Score: 45.0000
+
+Best Move Overall:
+Best move: Play 5|6 on the right
+Mean Expected Score: -13.3150
+Played (5, 6) on the right side
+New board state: (3, 6)
+Tiles remaining per player: [2, 4, 4, 3]
+Player 0 plays ((5, 6), 'r')
+
+Player 1's turn
+Current board: (3, 6)
+Played (3, 6) on the left side
+New board state: (6, 6)
+Tiles remaining per player: [2, 3, 4, 3]
+Player 1 plays ((3, 6), 'l')
+
+Player 2's turn
+Current board: (6, 6)
+Played (1, 6) on the left side
+New board state: (1, 6)
+Tiles remaining per player: [2, 3, 3, 3]
+Player 2 plays ((1, 6), 'l')
+
+Player 3's turn
+Current board: (1, 6)
+Played (4, 6) on the right side
+New board state: (1, 4)
+Tiles remaining per player: [2, 3, 3, 2]
+Player 3 plays ((4, 6), 'r')
+
+Player 0's turn
+Current board: (1, 4)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 2), (2, 6)]
+Remaining tiles: [0|0, 0|1, 0|6, 1|1, 1|4, 3|3, 4|4, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {5}
+  NORTH: {3, 4}
+  WEST: set()
+
+Remaining tiles for each player:
+  SOUTH: 2
+  EAST: 3
+  NORTH: 3
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 1|2 on the left
+  Count: 1000
+  Mean Score: 30.6590
+  Standard Deviation: 2.7543
+  Median Score: 32.0000
+  Mode Score: 32.0000
+  Min Score: 27.0000
+  Max Score: 35.0000
+
+Best Move Overall:
+Best move: Play 1|2 on the left
+Mean Expected Score: 30.6590
+Played (1, 2) on the left side
+New board state: (2, 4)
+Tiles remaining per player: [1, 3, 3, 2]
+Player 0 plays ((1, 2), 'l')
+
+Player 1's turn
+Current board: (2, 4)
+Played (1, 4) on the right side
+New board state: (2, 1)
+Tiles remaining per player: [1, 2, 3, 2]
+Player 1 plays ((1, 4), 'r')
+
+Player 2's turn
+Current board: (2, 1)
+Played (1, 1) on the right side
+New board state: (2, 1)
+Tiles remaining per player: [1, 2, 2, 2]
+Player 2 plays ((1, 1), 'r')
+
+Player 3's turn
+Current board: (2, 1)
+Player passed
+New board state: (2, 1)
+Tiles remaining per player: [1, 2, 2, 2]
+Player 3 passes
+
+Player 0's turn
+Current board: (2, 1)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(2, 6)]
+Remaining tiles: [0|0, 0|1, 0|6, 3|3, 4|4, 6|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {5}
+  NORTH: {3, 4}
+  WEST: {1, 2}
+
+Remaining tiles for each player:
+  SOUTH: 1
+  EAST: 2
+  NORTH: 2
+  WEST: 2
+----------------------------
+
+
+Move Statistics (based on 1000 samples):
+
+Move: Play 2|6 on the left
+  Count: 1000
+  Mean Score: 33.0000
+  Standard Deviation: 0.0000
+  Median Score: 33.0000
+  Mode Score: 33.0000
+  Min Score: 33.0000
+  Max Score: 33.0000
+
+Best Move Overall:
+Best move: Play 2|6 on the left
+Mean Expected Score: 33.0000
+Played (2, 6) on the left side
+New board state: (6, 1)
+Tiles remaining per player: [0, 2, 2, 2]
+Player 0 plays ((2, 6), 'l')
+
+Round over. Final hands:
+Player 0: []
+Player 1: [(0, 6), (0, 1)]
+Player 2: [(0, 0), (6, 6)]
+Player 3: [(3, 3), (4, 4)]
+Remaining tiles values: [0, 7, 12, 14]
+Player 0 won by playing all tiles
+HumanPlayer: Round ended. Scores - Team 1: 117, Team 2: 37
+HumanPlayer: Your team (Team 1) score: 117
+HumanPlayer: Reset missing tiles for the next round.
+
+Round 4 ended.
+Round winner: Team 1 (Player 0)
+Round score: 33
+Total scores: Team 1 - 150, Team 2 - 37
+
+Round Statistics:
+Games won: Team 1 - 4, Team 2 - 1
+Games tied: 0
+Cumulative points: Team 1 - 113, Team 2 - -113
+Average score per round: Team 1 - 28.25, Team 2 - -28.25
+Venezuelan/International rules: Player 1 starts next round
+Next starting player: Player 1
+
+Game over! Team 1 wins with a score of 150!
+
+Final Game Statistics:
+Total rounds played: 5
+Games won: Team 1 - 4, Team 2 - 1
+Games tied: 0
+Total cumulative points: Team 1 - 113, Team 2 - -113
+Average score per round: Team 1 - 22.60, Team 2 - -22.60
+
+Round-by-round scores:
+Round 1: Team 1 won 30 points
+Round 2: Team 2 won 37 points
+Round 3: Team 1 won 41 points
+Round 4: Team 1 won 46 points
+Round 5: Team 1 won 33 points

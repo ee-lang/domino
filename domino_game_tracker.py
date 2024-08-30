@@ -3,7 +3,7 @@
 # from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state
 # from domino_common_knowledge import CommonKnowledgeTracker, normalize_tile
 
-import numpy as np
+# import numpy as np
 from statistics import mode, mean, variance
 from collections import defaultdict, Counter
 from domino_game_analyzer import get_best_move_alpha_beta, list_possible_moves
