@@ -101,17 +101,18 @@ class DominoGame:
 				player.end_round(self.scores, i % 2)
 			
 			print(f"\nRound {self.current_round} ended.")
-			print(f"Round winner: {'Team 1' if round_winner % 2 == 0 else 'Team 2'} (Player {round_winner})")
-			print(f"Round score: {round_score}")
 			
 			# Update scores and round_scores
 			if round_winner != -1:  # Not a tie
 				self.scores[round_winner % 2] += round_score
 				round_scores.append((round_winner % 2, round_score))
 				games_won[round_winner % 2] += 1
+				print(f"Round winner: {'Team 1' if round_winner % 2 == 0 else 'Team 2'} (Player {round_winner})")
 			else:  # Tie
 				round_scores.append((-1, 0))
 				games_tied += 1
+				print(f"Round resulted in a tie.")
+			print(f"Round score: {round_score}")
 			
 			print(f"Total scores: Team 1 - {self.scores[0]}, Team 2 - {self.scores[1]}")
 			
