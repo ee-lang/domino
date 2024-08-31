@@ -1,0 +1,1218 @@
+Removed deepcopy for prob.calc.
+
+
+         639643851 function calls (614879244 primitive calls) in 300.451 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     71/1    0.002    0.000  320.973  320.973 {built-in method builtins.exec}
+      2/1    0.000    0.000  320.973  320.973 DominoGame.py:1(<module>)
+      2/1    0.000    0.000  320.962  320.962 DominoGame.py:416(main)
+      2/1    0.000    0.000  320.962  320.962 DominoGame.py:87(play_game)
+      2/1    0.000    0.000  320.962  320.962 DominoGame.py:168(play_round)
+    14/13    0.001    0.000  320.961   24.689 analytic_agent_player.py:21(next_move)
+       12    0.152    0.013  320.957   26.746 analytic_agent_player.py:70(get_best_move)
+    17775    0.026    0.000  288.471    0.016 domino_game_analyzer.py:590(get_best_move_alpha_beta)
+15839713/17775   43.461    0.000  288.445    0.016 domino_game_analyzer.py:512(min_max_alpha_beta)
+ 11282262   37.118    0.000   88.925    0.000 domino_game_analyzer.py:78(play_hand)
+ 13403130   26.984    0.000   48.273    0.000 domino_game_analyzer.py:189(list_possible_moves)
+ 16385782    9.578    0.000   46.182    0.000 domino_game_analyzer.py:108(is_game_over)
+  2444833   12.868    0.000   42.266    0.000 domino_game_analyzer.py:374(count_game_stats)
+ 16385816   11.967    0.000   36.603    0.000 {built-in method builtins.any}
+     8250    0.083    0.000   31.620    0.004 domino_game_tracker.py:293(generate_sample_from_game_state)
+     8250    0.979    0.000   31.495    0.004 domino_probability_calc.py:458(generate_sample)
+ 16226114   12.435    0.000   30.877    0.000 domino_game_analyzer.py:14(next)
+    66173    5.458    0.000   28.615    0.000 domino_probability_calc.py:360(calculate_tile_probabilities)
+ 76723353   18.542    0.000   24.637    0.000 domino_game_analyzer.py:109(<genexpr>)
+ 52559087   15.899    0.000   20.862    0.000 enum.py:202(__get__)
+  4943852    5.655    0.000   20.277    0.000 domino_game_analyzer.py:99(pass_turn)
+  1326985    7.861    0.000   16.225    0.000 domino_probability_calc.py:138(generate_scenarios)
+ 16226363    7.116    0.000   12.283    0.000 enum.py:726(__call__)
+ 13743428    5.243    0.000   10.879    0.000 domino_game_analyzer.py:111(get_current_hand)
+38223157/29378030    8.211    0.000   10.308    0.000 {built-in method builtins.hash}
+  8845127    3.002    0.000   10.159    0.000 domino_game_analyzer.py:64(__hash__)
+ 20506425    6.529    0.000    9.676    0.000 <string>:2(__hash__)
+78441728/78441547    7.721    0.000    7.721    0.000 {built-in method builtins.len}
+  5373024    5.302    0.000    7.203    0.000 <string>:2(__eq__)
+ 57613780    7.192    0.000    7.192    0.000 domino_game_analyzer.py:45(can_connect)
+   666560    1.755    0.000    5.507    0.000 domino_game_analyzer.py:128(determine_winning_pair)
+ 16226363    5.167    0.000    5.167    0.000 enum.py:1129(__new__)
+ 52534229    4.960    0.000    4.960    0.000 enum.py:1292(value)
+  1540541    1.215    0.000    4.427    0.000 {built-in method builtins.all}
+ 20249338    4.173    0.000    4.173    0.000 {method 'append' of 'list' objects}
+1336770/1336765    1.244    0.000    3.730    0.000 {built-in method builtins.sum}
+  8871600    2.103    0.000    3.320    0.000 enum.py:1267(__hash__)
+  6002160    2.098    0.000    3.212    0.000 domino_probability_calc.py:166(<genexpr>)
+  1536587    1.470    0.000    2.375    0.000 domino_probability_calc.py:49(calculate_scenario_probability)
+  8050672    2.228    0.000    2.245    0.000 {built-in method builtins.max}
+  7774908    2.115    0.000    2.115    0.000 {built-in method builtins.min}
+ 11282397    1.762    0.000    1.762    0.000 domino_game_analyzer.py:50(get_other_end)
+  1461275    0.809    0.000    1.237    0.000 domino_probability_calc.py:20(total_tiles)
+  2407332    0.930    0.000    1.215    0.000 domino_game_analyzer.py:130(<genexpr>)
+  1461275    1.146    0.000    1.146    0.000 <string>:2(__init__)
+  2814380    0.906    0.000    1.144    0.000 domino_game_analyzer.py:131(<genexpr>)
+  5109056    1.047    0.000    1.047    0.000 {method 'get' of 'dict' objects}
+  4621583    1.030    0.000    1.030    0.000 {method 'copy' of 'set' objects}
+  6006318    0.849    0.000    0.849    0.000 {built-in method builtins.getattr}
+96670/8262    0.256    0.000    0.733    0.000 copy.py:118(deepcopy)
+  2831482    0.704    0.000    0.704    0.000 {method 'pop' of 'list' objects}
+10264/8262    0.043    0.000    0.694    0.000 copy.py:217(_deepcopy_dict)
+  3888592    0.524    0.000    0.524    0.000 domino_game_analyzer.py:53(get_pip_sum)
+   514020    0.239    0.000    0.490    0.000 {method 'add' of 'set' objects}
+  3073174    0.488    0.000    0.488    0.000 {built-in method math.comb}
+     8262    0.015    0.000    0.360    0.000 std.py:1160(__iter__)
+    65872    0.262    0.000    0.349    0.000 random.py:454(choices)
+     1160    0.010    0.000    0.343    0.000 std.py:1198(update)
+     1172    0.005    0.000    0.328    0.000 std.py:1325(refresh)
+     1184    0.004    0.000    0.314    0.000 std.py:1464(display)
+    33/32    0.000    0.000    0.287    0.009 threading.py:637(wait)
+    33/32    0.000    0.000    0.282    0.009 threading.py:323(wait)
+  136/130    0.279    0.002    0.280    0.002 {method 'acquire' of '_thread.lock' objects}
+26800/24798    0.075    0.000    0.276    0.000 copy.py:247(_reconstruct)
+     1172    0.007    0.000    0.215    0.000 std.py:1150(__str__)
+    66193    0.072    0.000    0.206    0.000 random.py:341(choice)
+53600/49596    0.019    0.000    0.206    0.000 copy.py:252(<genexpr>)
+     1172    0.045    0.000    0.200    0.000 std.py:464(format_meter)
+     3528    0.004    0.000    0.180    0.000 utils.py:378(disp_len)
+     3528    0.004    0.000    0.170    0.000 utils.py:374(_text_width)
+    26800    0.057    0.000    0.138    0.000 {method '__reduce_ex__' of 'object' objects}
+    66280    0.071    0.000    0.126    0.000 {method 'remove' of 'list' objects}
+   388577    0.083    0.000    0.126    0.000 utils.py:375(<genexpr>)
+    66221    0.075    0.000    0.116    0.000 random.py:242(_randbelow_with_getrandbits)
+     1184    0.003    0.000    0.094    0.000 std.py:457(print_status)
+    24798    0.019    0.000    0.088    0.000 copy.py:191(_deepcopy_list)
+    24799    0.066    0.000    0.082    0.000 copyreg.py:107(_slotnames)
+     1172    0.001    0.000    0.072    0.000 utils.py:386(disp_trim)
+    74423    0.040    0.000    0.071    0.000 <string>:1(<lambda>)
+    61862    0.046    0.000    0.066    0.000 copy.py:231(_keep_alive)
+    73/11    0.000    0.000    0.043    0.004 <frozen importlib._bootstrap>:1349(_find_and_load)
+    73/11    0.000    0.000    0.043    0.004 <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+   385049    0.043    0.000    0.043    0.000 {built-in method unicodedata.east_asian_width}
+    72/11    0.000    0.000    0.042    0.004 <frozen importlib._bootstrap>:911(_load_unlocked)
+    49/10    0.000    0.000    0.042    0.004 <frozen importlib._bootstrap_external>:989(exec_module)
+       12    0.001    0.000    0.042    0.003 analytic_agent_player.py:140(print_move_statistics)
+   172/23    0.000    0.000    0.040    0.002 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+       54    0.000    0.000    0.036    0.001 statistics.py:468(mean)
+       54    0.016    0.000    0.035    0.001 statistics.py:154(_sum)
+    65871    0.034    0.000    0.034    0.000 {built-in method _bisect.bisect_right}
+   228755    0.034    0.000    0.034    0.000 {built-in method builtins.id}
+77353/77349    0.033    0.000    0.033    0.000 {built-in method __new__ of type object at 0x937f80}
+        1    0.000    0.000    0.025    0.025 HumanPlayerWithAnalytics.py:1(<module>)
+    22083    0.013    0.000    0.023    0.000 {method 'remove' of 'set' objects}
+     1184    0.003    0.000    0.023    0.000 std.py:451(fp_write)
+   105315    0.022    0.000    0.022    0.000 {method 'getrandbits' of '_random.Random' objects}
+    53325    0.011    0.000    0.021    0.000 statistics.py:287(_exact_ratio)
+        3    0.000    0.000    0.020    0.007 __init__.py:1(<module>)
+     2392    0.002    0.000    0.020    0.000 utils.py:194(inner)
+    66277    0.019    0.000    0.019    0.000 {method 'bit_length' of 'int' objects}
+    77025    0.019    0.000    0.019    0.000 {method 'union' of 'set' objects}
+    65879    0.019    0.000    0.019    0.000 {method 'random' of '_random.Random' objects}
+    85283    0.018    0.000    0.018    0.000 {method 'values' of 'dict' objects}
+    65871    0.018    0.000    0.018    0.000 {built-in method math.isfinite}
+     1208    0.018    0.000    0.018    0.000 {method 'write' of '_io.TextIOWrapper' objects}
+       27    0.000    0.000    0.017    0.001 analytic_agent_player.py:137(<lambda>)
+       27    0.000    0.000    0.017    0.001 statistics.py:959(stdev)
+       27    0.008    0.000    0.016    0.001 statistics.py:208(_ss)
+    33000    0.015    0.000    0.015    0.000 {method 'intersection' of 'set' objects}
+     2428    0.008    0.000    0.014    0.000 {method 'format' of 'str' objects}
+     8250    0.009    0.000    0.013    0.000 {method 'update' of 'set' objects}
+    53325    0.011    0.000    0.011    0.000 {method 'as_integer_ratio' of 'float' objects}
+       44    0.000    0.000    0.010    0.000 std.py:760(get_lock)
+        1    0.000    0.000    0.010    0.010 std.py:90(__init__)
+    34233    0.010    0.000    0.010    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.010    0.010 std.py:116(create_mp_lock)
+       49    0.000    0.000    0.010    0.000 <frozen importlib._bootstrap_external>:1062(get_code)
+        1    0.000    0.000    0.010    0.010 domino_game_tracker.py:1(<module>)
+     2332    0.008    0.000    0.009    0.000 std.py:400(format_interval)
+     2344    0.006    0.000    0.009    0.000 utils.py:273(_is_ascii)
+    24954    0.009    0.000    0.009    0.000 {method 'get' of 'mappingproxy' objects}
+    22/17    0.000    0.000    0.009    0.001 <frozen importlib._bootstrap>:1390(_handle_fromlist)
+      5/2    0.000    0.000    0.009    0.004 {built-in method builtins.__import__}
+     6972    0.008    0.000    0.008    0.000 std.py:231(__call__)
+        1    0.000    0.000    0.008    0.008 cli.py:1(<module>)
+     1172    0.006    0.000    0.008    0.000 std.py:1446(format_dict)
+    29844    0.008    0.000    0.008    0.000 {built-in method builtins.hasattr}
+        1    0.000    0.000    0.007    0.007 context.py:1(<module>)
+  165/163    0.002    0.000    0.006    0.000 {built-in method builtins.__build_class__}
+      129    0.000    0.000    0.006    0.000 __init__.py:280(_compile)
+       73    0.001    0.000    0.006    0.000 <frozen importlib._bootstrap>:1240(_find_spec)
+    26953    0.006    0.000    0.006    0.000 {built-in method builtins.issubclass}
+     1252    0.003    0.000    0.006    0.000 std.py:102(acquire)
+    18739    0.006    0.000    0.006    0.000 {method 'items' of 'dict' objects}
+       15    0.000    0.000    0.006    0.000 _compiler.py:740(compile)
+     1172    0.005    0.000    0.006    0.000 std.py:186(__format__)
+       16    0.000    0.000    0.006    0.000 __init__.py:226(compile)
+     3534    0.005    0.000    0.005    0.000 {method 'sub' of 're.Pattern' objects}
+        1    0.000    0.000    0.005    0.005 statistics.py:1(<module>)
+        1    0.000    0.000    0.005    0.005 domino_game_analyzer.py:1(<module>)
+     1160    0.005    0.000    0.005    0.000 {built-in method now}
+       48    0.000    0.000    0.005    0.000 <frozen importlib._bootstrap_external>:751(_compile_bytecode)
+       71    0.000    0.000    0.005    0.000 <frozen importlib._bootstrap_external>:1520(find_spec)
+       71    0.000    0.000    0.005    0.000 <frozen importlib._bootstrap_external>:1491(_get_spec)
+        1    0.000    0.000    0.005    0.005 reduction.py:1(<module>)
+    34760    0.004    0.000    0.004    0.000 copy.py:172(_deepcopy_atomic)
+       48    0.004    0.000    0.004    0.000 {built-in method marshal.loads}
+     1252    0.003    0.000    0.004    0.000 std.py:106(release)
+       12    0.000    0.000    0.004    0.000 std.py:952(__init__)
+      196    0.001    0.000    0.004    0.000 <frozen importlib._bootstrap_external>:1593(find_spec)
+        1    0.000    0.000    0.004    0.004 socket.py:1(<module>)
+       72    0.000    0.000    0.004    0.000 <frozen importlib._bootstrap>:806(module_from_spec)
+        4    0.000    0.000    0.004    0.001 dataclasses.py:1264(wrap)
+        4    0.000    0.000    0.004    0.001 dataclasses.py:921(_process_class)
+        1    0.000    0.000    0.003    0.003 argparse.py:1764(__init__)
+       15    0.000    0.000    0.003    0.000 _parser.py:969(parse)
+        1    0.000    0.000    0.003    0.003 fractions.py:1(<module>)
+    64/15    0.000    0.000    0.003    0.000 _parser.py:452(_parse_sub)
+    82/16    0.001    0.000    0.003    0.000 _parser.py:512(_parse)
+    24858    0.003    0.000    0.003    0.000 enum.py:1287(name)
+        2    0.000    0.000    0.003    0.001 argparse.py:1446(add_argument)
+     3200    0.003    0.000    0.003    0.000 {method 'update' of 'dict' objects}
+        2    0.000    0.000    0.003    0.001 argparse.py:2622(_get_formatter)
+        2    0.000    0.000    0.003    0.001 argparse.py:164(__init__)
+        7    0.000    0.000    0.003    0.000 enum.py:919(_convert_)
+       27    0.000    0.000    0.003    0.000 statistics.py:738(mode)
+    24758    0.003    0.000    0.003    0.000 {built-in method builtins.ord}
+        1    0.000    0.000    0.003    0.003 context.py:70(RLock)
+     2002    0.002    0.000    0.003    0.000 copyreg.py:98(__newobj__)
+       21    0.000    0.000    0.002    0.000 <frozen importlib._bootstrap_external>:1287(create_module)
+       21    0.002    0.000    0.002    0.000 {built-in method _imp.create_dynamic}
+        1    0.000    0.000    0.002    0.002 synchronize.py:1(<module>)
+        1    0.000    0.000    0.002    0.002 shutil.py:1(<module>)
+        1    0.000    0.000    0.002    0.002 <frozen importlib._bootstrap_external>:1054(source_to_code)
+        1    0.002    0.002    0.002    0.002 {built-in method builtins.compile}
+     1172    0.002    0.000    0.002    0.000 std.py:153(__init__)
+       15    0.000    0.000    0.002    0.000 _compiler.py:573(_code)
+      633    0.002    0.000    0.002    0.000 {built-in method builtins.print}
+       20    0.000    0.000    0.002    0.000 dataclasses.py:449(_create_fn)
+     5098    0.002    0.000    0.002    0.000 {built-in method time.time}
+   169/15    0.001    0.000    0.002    0.000 _compiler.py:37(_compile)
+       27    0.000    0.000    0.002    0.000 __init__.py:595(__init__)
+        1    0.000    0.000    0.002    0.002 std.py:1(<module>)
+       54    0.002    0.000    0.002    0.000 {built-in method builtins.sorted}
+        1    0.000    0.000    0.002    0.002 pickle.py:1(<module>)
+       27    0.000    0.000    0.002    0.000 statistics.py:601(median)
+       27    0.000    0.000    0.002    0.000 __init__.py:669(update)
+       64    0.000    0.000    0.002    0.000 _monitor.py:47(get_instances)
+       27    0.002    0.000    0.002    0.000 {built-in method _collections._count_elements}
+     1252    0.002    0.000    0.002    0.000 {method 'acquire' of '_multiprocessing.SemLock' objects}
+        7    0.001    0.000    0.001    0.000 enum.py:1708(convert_class)
+       73    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:416(__enter__)
+     5836    0.001    0.000    0.001    0.000 {built-in method builtins.divmod}
+        1    0.000    0.000    0.001    0.001 random.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 util.py:1(<module>)
+       50    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1183(get_data)
+        1    0.000    0.000    0.001    0.001 process.py:1(<module>)
+      948    0.001    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:126(_path_join)
+       12    0.000    0.000    0.001    0.000 domino_game_tracker.py:48(domino_game_state_our_perspective)
+       72    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:733(_init_module_attrs)
+       64    0.000    0.000    0.001    0.000 _weakrefset.py:95(copy)
+      330    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:140(_path_stat)
+      292    0.000    0.000    0.001    0.000 _weakrefset.py:63(__iter__)
+        1    0.000    0.000    0.001    0.001 domino_probability_calc.py:1(<module>)
+       83    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:304(acquire)
+      342    0.001    0.000    0.001    0.000 {built-in method posix.stat}
+       67    0.000    0.000    0.001    0.000 _weakrefset.py:37(__init__)
+      189    0.000    0.000    0.001    0.000 fractions.py:613(forward)
+       24    0.000    0.000    0.001    0.000 std.py:1265(close)
+       12    0.000    0.000    0.001    0.000 analytic_agent_player.py:57(print_verbose_info)
+       98    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:482(cache_from_source)
+        1    0.000    0.000    0.001    0.001 numbers.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 string.py:1(<module>)
+       27    0.000    0.000    0.001    0.000 __init__.py:618(most_common)
+      135    0.000    0.000    0.001    0.000 fractions.py:627(reverse)
+     1256    0.001    0.000    0.001    0.000 {method 'acquire' of '_thread.RLock' objects}
+        1    0.000    0.000    0.001    0.001 __init__.py:469(StrFormatStyle)
+       64    0.000    0.000    0.001    0.000 _weakrefset.py:120(update)
+        1    0.000    0.000    0.001    0.001 signal.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 DominoGameState.py:1(<module>)
+        4    0.000    0.000    0.001    0.000 dataclasses.py:1247(dataclass)
+      119    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:632(cached)
+        1    0.000    0.000    0.001    0.001 string.py:69(__init_subclass__)
+        1    0.000    0.000    0.001    0.001 numbers.py:319(Integral)
+       46    0.001    0.000    0.001    0.000 <frozen abc>:7(abstractmethod)
+        1    0.000    0.000    0.001    0.001 decimal.py:1(<module>)
+       70    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:611(_get_cached)
+        1    0.000    0.000    0.001    0.001 bz2.py:1(<module>)
+        6    0.000    0.000    0.001    0.000 __init__.py:355(namedtuple)
+       50    0.001    0.000    0.001    0.000 {built-in method _io.open_code}
+        1    0.000    0.000    0.001    0.001 subprocess.py:1(<module>)
+        4    0.000    0.000    0.001    0.000 dataclasses.py:568(_init_fn)
+     1208    0.001    0.000    0.001    0.000 {method 'flush' of '_io.TextIOWrapper' objects}
+     1256    0.001    0.000    0.001    0.000 {method 'release' of '_thread.RLock' objects}
+        1    0.000    0.000    0.001    0.001 __init__.py:436(PercentStyle)
+        3    0.000    0.000    0.001    0.000 dataclasses.py:638(_frozen_get_del_attr)
+      378    0.000    0.000    0.001    0.000 fractions.py:186(__new__)
+        5    0.000    0.000    0.001    0.000 inspect.py:3333(signature)
+      336    0.000    0.000    0.001    0.000 domino_game_analyzer.py:34(new_tile)
+        5    0.000    0.000    0.001    0.000 inspect.py:3071(from_callable)
+       25    0.000    0.000    0.001    0.000 DominoGame.py:266(apply_move)
+     1252    0.001    0.000    0.001    0.000 {method 'release' of '_multiprocessing.SemLock' objects}
+     13/5    0.000    0.000    0.001    0.000 inspect.py:2491(_signature_from_callable)
+     1410    0.000    0.000    0.001    0.000 _parser.py:261(get)
+    34/30    0.000    0.000    0.001    0.000 typing.py:392(inner)
+       64    0.000    0.000    0.001    0.000 _compiler.py:243(_optimize_charset)
+       21    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1295(exec_module)
+        1    0.000    0.000    0.001    0.001 selectors.py:1(<module>)
+       12    0.000    0.000    0.001    0.000 utils.py:333(_screen_shape_linux)
+       21    0.000    0.000    0.001    0.000 {built-in method _imp.exec_dynamic}
+      107    0.000    0.000    0.001    0.000 __init__.py:164(match)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:162(__enter__)
+      152    0.000    0.000    0.000    0.000 _weakrefset.py:27(__exit__)
+       21    0.000    0.000    0.000    0.000 <frozen abc>:105(__new__)
+       70    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1588(_get_spec)
+        1    0.000    0.000    0.000    0.000 utils.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 argparse.py:1(<module>)
+       24    0.000    0.000    0.000    0.000 domino_game_analyzer.py:38(loi_to_domino_tiles)
+       12    0.000    0.000    0.000    0.000 std.py:686(_decr_instances)
+      991    0.000    0.000    0.000    0.000 _parser.py:168(__getitem__)
+        1    0.000    0.000    0.000    0.000 std.py:245(tqdm)
+     1172    0.000    0.000    0.000    0.000 utils.py:108(__init__)
+       73    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:420(__exit__)
+       12    0.000    0.000    0.000    0.000 domino_utils.py:3(history_to_domino_tiles_history)
+     1154    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 inspect.py:3287(__str__)
+     1172    0.000    0.000    0.000    0.000 utils.py:112(__format__)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:124(setdefault)
+        4    0.000    0.000    0.000    0.000 dataclasses.py:627(_repr_fn)
+       79    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:159(_path_isfile)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:426(_get_module_lock)
+       70    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:802(spec_from_file_location)
+      135    0.000    0.000    0.000    0.000 fractions.py:758(_div)
+      108    0.000    0.000    0.000    0.000 statistics.py:203(<genexpr>)
+        1    0.000    0.000    0.000    0.000 traceback.py:1(<module>)
+       80    0.000    0.000    0.000    0.000 std.py:110(__enter__)
+     1208    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
+        4    0.000    0.000    0.000    0.000 dataclasses.py:661(_cmp_fn)
+        6    0.000    0.000    0.000    0.000 {built-in method builtins.eval}
+        1    0.000    0.000    0.000    0.000 lzma.py:1(<module>)
+       73    0.000    0.000    0.000    0.000 __init__.py:103(find_spec)
+        5    0.000    0.000    0.000    0.000 inspect.py:2387(_signature_from_function)
+       99    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:132(_path_split)
+   202/53    0.000    0.000    0.000    0.000 _parser.py:178(getwidth)
+       16    0.000    0.000    0.000    0.000 inspect.py:2820(__str__)
+     1813    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+     1172    0.000    0.000    0.000    0.000 std.py:167(colour)
+       82    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:150(_path_is_mode_type)
+        8    0.000    0.000    0.000    0.000 enum.py:528(__new__)
+      245    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1469(_path_importer_cache)
+       50    0.000    0.000    0.000    0.000 {method 'read' of '_io.BufferedReader' objects}
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:372(release)
+        1    0.000    0.000    0.000    0.000 datetime.py:1(<module>)
+       20    0.000    0.000    0.000    0.000 inspect.py:1457(formatannotation)
+       12    0.000    0.000    0.000    0.000 std.py:663(__new__)
+     1994    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 heapq.py:1(<module>)
+       15    0.000    0.000    0.000    0.000 _compiler.py:511(_compile_info)
+       12    0.000    0.000    0.000    0.000 DominoPlayer.py:78(get_unplayed_tiles)
+       12    0.000    0.000    0.000    0.000 typing.py:1260(__init__)
+        3    0.000    0.000    0.000    0.000 gettext.py:616(gettext)
+      8/4    0.000    0.000    0.000    0.000 typing.py:515(__getitem__)
+      152    0.000    0.000    0.000    0.000 _weakrefset.py:53(_commit_removals)
+      301    0.000    0.000    0.000    0.000 <frozen abc>:117(__instancecheck__)
+        3    0.000    0.000    0.000    0.000 gettext.py:578(dgettext)
+     1722    0.000    0.000    0.000    0.000 _parser.py:240(__next)
+        4    0.000    0.000    0.000    0.000 typing.py:747(Optional)
+        3    0.000    0.000    0.000    0.000 gettext.py:519(translation)
+       80    0.000    0.000    0.000    0.000 std.py:113(__exit__)
+      108    0.000    0.000    0.000    0.000 fractions.py:710(_add)
+        1    0.000    0.000    0.000    0.000 struct.py:1(<module>)
+     1606    0.000    0.000    0.000    0.000 {method 'isupper' of 'str' objects}
+        3    0.000    0.000    0.000    0.000 gettext.py:479(find)
+      324    0.000    0.000    0.000    0.000 fractions.py:317(_from_coprime_ints)
+        3    0.000    0.000    0.000    0.000 argparse.py:1364(__init__)
+      210    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+     1172    0.000    0.000    0.000    0.000 std.py:163(colour)
+       78    0.000    0.000    0.000    0.000 _weakrefset.py:85(add)
+        1    0.000    0.000    0.000    0.000 bisect.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 utils.py:34(envwrap)
+     1048    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:491(_verbose_message)
+      382    0.000    0.000    0.000    0.000 socket.py:84(<lambda>)
+      381    0.000    0.000    0.000    0.000 socket.py:79(<lambda>)
+      384    0.000    0.000    0.000    0.000 socket.py:94(<lambda>)
+      383    0.000    0.000    0.000    0.000 socket.py:89(<lambda>)
+        4    0.000    0.000    0.000    0.000 typing.py:694(Union)
+       37    0.000    0.000    0.000    0.000 _parser.py:98(closegroup)
+       10    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:463(_lock_unlock_module)
+       27    0.000    0.000    0.000    0.000 statistics.py:425(_float_sqrt_of_frac)
+        6    0.000    0.000    0.000    0.000 __init__.py:179(sub)
+       12    0.000    0.000    0.000    0.000 DominoPlayer.py:146(next_move)
+        1    0.000    0.000    0.000    0.000 argparse.py:1895(parse_args)
+        8    0.000    0.000    0.000    0.000 typing.py:1476(copy_with)
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1202(path_stats)
+        1    0.000    0.000    0.000    0.000 argparse.py:1902(parse_known_args)
+        2    0.000    0.000    0.000    0.000 dataclasses.py:882(_hash_add)
+       12    0.000    0.000    0.000    0.000 std.py:679(_get_free_pos)
+       54    0.000    0.000    0.000    0.000 statistics.py:333(_convert)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1207(_cache_bytecode)
+       30    0.000    0.000    0.000    0.000 enum.py:1562(__and__)
+        5    0.000    0.000    0.000    0.000 typing.py:1467(__getitem__)
+      147    0.000    0.000    0.000    0.000 domino_common_knowledge.py:16(update_play)
+        2    0.000    0.000    0.000    0.000 dataclasses.py:675(_hash_fn)
+       65    0.000    0.000    0.000    0.000 <frozen _collections_abc>:892(__iter__)
+      301    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
+        1    0.000    0.000    0.000    0.000 argparse.py:1940(_parse_known_args)
+      152    0.000    0.000    0.000    0.000 _weakrefset.py:21(__enter__)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1212(set_data)
+       27    0.000    0.000    0.000    0.000 heapq.py:523(nlargest)
+        1    0.000    0.000    0.000    0.000 utils.py:76(wrap)
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:666(_classify_pyc)
+       26    0.000    0.000    0.000    0.000 DominoGame.py:236(is_round_over)
+      125    0.000    0.000    0.000    0.000 enum.py:850(__setattr__)
+        1    0.000    0.000    0.000    0.000 argparse.py:2098(consume_positionals)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:195(_write_atomic)
+       59    0.000    0.000    0.000    0.000 {built-in method posix.getcwd}
+      147    0.000    0.000    0.000    0.000 {method 'discard' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 version.py:1(<module>)
+       51    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+      105    0.000    0.000    0.000    0.000 enum.py:38(_is_descriptor)
+      968    0.000    0.000    0.000    0.000 enum.py:820(<genexpr>)
+       12    0.000    0.000    0.000    0.000 utils.py:213(__init__)
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:699(_validate_timestamp_pyc)
+      621    0.000    0.000    0.000    0.000 {built-in method math.gcd}
+       72    0.000    0.000    0.000    0.000 typing.py:1206(__setattr__)
+      146    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:84(_unpack_uint32)
+       80    0.000    0.000    0.000    0.000 <frozen os>:709(__getitem__)
+       12    0.000    0.000    0.000    0.000 {built-in method fcntl.ioctl}
+       79    0.000    0.000    0.000    0.000 _compiler.py:398(_simple)
+       48    0.000    0.000    0.000    0.000 inspect.py:2733(__init__)
+        1    0.000    0.000    0.000    0.000 argparse.py:2251(_match_arguments_partial)
+       54    0.000    0.000    0.000    0.000 fractions.py:742(_mul)
+       12    0.000    0.000    0.000    0.000 _weakrefset.py:110(remove)
+      464    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
+       81    0.000    0.000    0.000    0.000 {built-in method _functools.reduce}
+        1    0.000    0.000    0.000    0.000 synchronize.py:193(__init__)
+       73    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:445(cb)
+       21    0.000    0.000    0.000    0.000 {built-in method _abc._abc_init}
+        9    0.000    0.000    0.000    0.000 inspect.py:176(get_annotations)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:74(__new__)
+        1    0.000    0.000    0.000    0.000 synchronize.py:50(__init__)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:210(initialize_round)
+      288    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1226(__exit__)
+       71    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1128(find_spec)
+      375    0.000    0.000    0.000    0.000 _parser.py:164(__len__)
+        1    0.000    0.000    0.000    0.000 _monitor.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 DominoPlayer.py:1(<module>)
+        3    0.000    0.000    0.000    0.000 typing.py:1566(__getitem__)
+      481    0.000    0.000    0.000    0.000 _parser.py:256(match)
+       54    0.000    0.000    0.000    0.000 statistics.py:239(<genexpr>)
+       12    0.000    0.000    0.000    0.000 typing.py:1165(__init__)
+        1    0.000    0.000    0.000    0.000 tempfile.py:1(<module>)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:82(remove)
+       24    0.000    0.000    0.000    0.000 typing.py:175(_type_check)
+      198    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:134(<genexpr>)
+       73    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:982(find_spec)
+      288    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1222(__enter__)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:760(_get_field)
+       27    0.000    0.000    0.000    0.000 statistics.py:413(_integer_sqrt_of_frac_rto)
+        4    0.000    0.000    0.000    0.000 DominoGame.py:231(draw_hand)
+       25    0.000    0.000    0.000    0.000 DominoGame.py:243(is_legal_move)
+       64    0.000    0.000    0.000    0.000 _compiler.py:216(_compile_charset)
+      196    0.000    0.000    0.000    0.000 _parser.py:176(append)
+        1    0.000    0.000    0.000    0.000 domino_game_analyzer.py:56(GameState)
+        6    0.000    0.000    0.000    0.000 gettext.py:224(_expand_lang)
+       73    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:232(__init__)
+        1    0.000    0.000    0.000    0.000 traceback.py:248(FrameSummary)
+       54    0.000    0.000    0.000    0.000 numbers.py:308(__float__)
+       12    0.000    0.000    0.000    0.000 domino_common_knowledge.py:6(__init__)
+       73    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:599(__init__)
+      224    0.000    0.000    0.000    0.000 _parser.py:293(tell)
+       72    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:185(_path_abspath)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:79(__init__)
+       37    0.000    0.000    0.000    0.000 _parser.py:86(opengroup)
+       33    0.000    0.000    0.000    0.000 threading.py:311(_acquire_restore)
+       12    0.000    0.000    0.000    0.000 std.py:438(status_printer)
+        1    0.000    0.000    0.000    0.000 domino_game_analyzer.py:29(DominoTile)
+        4    0.000    0.000    0.000    0.000 random.py:359(sample)
+      191    0.000    0.000    0.000    0.000 enum.py:816(__iter__)
+        1    0.000    0.000    0.000    0.000 _compat_pickle.py:1(<module>)
+       60    0.000    0.000    0.000    0.000 _parser.py:372(_escape)
+       24    0.000    0.000    0.000    0.000 std.py:1286(fp_write)
+        9    0.000    0.000    0.000    0.000 _compiler.py:386(_mk_bitmap)
+     25/9    0.000    0.000    0.000    0.000 <frozen abc>:121(__subclasscheck__)
+       95    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:645(parent)
+        9    0.000    0.000    0.000    0.000 functools.py:35(update_wrapper)
+       54    0.000    0.000    0.000    0.000 statistics.py:240(<genexpr>)
+     25/9    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.dir}
+       99    0.000    0.000    0.000    0.000 enum.py:1544(_get_value)
+       60    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
+        9    0.000    0.000    0.000    0.000 inspect.py:3019(__init__)
+        1    0.000    0.000    0.000    0.000 _monitor.py:30(__init__)
+      180    0.000    0.000    0.000    0.000 domino_game_analyzer.py:42(__repr__)
+      444    0.000    0.000    0.000    0.000 {built-in method _imp.acquire_lock}
+      348    0.000    0.000    0.000    0.000 DominoPlayer.py:80(<genexpr>)
+        1    0.000    0.000    0.000    0.000 domino_common_knowledge.py:1(<module>)
+       88    0.000    0.000    0.000    0.000 std.py:1157(__hash__)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.replace}
+      444    0.000    0.000    0.000    0.000 {built-in method _imp.release_lock}
+        3    0.000    0.000    0.000    0.000 enum.py:1551(__or__)
+       72    0.000    0.000    0.000    0.000 dataclasses.py:461(<genexpr>)
+       76    0.000    0.000    0.000    0.000 signal.py:9(<lambda>)
+      178    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+       75    0.000    0.000    0.000    0.000 typing.py:1152(_is_dunder)
+       22    0.000    0.000    0.000    0.000 dataclasses.py:864(_set_new_attribute)
+       34    0.000    0.000    0.000    0.000 threading.py:302(__exit__)
+      108    0.000    0.000    0.000    0.000 enum.py:79(_is_private)
+      152    0.000    0.000    0.000    0.000 _weakrefset.py:17(__init__)
+       12    0.000    0.000    0.000    0.000 inspect.py:2020(_signature_get_user_defined_method)
+        1    0.000    0.000    0.000    0.000 _compression.py:1(<module>)
+        8    0.000    0.000    0.000    0.000 enum.py:390(__setitem__)
+       29    0.000    0.000    0.000    0.000 _parser.py:449(_uniq)
+       72    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:180(_path_isabs)
+       12    0.000    0.000    0.000    0.000 DominoPlayer.py:158(available_moves)
+       27    0.000    0.000    0.000    0.000 fractions.py:726(_sub)
+        1    0.000    0.000    0.000    0.000 context.py:220(Process)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:173(__exit__)
+       19    0.000    0.000    0.000    0.000 _parser.py:274(getuntil)
+        4    0.000    0.000    0.000    0.000 enum.py:254(__set_name__)
+        1    0.000    0.000    0.000    0.000 DominoPlayer.py:22(HumanPlayer)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1456(_path_hooks)
+        4    0.000    0.000    0.000    0.000 dataclasses.py:250(_recursive_repr)
+        6    0.000    0.000    0.000    0.000 locale.py:381(normalize)
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:643(_check_name_wrapper)
+       80    0.000    0.000    0.000    0.000 <frozen os>:791(encode)
+      121    0.000    0.000    0.000    0.000 enum.py:48(_is_dunder)
+       12    0.000    0.000    0.000    0.000 typing.py:262(_collect_parameters)
+       27    0.000    0.000    0.000    0.000 {built-in method math.isqrt}
+      110    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+        1    0.000    0.000    0.000    0.000 <frozen os>:44(_get_exports_list)
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.000    0.000 domino_game_analyzer.py:8(PlayerPosition)
+        1    0.000    0.000    0.000    0.000 synchronize.py:121(_make_name)
+       83    0.000    0.000    0.000    0.000 {built-in method _weakref._remove_dead_weakref}
+       12    0.000    0.000    0.000    0.000 utils.py:266(_supports_unicode)
+      100    0.000    0.000    0.000    0.000 types.py:192(__init__)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1644(_fill_cache)
+        2    0.000    0.000    0.000    0.000 argparse.py:1497(add_argument_group)
+        4    0.000    0.000    0.000    0.000 inspect.py:2114(_signature_bound_method)
+       12    0.000    0.000    0.000    0.000 <frozen posixpath>:71(join)
+      156    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+      131    0.000    0.000    0.000    0.000 <frozen os>:795(decode)
+        1    0.000    0.000    0.000    0.000 {built-in method _thread.start_new_thread}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:764(_code_to_timestamp_pyc)
+        1    0.000    0.000    0.000    0.000 tempfile.py:153(__next__)
+    21/20    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:48(_new_module)
+        2    0.000    0.000    0.000    0.000 random.py:126(__init__)
+        2    0.000    0.000    0.000    0.000 argparse.py:1674(__init__)
+       12    0.000    0.000    0.000    0.000 utils.py:125(__eq__)
+      168    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.RLock' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method posix.open}
+       12    0.000    0.000    0.000    0.000 functools.py:393(__get__)
+       65    0.000    0.000    0.000    0.000 <frozen os>:732(__iter__)
+       35    0.000    0.000    0.000    0.000 threading.py:314(_is_owned)
+        2    0.000    0.000    0.000    0.000 random.py:135(seed)
+       12    0.000    0.000    0.000    0.000 {built-in method fromtimestamp}
+       71    0.000    0.000    0.000    0.000 {built-in method _imp.find_frozen}
+        2    0.000    0.000    0.000    0.000 {built-in method posix.listdir}
+        1    0.000    0.000    0.000    0.000 analytic_agent_player.py:1(<module>)
+       73    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
+      109    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
+       12    0.000    0.000    0.000    0.000 <frozen genericpath>:16(exists)
+        7    0.000    0.000    0.000    0.000 {method 'sort' of 'list' objects}
+        5    0.000    0.000    0.000    0.000 <frozen abc>:110(register)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:146(print_final_game_statistics)
+      108    0.000    0.000    0.000    0.000 enum.py:59(_is_sunder)
+        1    0.000    0.000    0.000    0.000 threading.py:973(start)
+       12    0.000    0.000    0.000    0.000 typing.py:1472(<genexpr>)
+      102    0.000    0.000    0.000    0.000 {method 'rfind' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 enum.py:513(__prepare__)
+        1    0.000    0.000    0.000    0.000 domino_probability_calc.py:14(Scenario)
+       92    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 enum.py:1414(_missing_)
+        5    0.000    0.000    0.000    0.000 {built-in method _abc._abc_register}
+        3    0.000    0.000    0.000    0.000 locale.py:347(_replace_encoding)
+       27    0.000    0.000    0.000    0.000 analytic_agent_player.py:189(<lambda>)
+        8    0.000    0.000    0.000    0.000 inspect.py:1835(getattr_static)
+        1    0.000    0.000    0.000    0.000 {built-in method marshal.dumps}
+      105    0.000    0.000    0.000    0.000 _parser.py:83(groups)
+        1    0.000    0.000    0.000    0.000 gui.py:1(<module>)
+      146    0.000    0.000    0.000    0.000 {built-in method from_bytes}
+      168    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+       12    0.000    0.000    0.000    0.000 typing.py:730(<genexpr>)
+       35    0.000    0.000    0.000    0.000 threading.py:299(__enter__)
+        2    0.000    0.000    0.000    0.000 shutil.py:1422(get_terminal_size)
+      176    0.000    0.000    0.000    0.000 _parser.py:113(__init__)
+        2    0.000    0.000    0.000    0.000 analytic_agent_player.py:201(end_round)
+      184    0.000    0.000    0.000    0.000 {built-in method posix.fspath}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:989(create_module)
+        1    0.000    0.000    0.000    0.000 tempfile.py:142(rng)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1685(path_hook_for_FileFinder)
+       24    0.000    0.000    0.000    0.000 utils.py:187(disable_on_exception)
+       24    0.000    0.000    0.000    0.000 std.py:1153(_comparable)
+        4    0.000    0.000    0.000    0.000 typing.py:345(_remove_dups_flatten)
+       12    0.000    0.000    0.000    0.000 <frozen _collections_abc>:804(get)
+        3    0.000    0.000    0.000    0.000 contextlib.py:272(contextmanager)
+        2    0.000    0.000    0.000    0.000 {function Random.seed at 0x7c02fce01f80}
+        4    0.000    0.000    0.000    0.000 inspect.py:3087(replace)
+      113    0.000    0.000    0.000    0.000 {method 'isalnum' of 'str' objects}
+       92    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 fractions.py:162(Fraction)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:323(calculate_round_score)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+       33    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        1    0.000    0.000    0.000    0.000 __init__.py:1293(__init__)
+    14/13    0.000    0.000    0.000    0.000 _compiler.py:436(_get_literal_prefix)
+       81    0.000    0.000    0.000    0.000 statistics.py:256(_coerce)
+        2    0.000    0.000    0.000    0.000 {built-in method _imp.create_builtin}
+        1    0.000    0.000    0.000    0.000 subprocess.py:749(Popen)
+       23    0.000    0.000    0.000    0.000 dataclasses.py:857(_set_qualname)
+       12    0.000    0.000    0.000    0.000 utils.py:252(_is_utf)
+       36    0.000    0.000    0.000    0.000 utils.py:152(wrapper_setattr)
+        1    0.000    0.000    0.000    0.000 __init__.py:928(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:882(__init__)
+        8    0.000    0.000    0.000    0.000 inspect.py:1796(_check_class)
+       34    0.000    0.000    0.000    0.000 threading.py:308(_release_save)
+      5/4    0.000    0.000    0.000    0.000 typing.py:1411(__repr__)
+       15    0.000    0.000    0.000    0.000 _parser.py:231(__init__)
+        2    0.000    0.000    0.000    0.000 argparse.py:1875(_add_action)
+        2    0.000    0.000    0.000    0.000 functools.py:518(decorating_function)
+       12    0.000    0.000    0.000    0.000 utils.py:156(__init__)
+        2    0.000    0.000    0.000    0.000 DominoPlayer.py:72(end_round)
+       81    0.000    0.000    0.000    0.000 _parser.py:172(__setitem__)
+      131    0.000    0.000    0.000    0.000 {method 'decode' of 'bytes' objects}
+       37    0.000    0.000    0.000    0.000 argparse.py:1417(register)
+        1    0.000    0.000    0.000    0.000 pickle.py:1129(_Unpickler)
+      128    0.000    0.000    0.000    0.000 DominoGame.py:237(<genexpr>)
+        1    0.000    0.000    0.000    0.000 fnmatch.py:1(<module>)
+       92    0.000    0.000    0.000    0.000 {method 'isidentifier' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 context.py:30(BaseContext)
+        3    0.000    0.000    0.000    0.000 __init__.py:43(normalize_encoding)
+       24    0.000    0.000    0.000    0.000 utils.py:139(__getattr__)
+        4    0.000    0.000    0.000    0.000 dataclasses.py:428(_fields_in_init_order)
+       14    0.000    0.000    0.000    0.000 inspect.py:1459(repl)
+        9    0.000    0.000    0.000    0.000 domino_common_knowledge.py:10(update_pass)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:131(print_round_statistics)
+      196    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:71(_relax_case)
+        3    0.000    0.000    0.000    0.000 enum.py:1404(_iter_member_by_def_)
+       24    0.000    0.000    0.000    0.000 utils.py:222(__eq__)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:404(field)
+        9    0.000    0.000    0.000    0.000 inspect.py:748(unwrap)
+       15    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
+        1    0.000    0.000    0.000    0.000 {method 'write' of '_io.FileIO' objects}
+       38    0.000    0.000    0.000    0.000 __init__.py:23(<genexpr>)
+        1    0.000    0.000    0.000    0.000 __init__.py:2149(getLogger)
+       77    0.000    0.000    0.000    0.000 threading.py:601(is_set)
+       10    0.000    0.000    0.000    0.000 dataclasses.py:437(_tuple_str)
+       33    0.000    0.000    0.000    0.000 {method 'remove' of 'collections.deque' objects}
+       53    0.000    0.000    0.000    0.000 inspect.py:3066(<genexpr>)
+        1    0.000    0.000    0.000    0.000 argparse.py:1987(take_action)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:489(_field_init)
+       33    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1567(__init__)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:7(__init__)
+        2    0.000    0.000    0.000    0.000 argparse.py:1696(_add_action)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:662(spec_from_loader)
+        2    0.000    0.000    0.000    0.000 <frozen zipimport>:64(__init__)
+        2    0.000    0.000    0.000    0.000 weakref.py:104(__init__)
+       24    0.000    0.000    0.000    0.000 typing.py:166(_type_convert)
+       55    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+       11    0.000    0.000    0.000    0.000 _monitor.py:94(report)
+        6    0.000    0.000    0.000    0.000 typing.py:1575(<genexpr>)
+      8/7    0.000    0.000    0.000    0.000 typing.py:237(_type_repr)
+        1    0.000    0.000    0.000    0.000 __init__.py:1377(getLogger)
+        1    0.000    0.000    0.000    0.000 argparse.py:157(HelpFormatter)
+       33    0.000    0.000    0.000    0.000 typing.py:1270(__eq__)
+       34    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.lock' objects}
+       73    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:412(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:616(set)
+        1    0.000    0.000    0.000    0.000 numbers.py:57(Complex)
+      100    0.000    0.000    0.000    0.000 enum.py:241(__set_name__)
+       48    0.000    0.000    0.000    0.000 {built-in method _imp._fix_co_filename}
+       73    0.000    0.000    0.000    0.000 {method '__contains__' of 'frozenset' objects}
+       35    0.000    0.000    0.000    0.000 {method '__enter__' of '_thread.lock' objects}
+       19    0.000    0.000    0.000    0.000 _parser.py:304(checkgroupname)
+       30    0.000    0.000    0.000    0.000 _compiler.py:570(isstring)
+        4    0.000    0.000    0.000    0.000 inspect.py:2140(_signature_is_builtin)
+        2    0.000    0.000    0.000    0.000 enum.py:967(_get_mixins_)
+        1    0.000    0.000    0.000    0.000 util.py:174(register_after_fork)
+       81    0.000    0.000    0.000    0.000 fractions.py:397(numerator)
+       12    0.000    0.000    0.000    0.000 std.py:1147(__del__)
+        3    0.000    0.000    0.000    0.000 enum.py:1394(_iter_member_by_value_)
+        1    0.000    0.000    0.000    0.000 argparse.py:1176(_SubParsersAction)
+       83    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:158(__init__)
+        2    0.000    0.000    0.000    0.000 argparse.py:605(_format_args)
+        9    0.000    0.000    0.000    0.000 {built-in method builtins.delattr}
+        1    0.000    0.000    0.000    0.000 process.py:71(BaseProcess)
+       57    0.000    0.000    0.000    0.000 DominoPlayer.py:162(<lambda>)
+      100    0.000    0.000    0.000    0.000 enum.py:942(<lambda>)
+        8    0.000    0.000    0.000    0.000 inspect.py:1822(_shadowed_dict)
+       29    0.000    0.000    0.000    0.000 DominoGame.py:263(can_play)
+       81    0.000    0.000    0.000    0.000 fractions.py:401(denominator)
+        1    0.000    0.000    0.000    0.000 __init__.py:592(__init__)
+        2    0.000    0.000    0.000    0.000 typing.py:1572(<genexpr>)
+        2    0.000    0.000    0.000    0.000 selectors.py:588(_can_use)
+        1    0.000    0.000    0.000    0.000 HumanPlayerWithAnalytics.py:12(HumanPlayerWithAnalytics)
+        3    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:164(_path_isdir)
+       34    0.000    0.000    0.000    0.000 {method 'append' of 'collections.deque' objects}
+       25    0.000    0.000    0.000    0.000 {method 'copy' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 subprocess.py:695(_use_posix_spawn)
+        1    0.000    0.000    0.000    0.000 pickle.py:401(_Pickler)
+        3    0.000    0.000    0.000    0.000 typing.py:1196(__getattr__)
+        1    0.000    0.000    0.000    0.000 traceback.py:679(TracebackException)
+        1    0.000    0.000    0.000    0.000 process.py:399(__init__)
+       41    0.000    0.000    0.000    0.000 _compiler.py:31(_combine_flags)
+        1    0.000    0.000    0.000    0.000 argparse.py:1362(_ActionsContainer)
+        2    0.000    0.000    0.000    0.000 _compiler.py:391(_bytes_to_codes)
+        1    0.000    0.000    0.000    0.000 tempfile.py:685(SpooledTemporaryFile)
+        1    0.000    0.000    0.000    0.000 weakref.py:164(__setitem__)
+        7    0.000    0.000    0.000    0.000 fractions.py:533(_operator_fallbacks)
+        1    0.000    0.000    0.000    0.000 __init__.py:255(escape)
+        1    0.000    0.000    0.000    0.000 argparse.py:2499(_get_values)
+      100    0.000    0.000    0.000    0.000 enum.py:1185(__init__)
+       25    0.000    0.000    0.000    0.000 {built-in method sys.intern}
+        2    0.000    0.000    0.000    0.000 argparse.py:1507(_add_action)
+        1    0.000    0.000    0.000    0.000 socket.py:215(socket)
+        1    0.000    0.000    0.000    0.000 statistics.py:1236(NormalDist)
+       15    0.000    0.000    0.000    0.000 _parser.py:953(fix_flags)
+        1    0.000    0.000    0.000    0.000 __init__.py:1878(LoggerAdapter)
+        1    0.000    0.000    0.000    0.000 analytic_agent_player.py:12(AnalyticAgentPlayer)
+        1    0.000    0.000    0.000    0.000 __init__.py:958(createLock)
+        2    0.000    0.000    0.000    0.000 typing.py:1594(__repr__)
+        4    0.000    0.000    0.000    0.000 inspect.py:2482(_descriptor_get)
+        1    0.000    0.000    0.000    0.000 std.py:76(TqdmDefaultWriteLock)
+        5    0.000    0.000    0.000    0.000 _compiler.py:407(_generate_overlap_table)
+       35    0.000    0.000    0.000    0.000 {method 'release' of '_thread.lock' objects}
+        2    0.000    0.000    0.000    0.000 threading.py:588(__init__)
+        4    0.000    0.000    0.000    0.000 _parser.py:312(_class_escape)
+        1    0.000    0.000    0.000    0.000 threading.py:424(notify_all)
+       72    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:653(has_location)
+        1    0.000    0.000    0.000    0.000 random.py:110(Random)
+        1    0.000    0.000    0.000    0.000 numbers.py:172(Real)
+       77    0.000    0.000    0.000    0.000 signal.py:16(<lambda>)
+        2    0.000    0.000    0.000    0.000 enum.py:1008(_find_data_type_)
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1153(__init__)
+        4    0.000    0.000    0.000    0.000 typing.py:317(_deduplicate)
+       49    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+       12    0.000    0.000    0.000    0.000 {method 'difference' of 'set' objects}
+        2    0.000    0.000    0.000    0.000 __init__.py:1497(__init__)
+       24    0.000    0.000    0.000    0.000 {built-in method _weakref.proxy}
+        1    0.000    0.000    0.000    0.000 std.py:131(Bar)
+        9    0.000    0.000    0.000    0.000 enum.py:785(__delattr__)
+        1    0.000    0.000    0.000    0.000 __init__.py:892(_addHandlerRef)
+        1    0.000    0.000    0.000    0.000 argparse.py:1587(_get_optional_kwargs)
+        8    0.000    0.000    0.000    0.000 _compiler.py:467(_get_charset_prefix)
+       22    0.000    0.000    0.000    0.000 DominoGame.py:239(<genexpr>)
+       13    0.000    0.000    0.000    0.000 dataclasses.py:643(<genexpr>)
+       85    0.000    0.000    0.000    0.000 _compat_pickle.py:167(<genexpr>)
+       48    0.000    0.000    0.000    0.000 {built-in method _sre.unicode_iscased}
+       78    0.000    0.000    0.000    0.000 signal.py:21(<lambda>)
+        1    0.000    0.000    0.000    0.000 __init__.py:1482(Logger)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:623(_calc_mode)
+       14    0.000    0.000    0.000    0.000 <frozen posixpath>:41(_get_sep)
+       60    0.000    0.000    0.000    0.000 __init__.py:110(<lambda>)
+       13    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        9    0.000    0.000    0.000    0.000 DominoGame.py:248(<genexpr>)
+        6    0.000    0.000    0.000    0.000 {built-in method math.log}
+       27    0.000    0.000    0.000    0.000 analytic_agent_player.py:168(<lambda>)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:501(_requires_builtin_wrapper)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:477(_field_assign)
+        2    0.000    0.000    0.000    0.000 analytic_agent_player.py:13(__init__)
+        2    0.000    0.000    0.000    0.000 weakref.py:289(update)
+       25    0.000    0.000    0.000    0.000 __init__.py:429(<genexpr>)
+       33    0.000    0.000    0.000    0.000 typing.py:1264(<genexpr>)
+        1    0.000    0.000    0.000    0.000 __init__.py:1117(StreamHandler)
+        5    0.000    0.000    0.000    0.000 typing.py:1276(__hash__)
+        1    0.000    0.000    0.000    0.000 tempfile.py:860(TemporaryDirectory)
+        7    0.000    0.000    0.000    0.000 functools.py:65(wraps)
+       10    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+       36    0.000    0.000    0.000    0.000 std.py:226(__init__)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:6(DominoGame)
+        1    0.000    0.000    0.000    0.000 __init__.py:450(validate)
+        1    0.000    0.000    0.000    0.000 __init__.py:262(_register_at_fork_reinit_lock)
+        1    0.000    0.000    0.000    0.000 enum.py:1035(_find_new_)
+       48    0.000    0.000    0.000    0.000 enum.py:1273(__deepcopy__)
+       64    0.000    0.000    0.000    0.000 inspect.py:2786(name)
+        6    0.000    0.000    0.000    0.000 signal.py:51(decorator)
+        1    0.000    0.000    0.000    0.000 threading.py:394(notify)
+        4    0.000    0.000    0.000    0.000 inspect.py:2154(_signature_is_functionlike)
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:408(abspath)
+        1    0.000    0.000    0.000    0.000 __init__.py:1867(__init__)
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:986(create_module)
+        3    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:79(_pack_uint32)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:683(_is_classvar)
+        1    0.000    0.000    0.000    0.000 threading.py:1043(_set_tstate_lock)
+        1    0.000    0.000    0.000    0.000 selectors.py:80(BaseSelector)
+       43    0.000    0.000    0.000    0.000 _compat_pickle.py:165(<genexpr>)
+        2    0.000    0.000    0.000    0.000 _parser.py:893(_parse_flags)
+        2    0.000    0.000    0.000    0.000 {built-in method posix.get_terminal_size}
+       49    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1178(get_filename)
+       14    0.000    0.000    0.000    0.000 inspect.py:372(isfunction)
+        3    0.000    0.000    0.000    0.000 argparse.py:1625(_get_handler)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:549(_init_param)
+        1    0.000    0.000    0.000    0.000 argparse.py:1742(ArgumentParser)
+        2    0.000    0.000    0.000    0.000 argparse.py:1621(_pop_action_class)
+        1    0.000    0.000    0.000    0.000 lzma.py:38(LZMAFile)
+       12    0.000    0.000    0.000    0.000 utils.py:282(_screen_shape_wrapper)
+        9    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
+       12    0.000    0.000    0.000    0.000 {method 'setter' of 'property' objects}
+        1    0.000    0.000    0.000    0.000 string.py:188(Formatter)
+       21    0.000    0.000    0.000    0.000 enum.py:93(_is_single_bit)
+       20    0.000    0.000    0.000    0.000 {method 'keys' of 'dict' objects}
+       22    0.000    0.000    0.000    0.000 _compiler.py:428(_get_iscased)
+       56    0.000    0.000    0.000    0.000 inspect.py:2798(kind)
+        2    0.000    0.000    0.000    0.000 threading.py:277(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:1353(Manager)
+       15    0.000    0.000    0.000    0.000 _parser.py:77(__init__)
+       28    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+        1    0.000    0.000    0.000    0.000 {built-in method math.exp}
+       12    0.000    0.000    0.000    0.000 inspect.py:296(isclass)
+        1    0.000    0.000    0.000    0.000 __init__.py:1428(_fixupParents)
+        1    0.000    0.000    0.000    0.000 __init__.py:919(Handler)
+        1    0.000    0.000    0.000    0.000 socket.py:665(SocketIO)
+       45    0.000    0.000    0.000    0.000 {built-in method _sre.unicode_tolower}
+        1    0.000    0.000    0.000    0.000 synchronize.py:46(SemLock)
+        1    0.000    0.000    0.000    0.000 DominoGameState.py:3(DominoGameState)
+        1    0.000    0.000    0.000    0.000 traceback.py:374(StackSummary)
+        3    0.000    0.000    0.000    0.000 __init__.py:234(_acquireLock)
+        1    0.000    0.000    0.000    0.000 reduction.py:33(ForkingPickler)
+        1    0.000    0.000    0.000    0.000 domino_common_knowledge.py:5(CommonKnowledgeTracker)
+        1    0.000    0.000    0.000    0.000 subprocess.py:470(CompletedProcess)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:389(determine_next_starting_player)
+        1    0.000    0.000    0.000    0.000 __init__.py:1358(__init__)
+        4    0.000    0.000    0.000    0.000 <frozen abc>:146(update_abstractmethods)
+        1    0.000    0.000    0.000    0.000 subprocess.py:126(CalledProcessError)
+        1    0.000    0.000    0.000    0.000 argparse.py:1131(__init__)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:309(__init__)
+        2    0.000    0.000    0.000    0.000 argparse.py:589(_metavar_formatter)
+        1    0.000    0.000    0.000    0.000 domino_utils.py:1(<module>)
+       14    0.000    0.000    0.000    0.000 {method 'group' of 're.Match' objects}
+        2    0.000    0.000    0.000    0.000 argparse.py:845(__init__)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:997(exec_module)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:691(_is_initvar)
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:169(basename)
+        9    0.000    0.000    0.000    0.000 DominoGame.py:324(<genexpr>)
+       18    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 __init__.py:546(Formatter)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:228(generate_all_pieces)
+        1    0.000    0.000    0.000    0.000 argparse.py:951(__init__)
+       11    0.000    0.000    0.000    0.000 {method 'items' of 'mappingproxy' objects}
+       14    0.000    0.000    0.000    0.000 {method 'removeprefix' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {method 'search' of 're.Pattern' objects}
+        7    0.000    0.000    0.000    0.000 enum.py:828(__members__)
+        5    0.000    0.000    0.000    0.000 argparse.py:1421(_registry_get)
+        1    0.000    0.000    0.000    0.000 bz2.py:26(BZ2File)
+       21    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1276(__init__)
+        5    0.000    0.000    0.000    0.000 typing.py:295(_check_generic)
+        1    0.000    0.000    0.000    0.000 threading.py:1249(daemon)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.urandom}
+        4    0.000    0.000    0.000    0.000 inspect.py:304(ismethoddescriptor)
+        1    0.000    0.000    0.000    0.000 synchronize.py:370(Barrier)
+        1    0.000    0.000    0.000    0.000 argparse.py:2557(_get_value)
+        7    0.000    0.000    0.000    0.000 enum.py:1692(_simple_enum)
+        3    0.000    0.000    0.000    0.000 enum.py:117(_iter_bits_lsb)
+        8    0.000    0.000    0.000    0.000 enum.py:70(_is_internal_class)
+        3    0.000    0.000    0.000    0.000 __init__.py:243(_releaseLock)
+        1    0.000    0.000    0.000    0.000 _parser.py:265(getwhile)
+       20    0.000    0.000    0.000    0.000 dataclasses.py:432(<genexpr>)
+       20    0.000    0.000    0.000    0.000 dataclasses.py:1142(<genexpr>)
+       16    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1573(<genexpr>)
+        8    0.000    0.000    0.000    0.000 {method 'values' of 'mappingproxy' objects}
+        1    0.000    0.000    0.000    0.000 __init__.py:2285(NullHandler)
+        3    0.000    0.000    0.000    0.000 threading.py:124(RLock)
+        1    0.000    0.000    0.000    0.000 random.py:222(__init_subclass__)
+        1    0.000    0.000    0.000    0.000 string.py:57(Template)
+        1    0.000    0.000    0.000    0.000 {method 'close' of 'select.epoll' objects}
+        1    0.000    0.000    0.000    0.000 utils.py:183(DisableOnWriteError)
+        2    0.000    0.000    0.000    0.000 {built-in method posix.register_at_fork}
+        4    0.000    0.000    0.000    0.000 __init__.py:208(_checkLevel)
+        1    0.000    0.000    0.000    0.000 argparse.py:1571(_get_positional_kwargs)
+       13    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 enum.py:383(__init__)
+        2    0.000    0.000    0.000    0.000 {built-in method math.sqrt}
+        1    0.000    0.000    0.000    0.000 selectors.py:206(_BaseSelectorImpl)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:327(<genexpr>)
+        1    0.000    0.000    0.000    0.000 __init__.py:286(LogRecord)
+        1    0.000    0.000    0.000    0.000 <frozen _collections_abc>:823(items)
+       16    0.000    0.000    0.000    0.000 dataclasses.py:697(_is_kw_only)
+        3    0.000    0.000    0.000    0.000 _parser.py:295(seek)
+        1    0.000    0.000    0.000    0.000 util.py:371(ForkAwareThreadLock)
+        2    0.000    0.000    0.000    0.000 {method 'tolist' of 'memoryview' objects}
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:60(isabs)
+        1    0.000    0.000    0.000    0.000 _compression.py:33(DecompressReader)
+        1    0.000    0.000    0.000    0.000 functools.py:355(__init__)
+        1    0.000    0.000    0.000    0.000 DominoPlayer.py:6(DominoPlayer)
+        1    0.000    0.000    0.000    0.000 numbers.py:292(Rational)
+        2    0.000    0.000    0.000    0.000 analytic_agent_player.py:210(record_round_score)
+        1    0.000    0.000    0.000    0.000 std.py:67(TRLock)
+        1    0.000    0.000    0.000    0.000 pickle.py:97(_Stop)
+        9    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+        3    0.000    0.000    0.000    0.000 {built-in method atexit.register}
+        1    0.000    0.000    0.000    0.000 {method 'translate' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 functools.py:479(lru_cache)
+        1    0.000    0.000    0.000    0.000 enum.py:957(_check_for_existing_members_)
+        3    0.000    0.000    0.000    0.000 utils.py:16(<genexpr>)
+        1    0.000    0.000    0.000    0.000 subprocess.py:163(TimeoutExpired)
+        5    0.000    0.000    0.000    0.000 <frozen _collections_abc>:341(__subclasshook__)
+        1    0.000    0.000    0.000    0.000 synchronize.py:191(RLock)
+        2    0.000    0.000    0.000    0.000 DominoPlayer.py:23(__init__)
+        6    0.000    0.000    0.000    0.000 {built-in method sys._getframemodulename}
+        4    0.000    0.000    0.000    0.000 {method 'extend' of 'bytearray' objects}
+        1    0.000    0.000    0.000    0.000 pickle.py:194(_Framer)
+        1    0.000    0.000    0.000    0.000 ast.py:1799(__getattr__)
+        9    0.000    0.000    0.000    0.000 <frozen _collections_abc>:435(__subclasshook__)
+        4    0.000    0.000    0.000    0.000 inspect.py:518(isbuiltin)
+        1    0.000    0.000    0.000    0.000 reduction.py:251(AbstractReducer)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:41(determine_first_player)
+        3    0.000    0.000    0.000    0.000 __init__.py:811(__init__)
+        2    0.000    0.000    0.000    0.000 argparse.py:598(format)
+        4    0.000    0.000    0.000    0.000 typing.py:494(__repr__)
+        1    0.000    0.000    0.000    0.000 context.py:230(DefaultContext)
+        1    0.000    0.000    0.000    0.000 selectors.py:290(SelectSelector)
+        1    0.000    0.000    0.000    0.000 util.py:185(Finalize)
+       12    0.000    0.000    0.000    0.000 {method 'isascii' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 synchronize.py:217(Condition)
+        2    0.000    0.000    0.000    0.000 {method 'fileno' of '_io.TextIOWrapper' objects}
+        1    0.000    0.000    0.000    0.000 tempfile.py:432(_TemporaryFileCloser)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.sysconf}
+        1    0.000    0.000    0.000    0.000 selectors.py:433(PollSelector)
+        1    0.000    0.000    0.000    0.000 tempfile.py:132(_RandomNameSequence)
+        5    0.000    0.000    0.000    0.000 reduction.py:43(register)
+        3    0.000    0.000    0.000    0.000 {method 'index' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 context.py:284(SpawnProcess)
+        1    0.000    0.000    0.000    0.000 weakref.py:347(__new__)
+        1    0.000    0.000    0.000    0.000 __init__.py:503(StringTemplateStyle)
+        1    0.000    0.000    0.000    0.000 threading.py:1040(_set_native_id)
+        1    0.000    0.000    0.000    0.000 process.py:364(_ParentProcess)
+        1    0.000    0.000    0.000    0.000 threading.py:837(_newname)
+        1    0.000    0.000    0.000    0.000 __init__.py:1202(FileHandler)
+        1    0.000    0.000    0.000    0.000 threading.py:1036(_set_ident)
+        1    0.000    0.000    0.000    0.000 _tqdm_pandas.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 selectors.py:341(_PollLikeSelector)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.confstr}
+        1    0.000    0.000    0.000    0.000 selectors.py:442(EpollSelector)
+        1    0.000    0.000    0.000    0.000 context.py:277(ForkProcess)
+        1    0.000    0.000    0.000    0.000 __init__.py:727(BufferingFormatter)
+        1    0.000    0.000    0.000    0.000 random.py:876(SystemRandom)
+        1    0.000    0.000    0.000    0.000 argparse.py:892(BooleanOptionalAction)
+        1    0.000    0.000    0.000    0.000 gui.py:24(tqdm_gui)
+        1    0.000    0.000    0.000    0.000 _monitor.py:15(TMonitor)
+        1    0.000    0.000    0.000    0.000 __init__.py:1373(disable)
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.vars}
+        2    0.000    0.000    0.000    0.000 argparse.py:1634(_check_conflict)
+       16    0.000    0.000    0.000    0.000 inspect.py:2790(default)
+        1    0.000    0.000    0.000    0.000 weakref.py:352(__init__)
+        2    0.000    0.000    0.000    0.000 utils.py:17(<genexpr>)
+        1    0.000    0.000    0.000    0.000 __init__.py:1287(_StderrHandler)
+        4    0.000    0.000    0.000    0.000 _parser.py:166(__delitem__)
+        1    0.000    0.000    0.000    0.000 threading.py:1483(current_thread)
+        1    0.000    0.000    0.000    0.000 context.py:203(reducer)
+        2    0.000    0.000    0.000    0.000 {method 'cast' of 'memoryview' objects}
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:52(normcase)
+        1    0.000    0.000    0.000    0.000 utils.py:163(SimpleTextIOWrapper)
+        2    0.000    0.000    0.000    0.000 {method 'capitalize' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 __init__.py:806(Filterer)
+        6    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 enum.py:986(_find_data_repr_)
+        2    0.000    0.000    0.000    0.000 argparse.py:206(__init__)
+        4    0.000    0.000    0.000    0.000 dataclasses.py:433(<genexpr>)
+        1    0.000    0.000    0.000    0.000 synchronize.py:328(Event)
+        9    0.000    0.000    0.000    0.000 inspect.py:3079(parameters)
+        1    0.000    0.000    0.000    0.000 selectors.py:60(_SelectorMapping)
+        1    0.000    0.000    0.000    0.000 argparse.py:109(_AttributeHolder)
+        2    0.000    0.000    0.000    0.000 threading.py:1234(daemon)
+        8    0.000    0.000    0.000    0.000 inspect.py:3083(return_annotation)
+        1    0.000    0.000    0.000    0.000 threading.py:1354(_make_invoke_excepthook)
+        6    0.000    0.000    0.000    0.000 signal.py:50(_wraps)
+        3    0.000    0.000    0.000    0.000 {method 'to_bytes' of 'int' objects}
+        8    0.000    0.000    0.000    0.000 {built-in method math.floor}
+        1    0.000    0.000    0.000    0.000 process.py:349(AuthenticationString)
+        1    0.000    0.000    0.000    0.000 _compression.py:9(BaseStream)
+        1    0.000    0.000    0.000    0.000 utils.py:117(Comparable)
+        1    0.000    0.000    0.000    0.000 pickle.py:257(_Unframer)
+        4    0.000    0.000    0.000    0.000 dataclasses.py:372(__init__)
+        2    0.000    0.000    0.000    0.000 DominoGame.py:136(<genexpr>)
+        1    0.000    0.000    0.000    0.000 argparse.py:1672(_ArgumentGroup)
+        2    0.000    0.000    0.000    0.000 {built-in method _imp.exec_builtin}
+        1    0.000    0.000    0.000    0.000 {built-in method posix.getpid}
+        4    0.000    0.000    0.000    0.000 {built-in method math.ceil}
+        1    0.000    0.000    0.000    0.000 argparse.py:794(Action)
+        1    0.000    0.000    0.000    0.000 tempfile.py:475(_TemporaryFileWrapper)
+        1    0.000    0.000    0.000    0.000 utils.py:102(FormatReplace)
+        1    0.000    0.000    0.000    0.000 utils.py:138(ObjectWrapper)
+        1    0.000    0.000    0.000    0.000 __init__.py:1861(RootLogger)
+        1    0.000    0.000    0.000    0.000 __init__.py:443(__init__)
+        1    0.000    0.000    0.000    0.000 argparse.py:980(__call__)
+        1    0.000    0.000    0.000    0.000 context.py:296(ForkServerProcess)
+        1    0.000    0.000    0.000    0.000 traceback.py:656(_ExceptionPrintContext)
+        1    0.000    0.000    0.000    0.000 synchronize.py:90(_make_methods)
+        1    0.000    0.000    0.000    0.000 argparse.py:1714(_MutuallyExclusiveGroup)
+        1    0.000    0.000    0.000    0.000 argparse.py:1342(Namespace)
+        4    0.000    0.000    0.000    0.000 {built-in method _sre.ascii_tolower}
+        1    0.000    0.000    0.000    0.000 traceback.py:90(_Sentinel)
+        1    0.000    0.000    0.000    0.000 context.py:233(__init__)
+        1    0.000    0.000    0.000    0.000 process.py:397(_MainProcess)
+        1    0.000    0.000    0.000    0.000 __init__.py:769(Filter)
+        1    0.000    0.000    0.000    0.000 argparse.py:1887(_get_positional_actions)
+        1    0.000    0.000    0.000    0.000 __init__.py:1311(PlaceHolder)
+        1    0.000    0.000    0.000    0.000 {built-in method _thread._set_sentinel}
+        1    0.000    0.000    0.000    0.000 {built-in method posix._path_normpath}
+        1    0.000    0.000    0.000    0.000 argparse.py:2366(_get_nargs_pattern)
+        1    0.000    0.000    0.000    0.000 argparse.py:1129(_HelpAction)
+        1    0.000    0.000    0.000    0.000 argparse.py:1287(FileType)
+        1    0.000    0.000    0.000    0.000 __init__.py:1317(__init__)
+        2    0.000    0.000    0.000    0.000 DominoGame.py:137(<genexpr>)
+        1    0.000    0.000    0.000    0.000 context.py:237(get_context)
+        1    0.000    0.000    0.000    0.000 argparse.py:2582(_check_value)
+        2    0.000    0.000    0.000    0.000 DominoGame.py:153(<genexpr>)
+        1    0.000    0.000    0.000    0.000 numbers.py:37(Number)
+        1    0.000    0.000    0.000    0.000 argparse.py:949(_StoreAction)
+        2    0.000    0.000    0.000    0.000 DominoGame.py:152(<genexpr>)
+        1    0.000    0.000    0.000    0.000 <frozen _collections_abc>:845(__init__)
+        1    0.000    0.000    0.000    0.000 std.py:40(TqdmWarning)
+        1    0.000    0.000    0.000    0.000 std.py:214(EMA)
+        4    0.000    0.000    0.000    0.000 {built-in method _sre.ascii_iscased}
+        1    0.000    0.000    0.000    0.000 utils.py:226(CallbackIOWrapper)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:17(get_variant_params)
+        1    0.000    0.000    0.000    0.000 argparse.py:1148(_VersionAction)
+        1    0.000    0.000    0.000    0.000 DominoGame.py:257(is_legal_first_move_venezuelan)
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.globals}
+        4    0.000    0.000    0.000    0.000 enum.py:251(__init__)
+        1    0.000    0.000    0.000    0.000 synchronize.py:130(Semaphore)
+        1    0.000    0.000    0.000    0.000 argparse.py:1041(_AppendAction)
+        1    0.000    0.000    0.000    0.000 argparse.py:2267(_parse_optional)
+        1    0.000    0.000    0.000    0.000 argparse.py:765(ArgumentError)
+        1    0.000    0.000    0.000    0.000 reduction.py:211(_C)
+        1    0.000    0.000    0.000    0.000 argparse.py:731(MetavarTypeHelpFormatter)
+        1    0.000    0.000    0.000    0.000 {method 'groups' of 're.Match' objects}
+        1    0.000    0.000    0.000    0.000 argparse.py:204(_Section)
+        1    0.000    0.000    0.000    0.000 argparse.py:1178(_ChoicesPseudoAction)
+        1    0.000    0.000    0.000    0.000 argparse.py:984(_StoreConstAction)
+        2    0.000    0.000    0.000    0.000 enum.py:1411(<lambda>)
+        1    0.000    0.000    0.000    0.000 util.py:108(_platform_supports_abstract_sockets)
+        1    0.000    0.000    0.000    0.000 DominoPlayer.py:145(RandomPlayer)
+        1    0.000    0.000    0.000    0.000 context.py:311(ForkServerContext)
+        1    0.000    0.000    0.000    0.000 argparse.py:1106(_CountAction)
+        1    0.000    0.000    0.000    0.000 argparse.py:1079(_AppendConstAction)
+        1    0.000    0.000    0.000    0.000 statistics.py:148(StatisticsError)
+        1    0.000    0.000    0.000    0.000 socket.py:212(_GiveupOnSendfile)
+        1    0.000    0.000    0.000    0.000 util.py:388(ForkAwareLocal)
+        1    0.000    0.000    0.000    0.000 argparse.py:680(RawDescriptionHelpFormatter)
+        1    0.000    0.000    0.000    0.000 pickle.py:73(PickleError)
+        1    0.000    0.000    0.000    0.000 {built-in method _thread.get_native_id}
+        1    0.000    0.000    0.000    0.000 argparse.py:1276(_ExtendAction)
+        1    0.000    0.000    0.000    0.000 {method 'insert' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 argparse.py:1007(_StoreTrueAction)
+        1    0.000    0.000    0.000    0.000 context.py:14(ProcessError)
+        1    0.000    0.000    0.000    0.000 argparse.py:1024(_StoreFalseAction)
+        1    0.000    0.000    0.000    0.000 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 util.py:48(debug)
+        1    0.000    0.000    0.000    0.000 _monitor.py:9(TqdmSynchronisationWarning)
+        1    0.000    0.000    0.000    0.000 argparse.py:702(ArgumentDefaultsHelpFormatter)
+        1    0.000    0.000    0.000    0.000 pickle.py:77(PicklingError)
+        1    0.000    0.000    0.000    0.000 synchronize.py:149(BoundedSemaphore)
+        1    0.000    0.000    0.000    0.000 shutil.py:67(Error)
+        1    0.000    0.000    0.000    0.000 argparse.py:691(RawTextHelpFormatter)
+        1    0.000    0.000    0.000    0.000 argparse.py:1349(__init__)
+        1    0.000    0.000    0.000    0.000 synchronize.py:166(Lock)
+        1    0.000    0.000    0.000    0.000 context.py:303(ForkContext)
+        1    0.000    0.000    0.000    0.000 subprocess.py:123(SubprocessError)
+        1    0.000    0.000    0.000    0.000 {method 'lstrip' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 shutil.py:70(SameFileError)
+        1    0.000    0.000    0.000    0.000 context.py:197(get_start_method)
+        2    0.000    0.000    0.000    0.000 DominoPlayer.py:10(end_round)
+        1    0.000    0.000    0.000    0.000 <string>:1(__create_fn__)
+        1    0.000    0.000    0.000    0.000 context.py:307(SpawnContext)
+        1    0.000    0.000    0.000    0.000 process.py:37(current_process)
+        1    0.000    0.000    0.000    0.000 {built-in method _thread.daemon_threads_allowed}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1014(is_package)
+        1    0.000    0.000    0.000    0.000 pickle.py:84(UnpicklingError)
+        1    0.000    0.000    0.000    0.000 std.py:52(TqdmExperimentalWarning)
+        1    0.000    0.000    0.000    0.000 shutil.py:73(SpecialFileError)
+        1    0.000    0.000    0.000    0.000 _dist_ver.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 shutil.py:77(ExecError)
+        1    0.000    0.000    0.000    0.000 std.py:62(TqdmMonitorWarning)
+        1    0.000    0.000    0.000    0.000 std.py:32(TqdmTypeError)
+        1    0.000    0.000    0.000    0.000 context.py:20(TimeoutError)
+        1    0.000    0.000    0.000    0.000 context.py:17(BufferTooShort)
+        1    0.000    0.000    0.000    0.000 shutil.py:83(RegistryError)
+        1    0.000    0.000    0.000    0.000 {method '__init_subclass__' of 'object' objects}
+        1    0.000    0.000    0.000    0.000 std.py:57(TqdmDeprecationWarning)
+        1    0.000    0.000    0.000    0.000 argparse.py:785(ArgumentTypeError)
+        1    0.000    0.000    0.000    0.000 shutil.py:80(ReadError)
+        1    0.000    0.000    0.000    0.000 shutil.py:87(_GiveupOnFastCopy)
+        1    0.000    0.000    0.000    0.000 context.py:23(AuthenticationError)
+        1    0.000    0.000    0.000    0.000 std.py:36(TqdmKeyError)
+        1    0.000    0.000    0.000    0.000 argparse.py:1804(identity)
+        1    0.000    0.000    0.000    0.000 dataclasses.py:879(_hash_set_none)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Move: Play 1|3 on the right
+  Count: 1000
+  Mean Score: 18.8090
+  Standard Deviation: 25.3719
+  Median Score: 29.0000
+  Mode Score: 44.0000
+  Min Score: -34.0000
+  Max Score: 47.0000
+
+Best Move Overall:
+Best move: Play 0|1 on the right
+Mean Expected Score: 32.1300
+Played (0, 1) on the right side
+New board state: (2, 0)
+Tiles remaining per player: [2, 3, 1, 2]
+Player 2 plays ((0, 1), 'r')
+
+Player 3's turn
+Current board: (2, 0)
+Player passed
+New board state: (2, 0)
+Tiles remaining per player: [2, 3, 1, 2]
+Player 3 passes
+
+Player 0's turn
+Current board: (2, 0)
+
+--- Verbose Information ---
+Starting player: NORTH
+Player's hand: [(0, 3), (3, 5)]
+Remaining tiles: [1|2, 1|3, 3|3, 3|6, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {4}
+  NORTH: set()
+  WEST: {0, 2}
+
+Remaining tiles for each player:
+  SOUTH: 2
+  EAST: 3
+  NORTH: 1
+  WEST: 2
+----------------------------
+
+                                                                                                                                        
+Move Statistics (based on 1000 samples):
+
+Move: Play 0|3 on the right
+  Count: 1000
+  Mean Score: 26.8150
+  Standard Deviation: 19.8796
+  Median Score: 36.0000
+  Mode Score: 39.0000
+  Min Score: -29.0000
+  Max Score: 44.0000
+
+Best Move Overall:
+Best move: Play 0|3 on the right
+Mean Expected Score: 26.8150
+Played (0, 3) on the right side
+New board state: (2, 3)
+Tiles remaining per player: [1, 3, 1, 2]
+Player 0 plays ((0, 3), 'r')
+
+Player 1's turn
+Current board: (2, 3)
+Played (1, 2) on the left side
+New board state: (1, 3)
+Tiles remaining per player: [1, 2, 1, 2]
+Player 1 plays ((1, 2), 'l')
+
+Player 2's turn
+Current board: (1, 3)
+
+--- Verbose Information ---
+Starting player: SOUTH
+Player's hand: [(1, 3)]
+Remaining tiles: [3|3, 3|5, 3|6, 5|5, 5|6]
+
+Common knowledge of missing suits:
+  SOUTH: set()
+  EAST: {0, 2}
+  NORTH: set()
+  WEST: {4}
+
+Remaining tiles for each player:
+  SOUTH: 1
+  EAST: 2
+  NORTH: 1
+  WEST: 2
+----------------------------
+
+                                                                                                                                        
+Move Statistics (based on 1000 samples):
+
+Move: Play 1|3 on the left
+  Count: 1000
+  Mean Score: 44.0000
+  Standard Deviation: 0.0000
+  Median Score: 44.0000
+  Mode Score: 44.0000
+  Min Score: 44.0000
+  Max Score: 44.0000
+
+Move: Play 1|3 on the right
+  Count: 1000
+  Mean Score: 44.0000
+  Standard Deviation: 0.0000
+  Median Score: 44.0000
+  Mode Score: 44.0000
+  Min Score: 44.0000
+  Max Score: 44.0000
+
+Best Move Overall:
+Best move: Play 1|3 on the left
+Mean Expected Score: 44.0000
+Played (1, 3) on the left side
+New board state: (3, 3)
+Tiles remaining per player: [1, 2, 0, 2]
+Player 2 plays ((1, 3), 'l')
+
+Round over. Final hands:
+Player 0: [(3, 5)]
+Player 1: [(3, 6), (5, 5)]
+Player 2: []
+Player 3: [(3, 3), (5, 6)]
+Remaining tiles values: [8, 19, 0, 17]
+Player 2 won by playing all tiles
+HumanPlayer: Round ended. Scores - Team 1: 0, Team 2: 0
+HumanPlayer: Your team (Team 1) score: 0
+HumanPlayer: Reset missing tiles for the next round.
+HumanPlayer: Round ended. Scores - Team 1: 0, Team 2: 0
+HumanPlayer: Your team (Team 1) score: 0
+HumanPlayer: Reset missing tiles for the next round.
+
+Round 0 ended.
+Round winner: Team 1 (Player 0)
+Round score: 44
+Total scores: Team 1 - 44, Team 2 - 0
+
+Round Statistics:
+Games won: Team 1 - 1, Team 2 - 0
+Games tied: 0
+Cumulative points: Team 1 - 44, Team 2 - -44
+Venezuelan/International rules: Player 3 starts next round
+Next starting player: Player 3
+
+Game over! Team 1 wins with a score of 44!
+
+Final Game Statistics:
+Total rounds played: 1
+Games won: Team 1 - 1, Team 2 - 0
+Games tied: 0
+Total cumulative points: Team 1 - 44, Team 2 - -44
+Average score per round: Team 1 - 44.00, Team 2 - -44.00
+
+Round-by-round scores:
+Round 1: Team 1 won 44 points
