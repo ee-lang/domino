@@ -1,7 +1,7 @@
 from DominoPlayer import HumanPlayer, available_moves, stats
 from collections import defaultdict
 from DominoGameState import DominoGameState
-from domino_game_analyzer import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves
+from domino_game_analyzer import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
 from domino_utils import history_to_domino_tiles_history
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
@@ -35,14 +35,16 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         _moves = history_to_domino_tiles_history(game_state.history)
         _remaining_tiles = set(_unplayed_tiles)
-        _initial_player_tiles = {p: 7 for p in PlayerPosition}
-        _starting_player = PlayerPosition((game_state.history[0][0] - self.position)%4) if len(game_state.history)>0 else PlayerPosition.SOUTH
+        # _initial_player_tiles = {p: 7 for p in PlayerPosition}
+        _initial_player_tiles = {p: 7 for p in range(4)}
+        # _starting_player = PlayerPosition((game_state.history[0][0] - self.position)%4) if len(game_state.history)>0 else PlayerPosition.SOUTH
+        _starting_player = ((game_state.history[0][0] - self.position)%4) if len(game_state.history)>0 else PlayerPosition_SOUTH
 
         current_player, _final_remaining_tiles, _board_ends, _player_tiles_count, _knowledge_tracker = domino_game_state_our_perspective(
             _remaining_tiles, _moves, _initial_player_tiles, current_player=_starting_player)
 
         if verbose:
-            self.print_verbose_info(player_hand, _unplayed_tiles, _knowledge_tracker, _player_tiles_count, _starting_player)
+            self.print_verbose_info(_player_hand, _unplayed_tiles, _knowledge_tracker, _player_tiles_count, _starting_player)
 
         num_samples = 1000 if len(game_state.history) > 8 else 100 if len(game_state.history) > 4 else 25 if len(game_state.history) > 0 else 1
         best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, num_samples, verbose=verbose)
@@ -54,17 +56,21 @@ class AnalyticAgentPlayer(HumanPlayer):
             side = 'l' if is_left else 'r'
             return (tile.top, tile.bottom), side
 
-    def print_verbose_info(self, player_hand, unplayed_tiles, knowledge_tracker, player_tiles_count, starting_player):
+    def print_verbose_info(self, player_hand: list[DominoTile], unplayed_tiles: list[DominoTile], knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], starting_player: PlayerPosition):
         print("\n--- Verbose Information ---")
-        print(f"Starting player: {starting_player.name}")
+        # print(f"Starting player: {starting_player.name}")
+        print(f"Starting player: {PlayerPosition_names[starting_player]}")
         print(f"Player's hand: {player_hand}")
         print(f"Remaining tiles: {unplayed_tiles}")
         print("\nCommon knowledge of missing suits:")
-        for player in PlayerPosition:
-            print(f"  {player.name}: {knowledge_tracker.common_knowledge_missing_suits[player]}")
+        # for player in PlayerPosition:
+        for player in range(4):
+            # print(f"  {player.name}: {knowledge_tracker.common_knowledge_missing_suits[player]}")
+            print(f"  {PlayerPosition_names[player]}: {knowledge_tracker.common_knowledge_missing_suits[player]}")
         print("\nRemaining tiles for each player:")
         for player, count in player_tiles_count.items():
-            print(f"  {player.name}: {count}")
+            # print(f"  {player.name}: {count}")
+            print(f"  {PlayerPosition_names[player]}: {count}")
         print("----------------------------\n")
 
     def get_best_move(self, final_south_hand: set[DominoTile], remaining_tiles: set[DominoTile], 
@@ -72,11 +78,13 @@ class AnalyticAgentPlayer(HumanPlayer):
                       board_ends: tuple[int|None,int|None], num_samples = 1000, verbose = False) -> tuple[DominoTile, bool] | None:
 
         inferred_knowledge: dict[PlayerPosition, set[DominoTile]] = {
-            player: set() for player in PlayerPosition
+            # player: set() for player in PlayerPosition
+            player: set() for player in range(4)
         }
 
         for tile in remaining_tiles:
-            for player in PlayerPosition:
+            # for player in PlayerPosition:
+            for player in range(4):
                 if tile.top in knowledge_tracker.common_knowledge_missing_suits[player] or tile.bottom in knowledge_tracker.common_knowledge_missing_suits[player]:
                     inferred_knowledge[player].add(tile)
 
@@ -89,7 +97,8 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         for _ in tqdm(range(num_samples), desc="Analyzing moves", leave=False):
             sample = generate_sample_from_game_state(
-                PlayerPosition.SOUTH,
+                # PlayerPosition.SOUTH,
+                PlayerPosition_SOUTH,
                 final_south_hand,
                 final_remaining_tiles_without_south_tiles,
                 player_tiles_count,
@@ -105,7 +114,8 @@ class AnalyticAgentPlayer(HumanPlayer):
 
             sample_state = GameState(
                 player_hands=sample_hands,
-                current_player=PlayerPosition.SOUTH,
+                # current_player=PlayerPosition.SOUTH,
+                current_player=PlayerPosition_SOUTH,
                 left_end=board_ends[0],
                 right_end=board_ends[1],
                 consecutive_passes=0
@@ -115,7 +125,7 @@ class AnalyticAgentPlayer(HumanPlayer):
 
             possible_moves = list_possible_moves(sample_state, include_stats=False)
 
-            new_cache: dict = {}
+            sample_cache: dict = {}
             for move in possible_moves:
                 if move[0] is None:
                     new_state = sample_state.pass_turn()
@@ -123,7 +133,7 @@ class AnalyticAgentPlayer(HumanPlayer):
                     tile, is_left = move[0]
                     new_state = sample_state.play_hand(tile, is_left)
 
-                _, best_score, _ = get_best_move_alpha_beta(new_state, depth, new_cache)
+                _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
 
                 move_scores[move[0]].append(best_score)
 

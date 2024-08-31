@@ -1,10 +1,11 @@
-from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state
+from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
 from typing import List, Tuple, Optional, Set, Dict
 import copy
 
 class CommonKnowledgeTracker:
     def __init__(self):
-        self.common_knowledge_missing_suits: dict[PlayerPosition, set[int]] = {player: set() for player in PlayerPosition}
+        # self.common_knowledge_missing_suits: dict[PlayerPosition, set[int]] = {player: set() for player in PlayerPosition}
+        self.common_knowledge_missing_suits: dict[PlayerPosition, set[int]] = {player: set() for player in range(4)}
         self.played_tiles: set[DominoTile] = set()
 
     def update_pass(self, player: PlayerPosition, left_end: Optional[int], right_end: Optional[int]):
@@ -26,7 +27,8 @@ class CommonKnowledgeTracker:
         :param new_south: The PlayerPosition that should become the new SOUTH
         :return: A new CommonKnowledgeTracker instance with the rotated perspective
         """
-        if new_south == PlayerPosition.SOUTH:
+        # if new_south == PlayerPosition.SOUTH:
+        if new_south == PlayerPosition_SOUTH:
             return copy.deepcopy(self)  # Return a deep copy of the current instance
 
         # Create a new instance
@@ -36,12 +38,14 @@ class CommonKnowledgeTracker:
         new_tracker.played_tiles = self.played_tiles.copy()
 
         # Calculate the number of clockwise rotations needed
-        rotations = (new_south.value - PlayerPosition.SOUTH.value) % 4
+        # rotations = (new_south.value - PlayerPosition.SOUTH.value) % 4
+        rotations = (new_south - PlayerPosition_SOUTH) % 4
 
         # Rotate the common knowledge
         for player, knowledge in self.common_knowledge_missing_suits.items():
             # Calculate the new position for each player
-            new_position = PlayerPosition((player.value - rotations) % 4)
+            # new_position = PlayerPosition((player.value - rotations) % 4)
+            new_position = (player - rotations) % 4
             new_tracker.common_knowledge_missing_suits[new_position] = knowledge.copy()
 
         return new_tracker
@@ -49,7 +53,8 @@ class CommonKnowledgeTracker:
     def __str__(self):
         result = "Common Knowledge of players missing tiles:\n"
         for player, knowledge in self.common_knowledge_missing_suits.items():
-            result += f"{player.name}: {sorted(knowledge)}\n"
+            # result += f"{player.name}: {sorted(knowledge)}\n"
+            result += f"{PlayerPosition_names[player]}: {sorted(knowledge)}\n"
         result += f"Played tiles: {sorted(str(tile) for tile in self.played_tiles)}"
         return result
 
@@ -71,20 +76,23 @@ def analyze_game_knowledge(initial_hands: list[list[DominoTile]],
         if move is None:
             knowledge_tracker.update_pass(current_player, state.left_end, state.right_end)
             state = state.pass_turn()
-            print(f"Player {current_player.name} passed.")
+            # print(f"Player {current_player.name} passed.")
+            print(f"Player {PlayerPosition_names[current_player]} passed.")
         else:
             # top, bottom, left = move
             tile, left = move
             # tile = next(t for t in state.get_current_hand() if normalize_tile(t) == normalize_tile(DominoTile(top, bottom)))
             knowledge_tracker.update_play(tile)
             state = state.play_hand(tile, left)
-            print(f"Player {current_player.name} played {tile} on the {'left' if left else 'right'}.")
+            # print(f"Player {current_player.name} played {tile} on the {'left' if left else 'right'}.")
+            print(f"Player {PlayerPosition_names[current_player]} played {tile} on the {'left' if left else 'right'}.")
 
         print_game_state(state)
         print_common_knowledge(state, knowledge_tracker)
 
 def print_game_state(state: GameState):
-    print(f"Current player: {state.current_player.name}")
+    # print(f"Current player: {state.current_player.name}")
+    print(f"Current player: {PlayerPosition_names[state.current_player]}")
     print(f"Board ends: {state.left_end} | {state.right_end}")
     # for player in PlayerPosition:
     #     print(f"Player {player.name}'s hand: {state.player_hands[player.value]}")
@@ -96,15 +104,18 @@ def print_common_knowledge(state: GameState, tracker: CommonKnowledgeTracker):
     # print('unplayed_tiles',unplayed_tiles)
 
     print("\nCommon Knowledge:")
-    for player in PlayerPosition:
+    # for player in PlayerPosition:
+    for player in range(4):
         known_not_to_have = {tile for tile in unplayed_tiles 
                              if tile.top in tracker.common_knowledge_missing_suits[player] 
                              or tile.bottom in tracker.common_knowledge_missing_suits[player]}
         if known_not_to_have:
             sorted_tiles = sorted(known_not_to_have, key=lambda x: (min(x.top, x.bottom), max(x.top, x.bottom)))
-            print(f"Player {player.name} doesn't have: {[f'{min(t.top, t.bottom)}|{max(t.top, t.bottom)}' for t in sorted_tiles]}")
+            # print(f"Player {player.name} doesn't have: {[f'{min(t.top, t.bottom)}|{max(t.top, t.bottom)}' for t in sorted_tiles]}")
+            print(f"Player {PlayerPosition_names[player]} doesn't have: {[f'{min(t.top, t.bottom)}|{max(t.top, t.bottom)}' for t in sorted_tiles]}")
         else:
-            print(f"No certain knowledge about player {player.name}'s hand")
+            # print(f"No certain knowledge about player {player.name}'s hand")
+            print(f"No certain knowledge about player {PlayerPosition_names[player]}'s hand")
 
 
 # Helper function to demonstrate the rotation
@@ -121,7 +132,8 @@ def main():
         [(4,4), (2,4), (2,2), (1,6), (5,5), (0,1), (3,5)]
     ]
 
-    starting_player = PlayerPosition.SOUTH
+    # starting_player = PlayerPosition.SOUTH
+    starting_player = PlayerPosition_SOUTH
     moves = [
         (0, 0, True),
         None,
@@ -158,19 +170,23 @@ def main():
     tracker = CommonKnowledgeTracker()
     
     # Simulate some game actions
-    tracker.update_pass(PlayerPosition.NORTH, 3, 5)
+    # tracker.update_pass(PlayerPosition.NORTH, 3, 5)
+    tracker.update_pass(PlayerPosition_NORTH, 3, 5)
     tracker.update_play(DominoTile(3, 5))
-    tracker.update_pass(PlayerPosition.EAST, 3, 6)
+    # tracker.update_pass(PlayerPosition.EAST, 3, 6)
+    tracker.update_pass(PlayerPosition_EAST, 3, 6)
     tracker.update_play(DominoTile(5, 6))
 
     print_tracker_state(tracker, "Initial State (SOUTH perspective)")
 
     # Rotate perspective to WEST
-    west_tracker = tracker.rotate_perspective(PlayerPosition.WEST)
+    # west_tracker = tracker.rotate_perspective(PlayerPosition.WEST)
+    west_tracker = tracker.rotate_perspective(PlayerPosition_WEST)
     print_tracker_state(west_tracker, "WEST perspective")
 
     # Rotate perspective to NORTH
-    north_tracker = tracker.rotate_perspective(PlayerPosition.NORTH)
+    # north_tracker = tracker.rotate_perspective(PlayerPosition.NORTH)
+    north_tracker = tracker.rotate_perspective(PlayerPosition_NORTH)
     print_tracker_state(north_tracker, "NORTH perspective")
 
     # Show that the original tracker is unchanged

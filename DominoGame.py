@@ -416,7 +416,7 @@ class DominoGame:
 
 def main():
 	from DominoPlayer import HumanPlayer, RandomPlayer
-	from HumanPlayerWithAnalytics import HumanPlayerWithAnalytics
+	# from HumanPlayerWithAnalytics import HumanPlayerWithAnalytics
 	from analytic_agent_player import AnalyticAgentPlayer
 
 	parser = argparse.ArgumentParser(description="Play a game of Dominoes")

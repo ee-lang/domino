@@ -5,14 +5,20 @@ from enum import Enum
 from collections import deque
 import argparse
 
-class PlayerPosition(Enum):
-    SOUTH = 0
-    EAST = 1
-    NORTH = 2
-    WEST = 3
+from game_state_cy import GameStateCy
 
-    def next(self):
-        return PlayerPosition((self.value + 1) % 4)
+
+type PlayerPosition = int
+
+PlayerPosition_SOUTH = 0
+PlayerPosition_EAST = 1
+PlayerPosition_NORTH = 2
+PlayerPosition_WEST = 3
+
+def next_player(pos: PlayerPosition)-> PlayerPosition:
+    return (pos + 1) % 4
+
+PlayerPosition_names = ['SOUTH', 'EAST', 'NORTH', 'WEST']
 
 # class PlayerPosition(Enum):
 #     SOUTH = 0
@@ -21,10 +27,7 @@ class PlayerPosition(Enum):
 #     WEST = 3
 
 #     def next(self):
-#         if self.value == PlayerPosition.SOUTH.value: return PlayerPosition.EAST
-#         if self.value == PlayerPosition.EAST.value: return PlayerPosition.NORTH
-#         if self.value == PlayerPosition.NORTH.value: return PlayerPosition.WEST
-#         return PlayerPosition.SOUTH
+#         return PlayerPosition((self.value + 1) % 4)
 
 @dataclass(frozen=True)
 class DominoTile:
@@ -64,20 +67,52 @@ class GameState:
     def __hash__(self):
         return hash((self.player_hands, self.current_player, self.left_end, self.right_end, self.consecutive_passes))
 
+    # @classmethod
+    # def new_game(cls, player_hands: list[list[DominoTile]]):
+    #     return cls(
+    #         # player_hands=tuple(frozenset(DominoTile(top, bottom) for top, bottom in hand) for hand in player_hands),
+    #         player_hands=tuple(frozenset(tile for tile in hand) for hand in player_hands),
+    #         current_player=PlayerPosition.SOUTH,
+    #         left_end=None,
+    #         right_end=None,
+    #         consecutive_passes=0
+    #     )
+
     @classmethod
     def new_game(cls, player_hands: list[list[DominoTile]]):
         return cls(
             # player_hands=tuple(frozenset(DominoTile(top, bottom) for top, bottom in hand) for hand in player_hands),
             player_hands=tuple(frozenset(tile for tile in hand) for hand in player_hands),
-            current_player=PlayerPosition.SOUTH,
+            current_player=PlayerPosition_SOUTH,
             left_end=None,
             right_end=None,
             consecutive_passes=0
         )
 
+    # def play_hand(self, tile: DominoTile, left: bool) -> 'GameState':
+    #     new_hands = list(self.player_hands)
+    #     new_hands[self.current_player.value] = self.player_hands[self.current_player.value] - frozenset([tile])
+
+    #     if self.left_end is None or self.right_end is None:
+    #         new_left_end, new_right_end = tile.top, tile.bottom
+    #     elif left:
+    #         new_left_end = tile.get_other_end(self.left_end)
+    #         new_right_end = self.right_end
+    #     else:
+    #         new_left_end = self.left_end
+    #         new_right_end = tile.get_other_end(self.right_end)
+
+    #     return GameState(
+    #         player_hands=tuple(new_hands),
+    #         current_player=self.current_player.next(),
+    #         left_end=new_left_end,
+    #         right_end=new_right_end,
+    #         consecutive_passes=0
+    #     )
+
     def play_hand(self, tile: DominoTile, left: bool) -> 'GameState':
         new_hands = list(self.player_hands)
-        new_hands[self.current_player.value] = self.player_hands[self.current_player.value] - frozenset([tile])
+        new_hands[self.current_player] = self.player_hands[self.current_player] - frozenset([tile])
 
         if self.left_end is None or self.right_end is None:
             new_left_end, new_right_end = tile.top, tile.bottom
@@ -90,7 +125,8 @@ class GameState:
 
         return GameState(
             player_hands=tuple(new_hands),
-            current_player=self.current_player.next(),
+            # current_player=self.current_player.next(),
+            current_player=next_player(self.current_player),
             left_end=new_left_end,
             right_end=new_right_end,
             consecutive_passes=0
@@ -99,31 +135,30 @@ class GameState:
     def pass_turn(self) -> 'GameState':
         return GameState(
             player_hands=self.player_hands,
-            current_player=self.current_player.next(),
+            # current_player=self.current_player.next(),
+            current_player=next_player(self.current_player),
             left_end=self.left_end,
             right_end=self.right_end,
             consecutive_passes=self.consecutive_passes + 1
         )
 
+    # def is_game_over(self) -> bool:
+    #     return any(len(hand) == 0 for hand in self.player_hands) or self.consecutive_passes == 4
+    # def is_game_over(self) -> bool:
+    #     cy_state = GameStateCy(
+    #         self.player_hands,
+    #         self.current_player.value,
+    #         self.left_end if self.left_end is not None else -1,
+    #         self.right_end if self.right_end is not None else -1,
+    #         self.consecutive_passes
+    #     )
+    #     return cy_state.is_game_over()
     def is_game_over(self) -> bool:
-        return any(len(hand) == 0 for hand in self.player_hands) or self.consecutive_passes == 4
+        return GameStateCy.static_is_game_over(self.player_hands, self.consecutive_passes)
 
     def get_current_hand(self) -> FrozenSet[DominoTile]:
-        return self.player_hands[self.current_player.value]
-
-# def determine_winning_pair(state: GameState) -> int:
-#     # Check if a player has run out of tiles
-#     for i, hand in enumerate(state.player_hands):
-#         if len(hand) == 0:
-#             return i % 2
-
-#     # If we're here, the game must be blocked
-#     pair_0_pips = sum(tile.get_pip_sum() for hand in state.player_hands[::2] for tile in hand)
-#     pair_1_pips = sum(tile.get_pip_sum() for hand in state.player_hands[1::2] for tile in hand)
-
-#     if pair_1_pips == pair_0_pips:
-#         return -1
-#     return 1 if pair_1_pips < pair_0_pips else 0
+        # return self.player_hands[self.current_player.value]
+        return self.player_hands[self.current_player]
 
 def determine_winning_pair(state: GameState) -> tuple[int, int, int]:
 
@@ -142,48 +177,6 @@ def determine_winning_pair(state: GameState) -> tuple[int, int, int]:
     else:
         result = 1 if pair_1_pips < pair_0_pips else 0
     return result, pair_0_pips, pair_1_pips
-
-# def list_possible_moves(state: GameState, cache: dict = {}) -> list[tuple[DominoTile, bool, int, float]]:
-#     """
-#     List all possible moves for the current player in the given game state,
-#     along with the number of possible outcomes and expected score for each move.
-
-#     :param state: The current GameState
-#     :param cache: The cache dictionary to use for memoization
-#     :return: A list of tuples (tile, is_left, possible_outcomes, expected_score)
-#     """
-#     current_hand = state.get_current_hand()
-#     possible_moves = []
-
-#     # If the board is empty, the first player can play any tile
-#     if state.right_end is None and state.left_end is None:
-#         for tile in current_hand:
-#             new_state = state.play_hand(tile, left=True)  # Direction doesn't matter for the first tile
-#             total_games, expected_score = count_game_stats(new_state, print_stats=False, cache=cache)
-#             possible_moves.append((tile, True, total_games, expected_score))
-#     else:
-#         # Try playing each tile in the current player's hand
-#         for tile in current_hand:
-#             if tile.can_connect(state.left_end):
-#                 new_state = state.play_hand(tile, left=True)
-#                 total_games, expected_score = count_game_stats(new_state, print_stats=False, cache=cache)
-#                 possible_moves.append((tile, True, total_games, expected_score))
-
-#             if tile.can_connect(state.right_end) and state.left_end != state.right_end:
-#                 new_state = state.play_hand(tile, left=False)
-#                 total_games, expected_score = count_game_stats(new_state, print_stats=False, cache=cache)
-#                 possible_moves.append((tile, False, total_games, expected_score))
-
-#     # If the player can't play, include the option to pass
-#     if not possible_moves:
-#         new_state = state.pass_turn()
-#         total_games, expected_score = count_game_stats(new_state, print_stats=False, cache=cache)
-#         possible_moves.append((None, None, total_games, expected_score))
-
-#     # Sort moves by expected score (descending order)
-#     possible_moves.sort(key=lambda x: x[3], reverse=True)
-
-#     return possible_moves
 
 
 def list_possible_moves(state: GameState, cache: dict = {}, include_stats: bool = True) -> list[tuple[tuple[DominoTile, bool]|None, Optional[int], Optional[float]]]:
@@ -251,125 +244,9 @@ def list_possible_moves(state: GameState, cache: dict = {}, include_stats: bool 
     return possible_moves
 
 
-# def count_game_stats(state: GameState, cache: dict = None) -> int:
-#     if cache is None:
-#         cache = {}
-
-#     if state in cache:
-#         return cache[state]
-
-#     global score_acc
-
-#     if state.is_game_over():
-#         winner, pair_0_pips, pair_1_pips = determine_winning_pair(state)
-#         winning_stats[winner] += 1
-#         score_acc += 0 if winner == -1 else (pair_0_pips+pair_1_pips)*(1 if winner==0 else -1)
-#         cache[state] = 1    
-#         return 1
-
-#     total_games = 0
-#     current_hand = state.get_current_hand()
-#     moves_made = 0
-
-#     # If the board is empty, the first player can play any tile
-#     if state.right_end is None and state.left_end is None:
-#         for tile in current_hand:
-#             new_state = state.play_hand(tile, left=True)  # Direction doesn't matter for the first tile
-#             total_games += count_game_stats(new_state)
-#             moves_made += 1
-#     else:
-#         # Try playing each tile in the current player's hand
-#         for tile in current_hand:
-#             if tile.can_connect(state.left_end):
-#                 new_state = state.play_hand(tile, left=True)
-#                 total_games += count_game_stats(new_state)
-#                 moves_made += 1
-
-#             if tile.can_connect(state.right_end) and state.left_end != state.right_end:
-#                 new_state = state.play_hand(tile, left=False)
-#                 total_games += count_game_stats(new_state)
-#                 moves_made += 1
-
-#     # If the player can't play, pass the turn
-#     if moves_made == 0:
-#         new_state = state.pass_turn()
-#         total_games = count_game_stats(new_state)
-
-#     cache[state] = total_games
-#     return total_games
-
 
 cache_hit: int = 0
 cache_miss: int = 0
-# def count_game_stats(initial_state: GameState, print_stats: bool = True, cache: dict = {}) -> tuple[int, float]:
-#     global cache_hit, cache_miss
-#     stack = deque([initial_state])
-#     # cache = {}
-#     winning_stats = {-1: 0, 0: 0, 1: 0}
-#     total_score: int = 0
-#     total_games: int = 0
-
-#     while stack:
-#         state = stack.pop()
-#         # print(f'processing state {state}')
-
-#         if state in cache:
-#             cache_hit += 1
-#             games, score = cache[state]
-#             total_games += games
-#             total_score += score
-#             continue
-#         else:
-#             cache_miss +=1
-
-#         if state.is_game_over():
-#             winner, pair_0_pips, pair_1_pips = determine_winning_pair(state)
-#             winning_stats[winner] += 1
-#             score = 0 if winner == -1 else (pair_0_pips+pair_1_pips)*(1 if winner==0 else -1)
-#             cache[state] = (1, score)
-#             total_games += 1
-#             total_score += score
-#             continue
-
-#         moves = []
-#         current_hand = state.get_current_hand()
-
-#         # If the board is empty, the first player can play any tile
-#         if state.right_end is None and state.left_end is None:
-#             moves = [(tile, True) for tile in current_hand]
-#         else:
-#             # Try playing each tile in the current player's hand
-#             for tile in current_hand:
-#                 if tile.can_connect(state.left_end):
-#                     moves.append((tile, True))
-#                 if tile.can_connect(state.right_end) and state.left_end != state.right_end:
-#                     moves.append((tile, False))
-
-#         # If the player can't play, pass the turn
-#         if not moves:
-#             new_state = state.pass_turn()
-#             stack.append(new_state)
-#         else:
-#             for tile, left in moves:
-#                 new_state = state.play_hand(tile, left)
-#                 stack.append(new_state)
-
-#     # Calculate total games
-#     # total_games = sum(cache.values())
-#     # total_games = len(cache.values())
-#     # total_games = sum(winning_stats.values())
-#     # exp_score = score_acc / total_games
-#     exp_score = total_score / total_games if total_games > 0 else 0 
-
-#     if print_stats:
-#         print(f"Number of possible game outcomes: {total_games}")
-#         print('Winning stats:', winning_stats)
-#         print(f'Expected score: {exp_score:.4f}')
-#         print(f'Cache hits: {cache_hit}')        
-#         print(f'Cache misses: {cache_miss}')        
-
-#     return total_games, exp_score
-
 
 def count_game_stats(initial_state: GameState, print_stats: bool = True, cache: dict = {}) -> tuple[int, float]:
     global cache_hit, cache_miss
@@ -454,62 +331,9 @@ def count_game_stats(initial_state: GameState, print_stats: bool = True, cache: 
 
     return total_games, exp_score
 
-
-# import math
-
-# def min_max_domino(state: GameState, depth: int, cache: dict = {}) -> Tuple[Optional[Tuple[DominoTile, bool]], float, List[Tuple[PlayerPosition, Optional[Tuple[DominoTile, bool]]]]]:
-#     """
-#     Implement the min-max algorithm for the domino game, including the optimal path.
-    
-#     :param state: The current GameState
-#     :param depth: The depth to search in the game tree
-#     :param cache: The cache dictionary to use for memoization
-#     :return: A tuple of (best_move, best_score, optimal_path)
-#     """
-#     if depth == 0 or state.is_game_over():
-#         _, total_score = count_game_stats(state, print_stats=False, cache=cache)
-#         return None, total_score, []
-
-#     current_player = state.current_player
-#     is_maximizing = current_player in (PlayerPosition.NORTH, PlayerPosition.SOUTH)
-    
-#     best_score = -math.inf if is_maximizing else math.inf
-#     best_move = None
-#     best_path = []
-    
-#     possible_moves = list_possible_moves(state, cache)
-    
-#     for move in possible_moves:
-#         tile, is_left, _, _ = move
-        
-#         if tile is None:  # Pass move
-#             new_state = state.pass_turn()
-#         else:
-#             new_state = state.play_hand(tile, is_left)
-        
-#         _, score, path = min_max_domino(new_state, depth - 1, cache)
-        
-#         if (is_maximizing and score > best_score) or (not is_maximizing and score < best_score):
-#             best_score = score
-#             best_move = (tile, is_left)
-#             best_path = [(current_player, (tile, is_left))] + path
-    
-#     return best_move, best_score, best_path
-
-# def get_best_move(state: GameState, depth: int, cache: dict = {}) -> Tuple[Optional[Tuple[DominoTile, bool]], float, List[Tuple[PlayerPosition, Optional[Tuple[DominoTile, bool]]]]]:
-#     """
-#     Get the best move for the current player using the min-max algorithm, including the optimal path.
-    
-#     :param state: The current GameState
-#     :param depth: The depth to search in the game tree
-#     :param cache: The cache dictionary to use for memoization
-#     :return: A tuple of (best_move, best_score, optimal_path)
-#     """
-#     return min_max_domino(state, depth, cache)
-
 import math
 
-def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, cache: dict = {}) -> tuple[Optional[tuple[DominoTile, bool]], float, list[tuple[PlayerPosition, Optional[Tuple[DominoTile, bool]]]]]:
+def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, cache: dict = {}, best_path_flag: bool = True) -> tuple[Optional[tuple[DominoTile, bool]], float, list[tuple[PlayerPosition, Optional[Tuple[DominoTile, bool]]]]]:
     """
     Implement the min-max algorithm with alpha-beta pruning for the domino game, including the optimal path.
     
@@ -518,6 +342,7 @@ def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, 
     :param alpha: The best value that the maximizer currently can guarantee at that level or above
     :param beta: The best value that the minimizer currently can guarantee at that level or above
     :param cache: The cache dictionary to use for memoization
+    :param best_path_flag: Flag to indicate if best_path is needed or not    
     :return: A tuple of (best_move, best_score, optimal_path)
     """
     if depth == 0 or state.is_game_over():
@@ -525,7 +350,8 @@ def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, 
         return None, total_score, []
 
     current_player = state.current_player
-    is_maximizing = current_player in (PlayerPosition.NORTH, PlayerPosition.SOUTH)
+    # is_maximizing = current_player in (PlayerPosition.NORTH, PlayerPosition.SOUTH)
+    is_maximizing = current_player in (PlayerPosition_NORTH, PlayerPosition_SOUTH)
     
     best_move = None
     best_path = []
@@ -553,7 +379,8 @@ def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, 
                 # best_move = (tile, is_left)
                 # best_path = [(current_player, (tile, is_left))] + path
                 best_move = tile_and_loc_info
-                best_path = [(current_player, tile_and_loc_info)] + path
+                if best_path_flag:
+                    best_path = [(current_player, tile_and_loc_info)] + path
             
             alpha = max(alpha, best_score)
             if beta <= alpha:
@@ -579,7 +406,8 @@ def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, 
                 # best_move = (tile, is_left)
                 best_move = tile_and_loc_info
                 # best_path = [(current_player, (tile, is_left))] + path
-                best_path = [(current_player, tile_and_loc_info)] + path
+                if best_path_flag:
+                    best_path = [(current_player, tile_and_loc_info)] + path
             
             beta = min(beta, best_score)
             if beta <= alpha:
@@ -587,49 +415,17 @@ def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, 
     
     return best_move, best_score, best_path
 
-def get_best_move_alpha_beta(state: GameState, depth: int, cache: dict = {}) -> tuple[Optional[tuple[DominoTile, bool]], float, list[tuple[PlayerPosition, Optional[tuple[DominoTile, bool]]]]]:
+def get_best_move_alpha_beta(state: GameState, depth: int, cache: dict = {}, best_path_flag: bool = True) -> tuple[Optional[tuple[DominoTile, bool]], float, list[tuple[PlayerPosition, Optional[tuple[DominoTile, bool]]]]]:
     """
     Get the best move for the current player using the min-max algorithm with alpha-beta pruning, including the optimal path.
     
     :param state: The current GameState
     :param depth: The depth to search in the game tree
     :param cache: The cache dictionary to use for memoization
+    :param best_path_flag: Flag to indicate if best_path is needed or not
     :return: A tuple of (best_move, best_score, optimal_path)
     """
-    return min_max_alpha_beta(state, depth, -math.inf, math.inf, cache)
-
-
-# def setup_game_state(initial_hands: List[List[Tuple[int, int]]], 
-#                      starting_player: PlayerPosition, 
-#                      first_moves: List[Optional[Tuple[int, int, bool]]]) -> GameState:
-#     """
-#     Set up a game state based on initial hands, starting player, and first moves.
-    
-#     :param initial_hands: List of initial hands for each player
-#     :param starting_player: The player who starts the game
-#     :param first_moves: List of first moves. Each move is a tuple (top, bottom, left) or None for pass
-#     :return: The resulting GameState after applying the first moves
-#     """
-#     state = GameState.new_game(initial_hands)
-#     state = GameState(
-#         player_hands=state.player_hands,
-#         current_player=starting_player,
-#         left_end=state.left_end,
-#         right_end=state.right_end,
-#         consecutive_passes=state.consecutive_passes
-#     )
-
-#     for move in first_moves:
-#         if move is None:
-#             state = state.pass_turn()
-#         else:
-#             top, bottom, left = move
-#             tile = next((t for t in state.get_current_hand() if (t.top == top and t.bottom == bottom) or (t.top == bottom and t.bottom == top)), None)
-#             if tile is None:
-#                 raise ValueError(f"Tile {top}|{bottom} not found in current player's hand")
-#             state = state.play_hand(tile, left)
-
-#     return state
+    return min_max_alpha_beta(state, depth, -math.inf, math.inf, cache, best_path_flag)
 
 
 def setup_game_state(
@@ -691,7 +487,8 @@ def analyze_moves_backward(initial_hands: list[list[DominoTile]],
         
         total_games, exp_score = count_game_stats(current_state, print_stats=False, cache=cache)
 
-        current_player = PlayerPosition((current_state.current_player.value - 1) % 4)
+        # current_player = PlayerPosition((current_state.current_player.value - 1) % 4)
+        current_player = (current_state.current_player - 1) % 4
 
         move = moves[i-1] if i > from_move else None
         
@@ -702,7 +499,8 @@ def analyze_moves_backward(initial_hands: list[list[DominoTile]],
             delta = 0.0        
 
         move_str = f"({move[0]},{move[1]})" if move else "Pass"
-        player_str = current_player.name
+        # player_str = current_player.name
+        player_str = 'SENW'[current_player]
         print(f"{player_str:<6}\t{move_str:<12}\t{total_games:<18}\t{exp_score:<14.4f}\t", end='')
         # print(f"{player_str:<6}\t{move_str:<12}\t{total_games:<18}\t{exp_score:<14.4f}\t{delta:+.4f}")
         
@@ -750,7 +548,8 @@ def main():
     for i, _hand in enumerate(initial_hands_orig):
         initial_hands.append([DominoTile.new_tile(*t) for t in _hand])
 
-    starting_player = PlayerPosition.SOUTH
+    # starting_player = PlayerPosition.SOUTH
+    starting_player = PlayerPosition_SOUTH
     moves = [(DominoTile.new_tile(move[0], move[1]), move[2]) if move is not None else None
              for move in [
                 (0, 0, True), 
@@ -823,7 +622,8 @@ def main():
         print(f"Current player: {final_state.current_player}")
         print(f"Board ends: {final_state.left_end} | {final_state.right_end}")
         for i, hand in enumerate(final_state.player_hands):
-            print(f"Player {PlayerPosition(i).name}'s hand: {hand}")
+            # print(f"Player {PlayerPosition(i).name}'s hand: {hand}")
+            print(f"Player {PlayerPosition_names[i]}'s hand: {hand}")
 
         count_game_stats(final_state, cache=cache)  # This will print the stats for the final state
 
@@ -854,11 +654,13 @@ def main():
     print("\nOptimal path:")
     for i, (player, move) in enumerate(optimal_path):
         if move is None:
-            print(f"{i+1}. {player.name}: Pass")
+            # print(f"{i+1}. {player.name}: Pass")
+            print(f"{i+1}. {PlayerPosition_names[player]}: Pass")
         else:
             tile, is_left = move
             direction = "left" if is_left else "right"
-            print(f"{i+1}. {player.name}: Play {tile} on the {direction}")
+            # print(f"{i+1}. {player.name}: Play {tile} on the {direction}")
+            print(f"{i+1}. {PlayerPosition_names[player]}: Play {tile} on the {direction}")
 
 
     if args.cache:
