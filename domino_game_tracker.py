@@ -324,7 +324,8 @@ def generate_sample_from_game_state(
         raise ae
 
     # Generate a sample
-    sample = generate_sample(list(remaining_tiles), not_with, player_tiles)
+    sample = generate_sample(remaining_tiles, not_with, player_tiles)
+    # sample = generate_sample(list(remaining_tiles), not_with, player_tiles)
     # sample = generate_sample(list(remaining_tiles), not_with, known_with, player_tiles)
 
     return sample

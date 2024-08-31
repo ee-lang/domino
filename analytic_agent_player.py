@@ -115,6 +115,7 @@ class AnalyticAgentPlayer(HumanPlayer):
 
             possible_moves = list_possible_moves(sample_state, include_stats=False)
 
+            new_cache: dict = {}
             for move in possible_moves:
                 if move[0] is None:
                     new_state = sample_state.pass_turn()
@@ -122,7 +123,7 @@ class AnalyticAgentPlayer(HumanPlayer):
                     tile, is_left = move[0]
                     new_state = sample_state.play_hand(tile, is_left)
 
-                _, best_score, _ = get_best_move_alpha_beta(new_state, depth)
+                _, best_score, _ = get_best_move_alpha_beta(new_state, depth, new_cache)
 
                 move_scores[move[0]].append(best_score)
 
