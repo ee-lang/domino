@@ -8,6 +8,7 @@ from domino_common_knowledge import CommonKnowledgeTracker
 from statistics import mean, median, stdev, mode
 import copy
 from tqdm import tqdm
+import get_best_move
 
 class AnalyticAgentPlayer(HumanPlayer):
     def __init__(self, position = 0):
@@ -133,7 +134,8 @@ class AnalyticAgentPlayer(HumanPlayer):
                     tile, is_left = move[0]
                     new_state = sample_state.play_hand(tile, is_left)
 
-                _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
+                # _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
+                _, best_score, _ = get_best_move.get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
 
                 move_scores[move[0]].append(best_score)
 
