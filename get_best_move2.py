@@ -2,6 +2,7 @@
 import math
 from dataclasses import dataclass
 
+type move = tuple[DominoTile, bool]|None
 type PlayerPosition = int
 
 PlayerPosition_SOUTH = 0
@@ -27,7 +28,7 @@ class DominoTile:
     def loi_to_domino_tiles(cls, tuple_list: list[tuple[int, int]]) -> list['DominoTile']:
         return [DominoTile.new_tile(left, right) for left, right in tuple_list]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.top}|{self.bottom}"
 
     def can_connect(self, end: int|None) -> bool:
@@ -49,11 +50,11 @@ class GameState:
     right_end: int|None
     consecutive_passes: int
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.player_hands, self.current_player, self.left_end, self.right_end, self.consecutive_passes))
 
     @classmethod
-    def new_game(cls, player_hands: list[list[DominoTile]]):
+    def new_game(cls, player_hands: list[list[DominoTile]]) -> 'GameState':
         return cls(
             # player_hands=tuple(frozenset(DominoTile(top, bottom) for top, bottom in hand) for hand in player_hands),
             player_hands=tuple(frozenset(tile for tile in hand) for hand in player_hands),
@@ -113,7 +114,7 @@ class GameState:
         # return self.player_hands[self.current_player.value]
         return self.player_hands[self.current_player]
 
-def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, cache: dict = {}, best_path_flag: bool = True) -> tuple[tuple[DominoTile, bool]|None, float, list[tuple[PlayerPosition, tuple[DominoTile, bool]|None]]]:
+def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, cache: dict[GameState, tuple[int, int]] = {}, best_path_flag: bool = True) -> tuple[tuple[DominoTile, bool]|None, float, list[tuple[PlayerPosition, tuple[DominoTile, bool]|None]]]:
     """
     Implement the min-max algorithm with alpha-beta pruning for the domino game, including the optimal path.
     
@@ -195,7 +196,7 @@ def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, 
     
     return best_move, best_score, best_path
 
-def get_best_move_alpha_beta(state: GameState, depth: int, cache: dict = {}, best_path_flag: bool = True) -> tuple[tuple[DominoTile, bool]|None, float, list[tuple[PlayerPosition, tuple[DominoTile, bool]|None]]]:
+def get_best_move_alpha_beta(state: GameState, depth: int, cache: dict[GameState, tuple[int, int]] = {}, best_path_flag: bool = True) -> tuple[move, float, list[tuple[PlayerPosition, move]]]:
     """
     Get the best move for the current player using the min-max algorithm with alpha-beta pruning, including the optimal path.
     
@@ -210,7 +211,7 @@ def get_best_move_alpha_beta(state: GameState, depth: int, cache: dict = {}, bes
 # cache_hit: int = 0
 # cache_miss: int = 0
 
-def count_game_stats(initial_state: GameState, print_stats: bool = True, cache: dict = {}) -> tuple[int, float]:
+def count_game_stats(initial_state: GameState, print_stats: bool = True, cache: dict[GameState, tuple[int, int]] = {}) -> tuple[int, float]:
     # global cache_hit, cache_miss
     
     # stack: list[tuple[GameState, list[tuple[DominoTile, bool]]]] = [(initial_state, [])]  # Stack contains (state, path) pairs
@@ -343,4 +344,43 @@ def determine_winning_pair(state: GameState) -> tuple[int, int, int]:
         result = -1
     else:
         result = 1 if pair_1_pips < pair_0_pips else 0
-    return result, pair_0_pips, pair_1_pips    
+    return result, pair_0_pips, pair_1_pips
+
+def setup_game_state(
+    initial_hands: list[list[DominoTile]], 
+    starting_player: PlayerPosition, 
+    first_moves: list[move]
+) -> GameState:
+    """
+    Set up a game state based on initial hands, starting player, and first moves.
+
+    :param initial_hands: List of initial hands for each player, where each hand is a list of DominoTile objects
+    :param starting_player: The player who starts the game
+    :param first_moves: List of first moves. Each move is a tuple (DominoTile, bool) or None for pass
+    :return: The resulting GameState after applying the first moves
+    """
+    # Initialize the game state with the given hands
+    state = GameState.new_game([[tile for tile in hand] for hand in initial_hands])
+    
+    # Set the starting player
+    state = GameState(
+        player_hands=state.player_hands,
+        current_player=starting_player,
+        left_end=state.left_end,
+        right_end=state.right_end,
+        consecutive_passes=state.consecutive_passes
+    )
+
+    # Apply the first moves
+    for move in first_moves:
+        if move is None:
+            state = state.pass_turn()
+        else:
+            tile, left = move
+            # Find and play the tile from the current player's hand
+            if tile not in state.get_current_hand():
+                print('state.get_current_hand()',state.get_current_hand())
+                raise ValueError(f"Tile {tile} not found in current player's hand")
+            state = state.play_hand(tile, left)
+
+    return state

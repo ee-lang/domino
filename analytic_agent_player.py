@@ -3,7 +3,7 @@ from collections import defaultdict
 from DominoGameState import DominoGameState
 # from domino_game_analyzer import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
 # from get_best_move import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
-from get_best_move2 import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
+from get_best_move2 import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names, move
 from domino_utils import history_to_domino_tiles_history
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
@@ -13,15 +13,15 @@ from tqdm import tqdm
 # import get_best_move
 
 class AnalyticAgentPlayer(HumanPlayer):
-    def __init__(self, position = 0):
+    def __init__(self, position: int = 0) -> None:
         super().__init__()
-        self.move_history = []
-        self.tile_count_history = defaultdict(list)
-        self.round_scores = []
+        self.move_history: list[tuple[int, tuple[tuple[int, int], str]|None]] = []
+        self.tile_count_history: dict[int, list[int]] = defaultdict(list)
+        # self.round_scores: list[int] = []
         self.first_game = True
         self.position = position
 
-    def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]], verbose=True) -> tuple[tuple[int,int], str] | None:
+    def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]], verbose: bool = True) -> tuple[tuple[int,int], str] | None:
         if self.first_game:
             # Check if the move is forced
             if game_state.variant in {'international','venezuelan'} and len(game_state.history)==0:
@@ -59,7 +59,7 @@ class AnalyticAgentPlayer(HumanPlayer):
             side = 'l' if is_left else 'r'
             return (tile.top, tile.bottom), side
 
-    def print_verbose_info(self, player_hand: list[DominoTile], unplayed_tiles: list[DominoTile], knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], starting_player: PlayerPosition):
+    def print_verbose_info(self, player_hand: list[DominoTile], unplayed_tiles: list[DominoTile], knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], starting_player: PlayerPosition) -> None:
         print("\n--- Verbose Information ---")
         # print(f"Starting player: {starting_player.name}")
         print(f"Starting player: {PlayerPosition_names[starting_player]}")
@@ -78,7 +78,7 @@ class AnalyticAgentPlayer(HumanPlayer):
 
     def get_best_move(self, final_south_hand: set[DominoTile], remaining_tiles: set[DominoTile], 
                       knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], 
-                      board_ends: tuple[int|None,int|None], num_samples = 1000, verbose = False) -> tuple[DominoTile, bool] | None:
+                      board_ends: tuple[int|None,int|None], num_samples: int = 1000, verbose: bool = False) -> tuple[DominoTile, bool] | None:
 
         inferred_knowledge: dict[PlayerPosition, set[DominoTile]] = {
             # player: set() for player in PlayerPosition
@@ -130,7 +130,7 @@ class AnalyticAgentPlayer(HumanPlayer):
             # possible_moves = list_possible_moves(sample_state, include_stats=False)
             possible_moves = list_possible_moves(sample_state)
 
-            sample_cache: dict = {}
+            sample_cache: dict[GameState, tuple[int, int]] = {}
             for move in possible_moves:
                 if move[0] is None:
                     new_state = sample_state.pass_turn()
@@ -154,7 +154,7 @@ class AnalyticAgentPlayer(HumanPlayer):
         best_move = max(move_scores, key=lambda x: mean(move_scores[x]))
         return best_move
 
-    def print_move_statistics(self, move_scores: dict, num_samples: int):
+    def print_move_statistics(self, move_scores: dict[move, list[float]], num_samples: int) -> None:
         print(f"\nMove Statistics (based on {num_samples} samples):")
 
         # Calculate statistics for each move
@@ -173,12 +173,18 @@ class AnalyticAgentPlayer(HumanPlayer):
             else:
                 move_statistics[move] = {
                     "count": len(scores),
-                    "mean": scores[0] if scores else None,
+                    # "mean": scores[0] if scores else None,
+                    # "std_dev": 0,
+                    # "median": scores[0] if scores else None,
+                    # "mode": scores[0] if scores else None,
+                    # "min": scores[0] if scores else None,
+                    # "max": scores[0] if scores else None
+                    "mean": scores[0],
                     "std_dev": 0,
-                    "median": scores[0] if scores else None,
-                    "mode": scores[0] if scores else None,
-                    "min": scores[0] if scores else None,
-                    "max": scores[0] if scores else None
+                    "median": scores[0],
+                    "mode": scores[0],
+                    "min": scores[0],
+                    "max": scores[0]
                 }
 
         # Sort moves by their mean score, descending order
@@ -215,23 +221,23 @@ class AnalyticAgentPlayer(HumanPlayer):
             print(f"Best move: Play {tile} on the {direction}")
         print(f"Mean Expected Score: {best_stats['mean']:.4f}")
 
-    def end_round(self, scores: list[int], team: int):
+    def end_round(self, scores: list[int], team: int) -> None:
         super().end_round(scores, team)
-        self.record_round_score(scores)
+        # self.record_round_score(scores)
 
-    def record_move(self, game_state: DominoGameState, move: tuple[tuple[int, int], str]|None):
+    def record_move(self, game_state: DominoGameState, move: tuple[tuple[int, int], str]|None) -> None:
         self.move_history.append((game_state.next_player, move))
         for i, count in enumerate(game_state.player_tile_counts):
             self.tile_count_history[i].append(count)
 
-    def record_round_score(self, scores: list[int]):
-        self.round_scores.append(scores)
+    # def record_round_score(self, scores: list[int]) -> None:
+    #     self.round_scores.append(scores)
 
-    def get_move_history(self):
+    def get_move_history(self) -> list[tuple[int, tuple[tuple[int, int], str]|None]]:
         return self.move_history
 
-    def get_tile_count_history(self):
+    def get_tile_count_history(self) -> dict[int, list[int]]:
         return dict(self.tile_count_history)
 
-    def get_round_scores(self):
-        return self.round_scores
+    # def get_round_scores(self) -> list[int]:
+    #     return self.round_scores

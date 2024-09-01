@@ -5,7 +5,7 @@ from enum import Enum
 from collections import deque
 import argparse
 
-from game_state_cy import GameStateCy
+# from game_state_cy import GameStateCy
 
 
 type PlayerPosition = int
@@ -142,8 +142,8 @@ class GameState:
             consecutive_passes=self.consecutive_passes + 1
         )
 
-    # def is_game_over(self) -> bool:
-    #     return any(len(hand) == 0 for hand in self.player_hands) or self.consecutive_passes == 4
+    def is_game_over(self) -> bool:
+        return any(len(hand) == 0 for hand in self.player_hands) or self.consecutive_passes == 4
     # def is_game_over(self) -> bool:
     #     cy_state = GameStateCy(
     #         self.player_hands,
@@ -153,8 +153,8 @@ class GameState:
     #         self.consecutive_passes
     #     )
     #     return cy_state.is_game_over()
-    def is_game_over(self) -> bool:
-        return GameStateCy.static_is_game_over(self.player_hands, self.consecutive_passes)
+    # def is_game_over(self) -> bool:
+    #     return GameStateCy.static_is_game_over(self.player_hands, self.consecutive_passes)
 
     def get_current_hand(self) -> FrozenSet[DominoTile]:
         # return self.player_hands[self.current_player.value]
@@ -521,7 +521,7 @@ def save_cache(cache: dict, filename: str):
     with open(filename, 'wb') as f:
         pickle.dump(cache, f)
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Domino Game Analyzer")
     parser.add_argument("--cache", type=str, help="Specify a cache file to use")
     parser.add_argument("--min-max-only", action="store_true", help="Run only the min-max algorithm")    

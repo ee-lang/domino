@@ -1,11 +1,12 @@
 from statistics import mode, mean, variance, stdev, median
 from collections import defaultdict, Counter
-from domino_game_analyzer import get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
+# from domino_game_analyzer import get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
+from get_best_move2 import get_best_move_alpha_beta, list_possible_moves, GameState, DominoTile, PlayerPosition, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST, move
 
 
-from typing import Optional
+# from typing import Optional
 from collections import defaultdict
-from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state
+# from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
 from domino_probability_calc import calculate_tile_probabilities, PlayerTiles, generate_sample
 import copy
@@ -36,11 +37,11 @@ def rotate_player_tiles_count(
 
 def domino_game_state_our_perspective(
     remaining_tiles: set[DominoTile],
-    moves: list[Optional[tuple[DominoTile, bool]]],
+    moves: list[move],
     initial_player_tiles: dict[PlayerPosition, int],
     # current_player: PlayerPosition = PlayerPosition.SOUTH
     current_player: PlayerPosition = PlayerPosition_SOUTH
-) -> tuple[PlayerPosition, set[DominoTile], tuple[Optional[int], Optional[int]], dict[PlayerPosition, int], CommonKnowledgeTracker]:
+) -> tuple[PlayerPosition, set[DominoTile], tuple[int|None, int|None], dict[PlayerPosition, int], CommonKnowledgeTracker]:
     knowledge_tracker = CommonKnowledgeTracker()
 
     # # Initialize the count of tiles for each player
@@ -52,7 +53,7 @@ def domino_game_state_our_perspective(
     # }
     player_tiles_count = initial_player_tiles
 
-    board_ends: tuple[Optional[int], Optional[int]] = (None, None)  # (left_end, right_end)
+    board_ends: tuple[int|None, int|None] = (None, None)  # (left_end, right_end)
 
     for move in moves:
         if move is None:
@@ -238,148 +239,157 @@ if __name__ == "__main__":
     #     for player, prob in probs.items():
     #         print(f"  P({player} has {tile}) = {prob:.6f}")
 
-    final_south_hand = current_south_hand
-    # print('final_south_hand',final_south_hand)
-    final_remaining_tiles_without_south_tiles = remaining_tiles - final_south_hand 
-    # print('final_remaining_tiles_without_south_tiles',final_remaining_tiles_without_south_tiles, len(final_remaining_tiles_without_south_tiles))
-    # print('player_tiles_count pre',player_tiles_count)
-    # player_tiles_count = rotate_player_tiles_count(player_tiles_count, PlayerPosition.NORTH)
-    # print('player_tiles_count post',player_tiles_count)
-    inferred_knowledge_for_current_player = copy.deepcopy(inferred_knowledge)
-    for player, tiles in inferred_knowledge_for_current_player.items():
-        inferred_knowledge_for_current_player[player] = tiles - final_south_hand
-    # print('reviewed inferred_knowledge', inferred_knowledge_for_current_player)
+    # final_south_hand = current_south_hand
+    # # print('final_south_hand',final_south_hand)
+    # final_remaining_tiles_without_south_tiles = remaining_tiles - final_south_hand 
+    # # print('final_remaining_tiles_without_south_tiles',final_remaining_tiles_without_south_tiles, len(final_remaining_tiles_without_south_tiles))
+    # # print('player_tiles_count pre',player_tiles_count)
+    # # player_tiles_count = rotate_player_tiles_count(player_tiles_count, PlayerPosition.NORTH)
+    # # print('player_tiles_count post',player_tiles_count)
+    # inferred_knowledge_for_current_player = copy.deepcopy(inferred_knowledge)
+    # for player, tiles in inferred_knowledge_for_current_player.items():
+    #     inferred_knowledge_for_current_player[player] = tiles - final_south_hand
+    # # print('reviewed inferred_knowledge', inferred_knowledge_for_current_player)
 
-    num_samples = 1000
-    move_scores = defaultdict(list)
+    # num_samples = 1000
+    # move_scores = defaultdict(list)
 
-    for _ in range(num_samples):
-        # Generate a sample based on the current game state
-        sample = generate_sample_from_game_state(
-            # current_player,
-            # PlayerPosition.SOUTH,
-            PlayerPosition_SOUTH,
-            final_south_hand,
-            final_remaining_tiles_without_south_tiles,
-            player_tiles_count,
-            inferred_knowledge_for_current_player
-        )
+    # for _ in range(num_samples):
+    #     # Generate a sample based on the current game state
+    #     sample = generate_sample_from_game_state(
+    #         # current_player,
+    #         # PlayerPosition.SOUTH,
+    #         PlayerPosition_SOUTH,
+    #         final_south_hand,
+    #         final_remaining_tiles_without_south_tiles,
+    #         player_tiles_count,
+    #         inferred_knowledge_for_current_player
+    #     )
 
-        # Create a game state from the sample. The order is important!
-        sample_hands = (
-            frozenset(final_south_hand),  # South's hand
-            frozenset(sample['E']),       # East's hand
-            frozenset(sample['N']),       # North's hand
-            frozenset(sample['W'])        # West's hand
-        )
+    #     # Create a game state from the sample. The order is important!
+    #     sample_hands = (
+    #         frozenset(final_south_hand),  # South's hand
+    #         frozenset(sample['E']),       # East's hand
+    #         frozenset(sample['N']),       # North's hand
+    #         frozenset(sample['W'])        # West's hand
+    #     )
 
-        # Create a new GameState object
-        sample_state = GameState(
-            player_hands=sample_hands,
-            # current_player=current_player,
-            # current_player=PlayerPosition.SOUTH,
-            current_player=PlayerPosition_SOUTH,
-            left_end=board_ends[0],
-            right_end=board_ends[1],
-            consecutive_passes=0  # Assuming we start with 0 consecutive passes
-        )
+    #     # Create a new GameState object
+    #     sample_state = GameState(
+    #         player_hands=sample_hands,
+    #         # current_player=current_player,
+    #         # current_player=PlayerPosition.SOUTH,
+    #         current_player=PlayerPosition_SOUTH,
+    #         left_end=board_ends[0],
+    #         right_end=board_ends[1],
+    #         consecutive_passes=0  # Assuming we start with 0 consecutive passes
+    #     )
 
-        # Get the list of possible moves
-        possible_moves = list_possible_moves(sample_state, include_stats=False)
+    #     # Get the list of possible moves
+    #     # possible_moves = list_possible_moves(sample_state, include_stats=False)
+    #     possible_moves = list_possible_moves(sample_state)
 
-        # Analyze each possible move
-        move_analysis = []        
-        # Find the best move using get_best_move_alpha_beta
-        depth = 24  # You can adjust this depth based on your performance requirements
-        for move in possible_moves:
-            if move[0] is None:  # Pass move
-                new_state = sample_state.pass_turn()
-            else:
-                tile, is_left = move[0]
-                new_state = sample_state.play_hand(tile, is_left)
+    #     # Analyze each possible move
+    #     move_analysis = []        
+    #     # Find the best move using get_best_move_alpha_beta
+    #     depth = 24  # You can adjust this depth based on your performance requirements
+    #     for move in possible_moves:
+    #         if move[0] is None:  # Pass move
+    #             new_state = sample_state.pass_turn()
+    #         else:
+    #             tile, is_left = move[0]
+    #             new_state = sample_state.play_hand(tile, is_left)
             
-            # best_move, best_score, optimal_path = get_best_move_alpha_beta(new_state, depth)
-            best_move, best_score, __ = get_best_move_alpha_beta(new_state, depth)
+    #         # best_move, best_score, optimal_path = get_best_move_alpha_beta(new_state, depth)
+    #         best_move, best_score, __ = get_best_move_alpha_beta(new_state, depth)
             
-            move_analysis.append({
-                'move': move[0],
-                'resulting_best_move': best_move,
-                'expected_score': best_score
-                # 'optimal_path': optimal_path
-            })
-            if move[0] is not None:  # Pass move
-                # print(f'Move {move[0]} resulted in {best_score}')
-                move_scores[move[0]].append(best_score)
+    #         move_analysis.append({
+    #             'move': move[0],
+    #             'resulting_best_move': best_move,
+    #             'expected_score': best_score
+    #             # 'optimal_path': optimal_path
+    #         })
+    #         if move[0] is not None:  # Pass move
+    #             # print(f'Move {move[0]} resulted in {best_score}')
+    #             move_scores[move[0]].append(best_score)
 
-        # best_move, best_score, _ = get_best_move_alpha_beta(sample_state, depth)
+    #     # best_move, best_score, _ = get_best_move_alpha_beta(sample_state, depth)
 
-        # best_move, best_score, optimal_path = get_best_move_alpha_beta(sample_state, depth)
+    #     # best_move, best_score, optimal_path = get_best_move_alpha_beta(sample_state, depth)
 
-        # tile, is_left = best_move
-        # direction = "left" if is_left else "right"
-        # print('='*25)
-        # print('Partner hand', sample['N'])
-        # print(f"Best move: Play {tile} on the {direction}, Expected score: {best_score:.4f}")
+    #     # tile, is_left = best_move
+    #     # direction = "left" if is_left else "right"
+    #     # print('='*25)
+    #     # print('Partner hand', sample['N'])
+    #     # print(f"Best move: Play {tile} on the {direction}, Expected score: {best_score:.4f}")
 
-        # print("\nOptimal path:")
-        # for i, (player, move) in enumerate(optimal_path):
-        #     if move is None:
-        #         print(f"{i+1}. {player.name}: Pass")
-        #     else:
-        #         tile, is_left = move
-        #         direction = "left" if is_left else "right"
-        #         print(f"{i+1}. {player.name}: Play {tile} on the {direction}")
+    #     # print("\nOptimal path:")
+    #     # for i, (player, move) in enumerate(optimal_path):
+    #     #     if move is None:
+    #     #         print(f"{i+1}. {player.name}: Pass")
+    #     #     else:
+    #     #         tile, is_left = move
+    #     #         direction = "left" if is_left else "right"
+    #     #         print(f"{i+1}. {player.name}: Play {tile} on the {direction}")
 
 
-        # # Record the move and score
-        # move_scores[best_move].append(best_score)
+    #     # # Record the move and score
+    #     # move_scores[best_move].append(best_score)
 
-    # Calculate statistics for each move
-    move_statistics = {}
-    for _move, scores in move_scores.items():
-        move_statistics[_move] = {
-            "count": len(scores),
-            "mean": mean(scores),
-            "std_dev": stdev(scores) if len(scores) > 1 else 0,
-            "median": median(scores),
-            "mode": mode(scores),
-            "min": min(scores),
-            "max": max(scores)
-        }
+    # # Calculate statistics for each move
+    # move_statistics = {}
+    # for _move, scores in move_scores.items():
+    #     move_statistics[_move] = {
+    #         "count": len(scores),
+    #         "mean": mean(scores),
+    #         "std_dev": stdev(scores) if len(scores) > 1 else 0,
+    #         "median": median(scores),
+    #         "mode": mode(scores),
+    #         "min": min(scores),
+    #         "max": max(scores)
+    #     }
 
-    # Sort moves by their mean score, descending order
-    sorted_moves = sorted(move_statistics.items(), key=lambda x: x[1]["mean"], reverse=True)
+    # # Sort moves by their mean score, descending order
+    # sorted_moves = sorted(move_statistics.items(), key=lambda x: x[1]["mean"], reverse=True)
 
-    # Print statistics for each move
-    print(f"\nMove Statistics (based on {num_samples} samples):")
-    for __move, stats in sorted_moves:
-        if __move is None:
-            move_str = "Pass"
-        else:
-            tile, is_left = __move
-            direction = "left" if is_left else "right"
-            move_str = f"Play {tile} on the {direction}"
+    # # Print statistics for each move
+    # print(f"\nMove Statistics (based on {num_samples} samples):")
+    # for __move, stats in sorted_moves:
+    #     # __move can't be None 
+    #     # if __move is None:
+    #     #     move_str = "Pass"
+    #     # else:
+    #     #     tile, is_left = __move
+    #     #     direction = "left" if is_left else "right"
+    #     #     move_str = f"Play {tile} on the {direction}"
+    #     tile, is_left = __move
+    #     direction = "left" if is_left else "right"
+    #     move_str = f"Play {tile} on the {direction}"
         
-        print(f"\nMove: {move_str}")
-        print(f"  Count: {stats['count']}")
-        print(f"  Mean Score: {stats['mean']:.4f}")
-        print(f"  Standard Deviation: {stats['std_dev']:.4f}")
-        print(f"  Median Score: {stats['median']:.4f}")
-        print(f"  Mode Score: {stats['mode']:.4f}")
-        print(f"  Min Score: {stats['min']:.4f}")
-        print(f"  Max Score: {stats['max']:.4f}")
+    #     print(f"\nMove: {move_str}")
+    #     print(f"  Count: {stats['count']}")
+    #     print(f"  Mean Score: {stats['mean']:.4f}")
+    #     print(f"  Standard Deviation: {stats['std_dev']:.4f}")
+    #     print(f"  Median Score: {stats['median']:.4f}")
+    #     print(f"  Mode Score: {stats['mode']:.4f}")
+    #     print(f"  Min Score: {stats['min']:.4f}")
+    #     print(f"  Max Score: {stats['max']:.4f}")
 
-    # Identify the best move based on the highest mean score
-    best_move = max(move_statistics, key=lambda x: move_statistics[x]["mean"])
-    best_stats = move_statistics[best_move]
+    # # Identify the best move based on the highest mean score
+    # best_move = max(move_statistics, key=lambda x: move_statistics[x]["mean"])
+    # best_stats = move_statistics[best_move]
 
-    print("\nBest Move Overall:")
-    if best_move is None:
-        print(f"Best move: Pass")
-    else:
-        tile, is_left = best_move
-        direction = "left" if is_left else "right"
-        print(f"Best move: Play {tile} on the {direction}")
-    print(f"Mean Expected Score: {best_stats['mean']:.4f}")
-    print(f"Frequency: {best_stats['count']} out of {num_samples} samples")
+    # print("\nBest Move Overall:")
+    # # best_move can't be None 
+    # # if best_move is None:
+    # #     print(f"Best move: Pass")
+    # # else:
+    # #     tile, is_left = best_move
+    # #     direction = "left" if is_left else "right"
+    # #     print(f"Best move: Play {tile} on the {direction}")
+    # tile, is_left = best_move
+    # direction = "left" if is_left else "right"
+    # print(f"Best move: Play {tile} on the {direction}")
+    # print(f"Mean Expected Score: {best_stats['mean']:.4f}")
+    # print(f"Frequency: {best_stats['count']} out of {num_samples} samples")
 

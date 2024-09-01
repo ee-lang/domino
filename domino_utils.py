@@ -1,4 +1,5 @@
-from domino_game_analyzer import DominoTile
+# from domino_game_analyzer import DominoTile
+from get_best_move2 import DominoTile
 
 def history_to_domino_tiles_history(move_list: list[tuple[int, tuple[tuple[int, int], str]|None]]) -> list[tuple[DominoTile, bool]|None]:
     result: list[tuple[DominoTile, bool]|None] = []

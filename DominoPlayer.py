@@ -1,13 +1,13 @@
 from DominoGameState import DominoGameState
-from typing import List, Tuple, Optional
+# from typing import List, Tuple, Optional
 from collections import Counter, defaultdict
 
 
 class DominoPlayer:
-	def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]):
+	def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]) -> tuple[tuple[int, int], str]|None:
 		raise NotImplementedError('Not implemented.')
 
-	def end_round(self, scores: list[int], team: int):
+	def end_round(self, scores: list[int], team: int) -> None:
 		"""
 		Called at the end of each round with the scores and team information.
 
@@ -20,10 +20,10 @@ class DominoPlayer:
 		pass
 
 class HumanPlayer(DominoPlayer):
-	def __init__(self):
-		self.missing_tiles = defaultdict(set)
+	def __init__(self) -> None:
+		self.missing_tiles: dict[int, set[int]] = defaultdict(set)
 
-	def next_move(self, game_state, player_hand):
+	def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]) -> tuple[tuple[int, int], str]|None:
 		self.update_missing_tiles(game_state)
 		
 		while True:
@@ -69,19 +69,19 @@ class HumanPlayer(DominoPlayer):
 			except Exception as e:
 				print('illegal input', e)
 
-	def end_round(self, scores: List[int], team: int):
+	def end_round(self, scores: list[int], team: int) -> None:
 		self.missing_tiles = defaultdict(set)
 		print(f"HumanPlayer: Round ended. Scores - Team 1: {scores[0]}, Team 2: {scores[1]}")
 		print(f"HumanPlayer: Your team (Team {team + 1}) score: {scores[team]}")
 		print("HumanPlayer: Reset missing tiles for the next round.")
 
-	def get_unplayed_tiles(self, game_state, player_hand)-> list[tuple[int,int]]:
+	def get_unplayed_tiles(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]) -> list[tuple[int,int]]:
 		max_pip = 9 if game_state.variant == "cuban" else 6
 		all_tiles = set((i, j) for i in range(max_pip + 1) for j in range(i, max_pip + 1))
 		played_tiles = game_state.played_set
 		return sorted(list(all_tiles - set(player_hand) - played_tiles))
 
-	def count_remaining_pips(self, unplayed_tiles):
+	def count_remaining_pips(self, unplayed_tiles: list[tuple[int, int]]) -> dict[int, int]:
 		pip_counts: dict[int,int] = Counter()
 		for tile in unplayed_tiles:
 			pip_counts[tile[0]] += 1
@@ -89,7 +89,7 @@ class HumanPlayer(DominoPlayer):
 				pip_counts[tile[1]] += 1
 		return dict(sorted(pip_counts.items()))
 
-	def update_missing_tiles(self, game_state):
+	def update_missing_tiles(self, game_state: DominoGameState) -> None:
 		moves_to_check = min(len(game_state.history), 4)
 		last_moves = game_state.history[-moves_to_check:]
 
@@ -119,7 +119,7 @@ class HumanPlayer(DominoPlayer):
 				else:  # side == 'r'
 					ends = (ends[0], tile[1] if tile[0] == ends[1] else tile[0])
 
-	def get_ends_before_last_moves(self, history):
+	def get_ends_before_last_moves(self, history: list[tuple[int, tuple[tuple[int, int], str]|None]]) -> tuple[int, int]:
 		ends = (-1, -1)
 		for _, move in history:
 			if move is not None:
@@ -132,7 +132,7 @@ class HumanPlayer(DominoPlayer):
 					ends = (ends[0], tile[1] if tile[0] == ends[1] else tile[0])
 		return ends
 
-	def display_possible_tiles_for_players(self, game_state, unplayed_tiles):
+	def display_possible_tiles_for_players(self, game_state: DominoGameState, unplayed_tiles: list[tuple[int, int]]) -> None:
 		for player in range(4):
 			if player != game_state.next_player:
 				possible_tiles = [tile for tile in unplayed_tiles 
@@ -143,7 +143,7 @@ class HumanPlayer(DominoPlayer):
 
 import random
 class RandomPlayer(DominoPlayer):
-	def next_move(self, game_state, player_hand):
+	def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]) -> tuple[tuple[int, int], str]|None:
 		lom = available_moves(game_state, player_hand)
 		if len(lom) == 0: return None
 		tiles = random.choice(lom)
@@ -155,13 +155,13 @@ class RandomPlayer(DominoPlayer):
 		side = random.choice(sides) if len(game_state.played_set) > 0 else 'l'
 		return tiles, side
 
-def available_moves(game_state, player_hand):
+def available_moves(game_state: DominoGameState, player_hand: list[tuple[int, int]]) -> list[tuple[int, int]]:
 	l_end, r_end = game_state.ends
 	if l_end == -1 and r_end == -1:
 		return player_hand
 	return list(filter(lambda h: r_end in h or l_end in h, player_hand))
 
-def stats(player_hand, max_pips):
+def stats(player_hand: list[tuple[int, int]], max_pips: int) -> dict[int, int]:
 	counter: dict[int, int] = defaultdict(int)
 	for tile in player_hand:
 		counter[tile[0]] += 1

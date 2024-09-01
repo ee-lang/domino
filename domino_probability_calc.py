@@ -1,8 +1,9 @@
 from math import factorial, comb
 from collections import namedtuple, defaultdict
 import itertools
-from typing import List, Dict, Tuple, Set
-from domino_game_analyzer import DominoTile, PlayerPosition
+# from typing import List, Dict, Tuple, Set
+# from domino_game_analyzer import DominoTile, PlayerPosition
+from get_best_move2 import DominoTile, PlayerPosition
 from dataclasses import dataclass
 import copy
 import random
@@ -13,14 +14,14 @@ PlayerTiles = namedtuple('PlayerTiles', ['N', 'E', 'W'])
 
 @dataclass(frozen=True)
 class Scenario:
-    N: Set[DominoTile]
-    E: Set[DominoTile]
-    W: Set[DominoTile]
+    N: set[DominoTile]
+    E: set[DominoTile]
+    W: set[DominoTile]
 
     def total_tiles(self) -> int:
         return len(self.N) + len(self.E) + len(self.W)    
 
-def normalize_tile(tile: Tuple[int, int]) -> str:
+def normalize_tile(tile: tuple[int, int]) -> str:
     return f"{min(tile)}-{max(tile)}"
 
 # def factorial(n: int) -> int:
@@ -431,7 +432,7 @@ def calculate_tile_probabilities(
     return probabilities    
 
 
-def no_duplicates_in_not_with(not_with: dict[str, set[DominoTile]])-> bool:
+def no_duplicates_in_not_with(not_with: dict[str, set[DominoTile]]) -> bool:
     N_set = not_with.get('N',set())
     E_set = not_with.get('E',set())
     W_set = not_with.get('W',set())
@@ -441,7 +442,7 @@ def no_duplicates_in_not_with(not_with: dict[str, set[DominoTile]])-> bool:
     return len(WE_set) == 0 and len(NE_set) == 0 and len(NW_set) == 0
 
 
-def print_probabilities(probabilities: Dict[str, Dict[str, float]]):
+def print_probabilities(probabilities: dict[str, dict[str, float]]) -> None:
     for tile, probs in probabilities.items():
         print(f"Tile {tile}:")
         for player, prob in probs.items():
@@ -560,7 +561,7 @@ def generate_sample(
     return sample    
 
 # Example usage
-def main():
+def main() -> None:
     remaining_tiles = [
         (3,6), (5,4), (2,5), (3,3), (1,3), (5,1), (1,1),
         (6,6), (2,6), (0,2), (6,5), (3,4), (2,3), (2,1),

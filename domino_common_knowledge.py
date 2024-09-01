@@ -1,20 +1,21 @@
-from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
-from typing import List, Tuple, Optional, Set, Dict
+# from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
+from get_best_move2 import GameState, PlayerPosition, DominoTile, setup_game_state, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
+# from typing import List, Tuple, Optional, Set, Dict
 import copy
 
 class CommonKnowledgeTracker:
-    def __init__(self):
+    def __init__(self) -> None:
         # self.common_knowledge_missing_suits: dict[PlayerPosition, set[int]] = {player: set() for player in PlayerPosition}
         self.common_knowledge_missing_suits: dict[PlayerPosition, set[int]] = {player: set() for player in range(4)}
         self.played_tiles: set[DominoTile] = set()
 
-    def update_pass(self, player: PlayerPosition, left_end: Optional[int], right_end: Optional[int]):
+    def update_pass(self, player: PlayerPosition, left_end: int|None, right_end: int|None) -> None:
         if left_end is not None:
             self.common_knowledge_missing_suits[player].add(left_end)
         if right_end is not None and right_end != left_end:
             self.common_knowledge_missing_suits[player].add(right_end)
 
-    def update_play(self, tile: DominoTile):        
+    def update_play(self, tile: DominoTile) -> None:
         self.played_tiles.add(tile)
         # self.played_tiles.add(DominoTile(min(tile.top, tile.bottom), max(tile.top, tile.bottom)))
         # print('self.played_tiles',self.played_tiles)
@@ -50,7 +51,7 @@ class CommonKnowledgeTracker:
 
         return new_tracker
 
-    def __str__(self):
+    def __str__(self) -> str:
         result = "Common Knowledge of players missing tiles:\n"
         for player, knowledge in self.common_knowledge_missing_suits.items():
             # result += f"{player.name}: {sorted(knowledge)}\n"
@@ -58,12 +59,12 @@ class CommonKnowledgeTracker:
         result += f"Played tiles: {sorted(str(tile) for tile in self.played_tiles)}"
         return result
 
-def normalize_tile(tile: DominoTile) -> Tuple[int, int]:
+def normalize_tile(tile: DominoTile) -> tuple[int, int]:
     return (min(tile.top, tile.bottom), max(tile.top, tile.bottom))
 
 def analyze_game_knowledge(initial_hands: list[list[DominoTile]],
                            starting_player: PlayerPosition,
-                           moves: list[Optional[tuple[DominoTile, bool]]]):
+                           moves: list[tuple[DominoTile, bool]|None]) -> None:
     state = setup_game_state(initial_hands, starting_player, [])
     knowledge_tracker = CommonKnowledgeTracker()
 
@@ -90,14 +91,14 @@ def analyze_game_knowledge(initial_hands: list[list[DominoTile]],
         print_game_state(state)
         print_common_knowledge(state, knowledge_tracker)
 
-def print_game_state(state: GameState):
+def print_game_state(state: GameState) -> None:
     # print(f"Current player: {state.current_player.name}")
     print(f"Current player: {PlayerPosition_names[state.current_player]}")
     print(f"Board ends: {state.left_end} | {state.right_end}")
     # for player in PlayerPosition:
     #     print(f"Player {player.name}'s hand: {state.player_hands[player.value]}")
 
-def print_common_knowledge(state: GameState, tracker: CommonKnowledgeTracker):
+def print_common_knowledge(state: GameState, tracker: CommonKnowledgeTracker) -> None:
     all_tiles = set(DominoTile(i, j) for i in range(7) for j in range(i, 7))
     unplayed_tiles = all_tiles - tracker.played_tiles
     # print('tracker.played_tiles',tracker.played_tiles)
@@ -119,12 +120,12 @@ def print_common_knowledge(state: GameState, tracker: CommonKnowledgeTracker):
 
 
 # Helper function to demonstrate the rotation
-def print_tracker_state(tracker: CommonKnowledgeTracker, title: str):
+def print_tracker_state(tracker: CommonKnowledgeTracker, title: str) -> None:
     print(f"\n{title}")
     print(tracker)
 
 
-def main():
+def main() -> None:
     initial_hands = [
         [(0,3), (6,4), (0,6), (0,0), (4,0), (4,1), (5,0)],
         [(3,6), (5,4), (2,5), (3,3), (1,3), (5,1), (1,1)],

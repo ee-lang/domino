@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class DominoGameState:
-	played_set: set  # set of played pieces
+	played_set: set[tuple[int, int]]  # set of played pieces
 	ends: tuple[int, int]  # (left_end, right_end). (-1, -1) if empty
 	next_player: int  # next player to move. range[0-3]
 	player_tile_counts: list[int]  # number of tiles for each player
