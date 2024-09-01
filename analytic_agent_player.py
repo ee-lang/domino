@@ -1,14 +1,16 @@
 from DominoPlayer import HumanPlayer, available_moves, stats
 from collections import defaultdict
 from DominoGameState import DominoGameState
-from domino_game_analyzer import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
+# from domino_game_analyzer import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
+# from get_best_move import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
+from get_best_move2 import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
 from domino_utils import history_to_domino_tiles_history
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
 from statistics import mean, median, stdev, mode
 import copy
 from tqdm import tqdm
-import get_best_move
+# import get_best_move
 
 class AnalyticAgentPlayer(HumanPlayer):
     def __init__(self, position = 0):
@@ -90,7 +92,8 @@ class AnalyticAgentPlayer(HumanPlayer):
                     inferred_knowledge[player].add(tile)
 
         final_remaining_tiles_without_south_tiles = remaining_tiles - final_south_hand 
-        inferred_knowledge_for_current_player = copy.deepcopy(inferred_knowledge)
+        # inferred_knowledge_for_current_player = copy.deepcopy(inferred_knowledge)
+        inferred_knowledge_for_current_player = inferred_knowledge
         for player, tiles in inferred_knowledge_for_current_player.items():
             inferred_knowledge_for_current_player[player] = tiles - final_south_hand
 
@@ -124,7 +127,8 @@ class AnalyticAgentPlayer(HumanPlayer):
 
             depth = 24
 
-            possible_moves = list_possible_moves(sample_state, include_stats=False)
+            # possible_moves = list_possible_moves(sample_state, include_stats=False)
+            possible_moves = list_possible_moves(sample_state)
 
             sample_cache: dict = {}
             for move in possible_moves:
@@ -135,7 +139,7 @@ class AnalyticAgentPlayer(HumanPlayer):
                     new_state = sample_state.play_hand(tile, is_left)
 
                 # _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
-                _, best_score, _ = get_best_move.get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
+                _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
 
                 move_scores[move[0]].append(best_score)
 

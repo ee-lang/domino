@@ -473,7 +473,9 @@ def generate_sample(
     assert len(door_tiles.intersection(remaining_tiles)) == 0, 'Tile in remaining_tiles and not with any player!'
 
     # Create local copies of not_with and known_with
-    local_not_with = copy.deepcopy(not_with)
+    # local_not_with = copy.deepcopy(not_with)
+    # Temp. fix as deepcopy is not working with the mypyc compiled DominoTile from get_best_move2
+    local_not_with = {k:set(t for t in v) for k,v in not_with.items()}
     local_known_with = {}
 
     if len(door_tiles) > 0:
