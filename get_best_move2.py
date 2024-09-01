@@ -1,7 +1,6 @@
 # from domino_game_analyzer import GameState, DominoTile, PlayerPosition, PlayerPosition_SOUTH, PlayerPosition_NORTH
 import math
 from dataclasses import dataclass
-from typing import FrozenSet
 
 type PlayerPosition = int
 
@@ -44,7 +43,7 @@ class DominoTile:
 
 @dataclass(frozen=True)
 class GameState:
-    player_hands: tuple[FrozenSet[DominoTile], ...]
+    player_hands: tuple[frozenset[DominoTile], ...]
     current_player: PlayerPosition
     left_end: int|None
     right_end: int|None
@@ -110,7 +109,7 @@ class GameState:
     # def is_game_over(self) -> bool:
     #     return GameStateCy.static_is_game_over(self.player_hands, self.consecutive_passes)
 
-    def get_current_hand(self) -> FrozenSet[DominoTile]:
+    def get_current_hand(self) -> frozenset[DominoTile]:
         # return self.player_hands[self.current_player.value]
         return self.player_hands[self.current_player]
 
