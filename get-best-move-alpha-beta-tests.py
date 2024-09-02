@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch
 # from get_best_move import get_best_move_alpha_beta, GameState, DominoTile, PlayerPosition_SOUTH, PlayerPosition_WEST, PlayerPosition_NORTH, PlayerPosition_EAST
-from get_best_move2 import get_best_move_alpha_beta, GameState, DominoTile, PlayerPosition_SOUTH, PlayerPosition_WEST, PlayerPosition_NORTH, PlayerPosition_EAST
+from domino_data_types import GameState, DominoTile, PlayerPosition_SOUTH, PlayerPosition_WEST, PlayerPosition_NORTH, PlayerPosition_EAST
+from get_best_move2 import get_best_move_alpha_beta
 # from get_best_move import PlayerPosition_SOUTH, PlayerPosition_WEST, PlayerPosition_NORTH, PlayerPosition_EAST
 # from get_best_move3 import get_best_move_alpha_beta, GameState, DominoTile
 

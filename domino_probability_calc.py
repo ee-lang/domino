@@ -3,16 +3,17 @@ from collections import namedtuple, defaultdict
 import itertools
 # from typing import List, Dict, Tuple, Set
 # from domino_game_analyzer import DominoTile, PlayerPosition
-from get_best_move2 import DominoTile, PlayerPosition
+# from get_best_move2 import DominoTile, PlayerPosition
+from domino_data_types import DominoTile, PlayerPosition, PlayerTiles
 from dataclasses import dataclass
 import copy
 import random
 
 # Scenario = namedtuple('Scenario', ['N', 'E', 'W'])
 # Scenario = namedtuple('Scenario', [('N', set[DominoTile]), ('E', set[DominoTile]), ('W', set[DominoTile])])
-PlayerTiles = namedtuple('PlayerTiles', ['N', 'E', 'W'])
 
-@dataclass(frozen=True)
+# @dataclass(frozen=True)
+@dataclass
 class Scenario:
     N: set[DominoTile]
     E: set[DominoTile]
@@ -463,7 +464,7 @@ def generate_sample(
     player_tiles: PlayerTiles
 ) -> dict[str, set[DominoTile]]:
 
-    assert len(remaining_tiles) == sum(e for e in player_tiles)
+    # assert len(remaining_tiles) == sum(e for e in player_tiles)
     assert 'S' not in not_with
     assert all(p in not_with for p in 'NEW')
     assert all(isinstance(not_with[p],set) for p in 'NEW')
@@ -560,6 +561,28 @@ def generate_sample(
 
     return sample    
 
+# import multiprocessing as mp
+# from functools import partial
+
+# def worker(_, remaining_tiles_converted, not_with_converted, player_tiles):
+#     return generate_sample(set(remaining_tiles_converted), not_with_converted, player_tiles)
+
+# def parallel_generate_samples(remaining_tiles_converted, not_with_converted, player_tiles, num_samples=1000, num_processes=None):
+#     if num_processes is None:
+#         num_processes = mp.cpu_count()  # Use all available CPU cores by default
+    
+#     with mp.Pool(processes=num_processes) as pool:
+#         partial_worker = partial(worker, remaining_tiles_converted=remaining_tiles_converted, 
+#                                  not_with_converted=not_with_converted, player_tiles=player_tiles)
+#         samples = pool.map(partial_worker, range(num_samples))
+#     return samples
+
+
+import concurrent.futures
+
+def generate_sample_parallel(remaining_tiles_converted: list[DominoTile], not_with_converted: dict[str, set[DominoTile]], player_tiles: PlayerTiles) -> dict[str, set[DominoTile]]:
+    return generate_sample(set(remaining_tiles_converted), not_with_converted, player_tiles)
+
 # Example usage
 def main() -> None:
     remaining_tiles = [
@@ -577,7 +600,9 @@ def main() -> None:
     
     not_with = {
         'E': {'0-1', '0-2'},
-        # 'W': {'3-6'}
+        'W': set(),
+        # 'W': {'3-6'},
+        'N': set()
     }
     # not_with = {
     #     'E': {'3-6'},
@@ -605,12 +630,32 @@ def main() -> None:
     #     break
     # print_probabilities(probabilities)
 
+    # List to store the results
+    results = []
+
     # Example usage of generate_sample
     for _ in range(1000):
         # sample = generate_sample(remaining_tiles_converted, not_with_converted, known_with, player_tiles)
         sample = generate_sample(set(remaining_tiles_converted), not_with_converted, player_tiles)
-        break
+        results.append(sample)
+        # break
+    
+    # samples = parallel_generate_samples(remaining_tiles_converted, not_with_converted, player_tiles)        
+
+
+    # Use ThreadPoolExecutor to parallelize the loop
+    # with concurrent.futures.ThreadPoolExecutor() as executor:
+    # with concurrent.futures.ProcessPoolExecutor() as executor:
+    #     # Submit tasks to the executor
+    #     futures = [executor.submit(generate_sample_parallel, remaining_tiles_converted, not_with_converted, player_tiles) for _ in range(1000)]
+        
+    #     # Collect the results as they complete
+    #     for future in concurrent.futures.as_completed(futures):
+    #         results.append(future.result())
+
+    print('len(results)',len(results))
     print("Generated sample:")
+    sample = results[-1]
     for player, tiles in sample.items():
         print(f"{player}: {tiles}")    
 

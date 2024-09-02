@@ -1,14 +1,15 @@
 from statistics import mode, mean, variance, stdev, median
 from collections import defaultdict, Counter
 # from domino_game_analyzer import get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
-from get_best_move2 import get_best_move_alpha_beta, list_possible_moves, GameState, DominoTile, PlayerPosition, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST, move
+from get_best_move2 import get_best_move_alpha_beta, list_possible_moves
+from domino_data_types import GameState, DominoTile, PlayerPosition, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST, move, PlayerTiles
 
 
 # from typing import Optional
 from collections import defaultdict
 # from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
-from domino_probability_calc import calculate_tile_probabilities, PlayerTiles, generate_sample
+from domino_probability_calc import calculate_tile_probabilities, generate_sample
 import copy
 
 

@@ -1,5 +1,7 @@
 # from domino_game_analyzer import GameState, PlayerPosition, DominoTile, setup_game_state, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
-from get_best_move2 import GameState, PlayerPosition, DominoTile, setup_game_state, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
+from domino_data_types import GameState, PlayerPosition, DominoTile, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
+# from get_best_move2 import GameState, PlayerPosition, DominoTile, setup_game_state, PlayerPosition_SOUTH, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
+from domino_utils import setup_game_state
 # from typing import List, Tuple, Optional, Set, Dict
 import copy
 
