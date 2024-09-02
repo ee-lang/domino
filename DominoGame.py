@@ -417,7 +417,8 @@ class DominoGame:
 def main():
 	from DominoPlayer import HumanPlayer, RandomPlayer
 	# from HumanPlayerWithAnalytics import HumanPlayerWithAnalytics
-	from analytic_agent_player import AnalyticAgentPlayer
+	# from analytic_agent_player import AnalyticAgentPlayer
+	from analytic_agent_player_parallel import AnalyticAgentPlayer
 
 	parser = argparse.ArgumentParser(description="Play a game of Dominoes")
 	parser.add_argument("variant", choices=["cuban", "venezuelan", "international"], help="Choose the domino variant to play")

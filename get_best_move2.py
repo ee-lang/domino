@@ -2,7 +2,7 @@
 import math
 from domino_data_types import GameState, DominoTile, move, PlayerPosition, PlayerPosition_SOUTH, PlayerPosition_NORTH
 
-def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, cache: dict[GameState, tuple[int, int]] = {}, best_path_flag: bool = True) -> tuple[tuple[DominoTile, bool]|None, float, list[tuple[PlayerPosition, tuple[DominoTile, bool]|None]]]:
+def min_max_alpha_beta(state: GameState, depth: int, alpha: float, beta: float, cache: dict[GameState, tuple[int, int]] = {}, best_path_flag: bool = True) -> tuple[move, float, list[tuple[PlayerPosition, move]]]:
     """
     Implement the min-max algorithm with alpha-beta pruning for the domino game, including the optimal path.
     
@@ -182,7 +182,7 @@ def count_game_stats(initial_state: GameState, print_stats: bool = True, cache: 
 
     return total_games, exp_score
 
-def list_possible_moves(state: GameState) -> list[tuple[tuple[DominoTile, bool]|None, int|None, float|None]]:
+def list_possible_moves(state: GameState) -> list[tuple[move, int|None, float|None]]:
     """
     List all possible moves for the current player in the given game state,
     optionally including the number of possible outcomes and expected score for each move.
