@@ -3,7 +3,8 @@ from collections import defaultdict
 from DominoGameState import DominoGameState
 # from domino_game_analyzer import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
 # from get_best_move import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
-from get_best_move2 import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names, move
+from domino_data_types import DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, move
+from get_best_move2 import get_best_move_alpha_beta, list_possible_moves
 from domino_utils import history_to_domino_tiles_history
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
