@@ -70,10 +70,11 @@ class HumanPlayer(DominoPlayer):
 				print('illegal input', e)
 
 	def end_round(self, scores: list[int], team: int) -> None:
-		self.missing_tiles = defaultdict(set)
-		print(f"HumanPlayer: Round ended. Scores - Team 1: {scores[0]}, Team 2: {scores[1]}")
-		print(f"HumanPlayer: Your team (Team {team + 1}) score: {scores[team]}")
-		print("HumanPlayer: Reset missing tiles for the next round.")
+		# self.missing_tiles = defaultdict(set)
+		# print(f"HumanPlayer: Round ended. Scores - Team 1: {scores[0]}, Team 2: {scores[1]}")
+		# print(f"HumanPlayer: Your team (Team {team + 1}) score: {scores[team]}")
+		# print("HumanPlayer: Reset missing tiles for the next round.")
+		pass
 
 	def get_unplayed_tiles(self, game_state: DominoGameState, player_hand: list[tuple[int, int]]) -> list[tuple[int,int]]:
 		max_pip = 9 if game_state.variant == "cuban" else 6
