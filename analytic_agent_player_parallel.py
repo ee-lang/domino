@@ -23,7 +23,8 @@ class AnalyticAgentPlayer(HumanPlayer):
         self.position = position
 
     def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]], verbose: bool = True) -> tuple[tuple[int,int], str] | None:
-        if self.first_game:
+        # if self.first_game:
+        if game_state.first_round:
             # Check if the move is forced
             if game_state.variant in {'international','venezuelan'} and len(game_state.history)==0:
                 self.first_game = False

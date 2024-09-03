@@ -8,3 +8,4 @@ class DominoGameState:
 	player_tile_counts: list[int]  # number of tiles for each player
 	history: list[tuple[int, tuple[tuple[int, int], str]|None]]  # list of (player, move)
 	variant: str  # "cuban" or "venezuelan" or "international"
+	first_round: bool = False
