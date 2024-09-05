@@ -1,9 +1,9 @@
 from statistics import mode, mean, variance, stdev, median
 from collections import defaultdict, Counter
 # from domino_game_analyzer import get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST
-from get_best_move2 import get_best_move_alpha_beta, list_possible_moves
+from get_best_move2 import get_best_move_alpha_beta
 from domino_data_types import GameState, DominoTile, PlayerPosition, PlayerPosition_SOUTH, next_player, PlayerPosition_names, PlayerPosition_NORTH, PlayerPosition_EAST, PlayerPosition_WEST, move, PlayerTiles
-
+from domino_utils import list_possible_moves
 
 # from typing import Optional
 from collections import defaultdict

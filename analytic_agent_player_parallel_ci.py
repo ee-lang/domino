@@ -1,11 +1,9 @@
 from DominoPlayer import HumanPlayer, available_moves, stats
 from collections import defaultdict
 from DominoGameState import DominoGameState
-# from domino_game_analyzer import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
-# from get_best_move import DominoTile, PlayerPosition, GameState, get_best_move_alpha_beta, list_possible_moves, PlayerPosition_SOUTH, PlayerPosition_names
 from domino_data_types import DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, move
-from get_best_move2 import get_best_move_alpha_beta, list_possible_moves
-from domino_utils import history_to_domino_tiles_history
+from get_best_move2 import get_best_move_alpha_beta
+from domino_utils import history_to_domino_tiles_history, list_possible_moves, list_possible_moves_from_hand
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
 from statistics import mean, median, stdev, mode
@@ -81,19 +79,19 @@ class AnalyticAgentPlayer(HumanPlayer):
             print(f"  {PlayerPosition_names[player]}: {count}")
         print("----------------------------\n")
 
-    def list_possible_moves_from_hand(self, hand: set[DominoTile], board_ends: tuple[int|None,int|None]) -> list[tuple[move, int | None, float | None]]:
-        possible_moves: list[tuple[move, int | None, float | None]] = []
-        for tile in hand:
-            if board_ends[0] is None and board_ends[1] is None:
-                possible_moves.append(((tile, True), None, None))  # Arbitrary choice of left end for first move
-            else:
-                if board_ends[0] in (tile.top, tile.bottom):
-                    possible_moves.append(((tile, True), None, None))
-                if board_ends[1] in (tile.top, tile.bottom):
-                    possible_moves.append(((tile, False), None, None))
-        if not possible_moves:
-            possible_moves.append((None, None, None))  # Represent a pass move
-        return possible_moves
+    # def list_possible_moves_from_hand(self, hand: set[DominoTile], board_ends: tuple[int|None,int|None]) -> list[tuple[move, int | None, float | None]]:
+    #     possible_moves: list[tuple[move, int | None, float | None]] = []
+    #     for tile in hand:
+    #         if board_ends[0] is None and board_ends[1] is None:
+    #             possible_moves.append(((tile, True), None, None))  # Arbitrary choice of left end for first move
+    #         else:
+    #             if board_ends[0] in (tile.top, tile.bottom):
+    #                 possible_moves.append(((tile, True), None, None))
+    #             if board_ends[1] in (tile.top, tile.bottom):
+    #                 possible_moves.append(((tile, False), None, None))
+    #     if not possible_moves:
+    #         possible_moves.append((None, None, None))  # Represent a pass move
+    #     return possible_moves
 
     def sample_and_search(self, final_south_hand: set[DominoTile], final_remaining_tiles_without_south_tiles: set[DominoTile], player_tiles_count: dict[PlayerPosition, int], inferred_knowledge_for_current_player: dict[PlayerPosition, set[DominoTile]], board_ends: tuple[int|None,int|None], possible_moves: list[tuple[tuple[DominoTile, bool] | None, int | None, float | None]]|None = None) -> list[tuple[move, float]]:
         sample = generate_sample_from_game_state(
@@ -169,7 +167,7 @@ class AnalyticAgentPlayer(HumanPlayer):
         batch_size = 8
         confidence_level = 0.95
         min_samples = 24
-        possible_moves = self.list_possible_moves_from_hand(final_south_hand, board_ends)
+        possible_moves = list_possible_moves_from_hand(final_south_hand, board_ends)
 
         with ProcessPoolExecutor() as executor:
             
