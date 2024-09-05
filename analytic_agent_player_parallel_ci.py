@@ -163,10 +163,10 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         # Use ProcessPoolExecutor to parallelize the execution
         total_samples = 0
-        max_samples = 1000
-        batch_size = 8
+        batch_size = 16
         confidence_level = 0.95
-        min_samples = 24
+        min_samples = 1 * batch_size
+        max_samples = 50 * batch_size
         possible_moves = list_possible_moves_from_hand(final_south_hand, board_ends)
 
         with ProcessPoolExecutor() as executor:
