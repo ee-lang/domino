@@ -7,7 +7,7 @@ from domino_utils import history_to_domino_tiles_history, list_possible_moves, l
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
 from statistics import mean, median, stdev, mode
-import copy, time
+import time, copy
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from scipy import stats as scipy_stats
@@ -161,7 +161,6 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         move_scores = defaultdict(list)
 
-        # Use ProcessPoolExecutor to parallelize the execution
         total_samples = 0
         batch_size = 16
         confidence_level = 0.95
@@ -173,6 +172,7 @@ class AnalyticAgentPlayer(HumanPlayer):
         start_time = time.time()
         time_limit = 30  # 30 seconds time limit
 
+        # Use ProcessPoolExecutor to parallelize the execution
         with ProcessPoolExecutor() as executor:
             
             while total_samples < max_samples:
@@ -229,7 +229,6 @@ class AnalyticAgentPlayer(HumanPlayer):
                 if time.time() - start_time > time_limit:
                     print(f"Time limit of {time_limit} seconds exceeded. Terminating early.")
                     break
-
 
         if not move_scores:
             if verbose:
