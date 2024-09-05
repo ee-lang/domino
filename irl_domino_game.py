@@ -1,7 +1,7 @@
 import argparse
 # from typing import List, Tuple, Optional
 from DominoGameState import DominoGameState
-from analytic_agent_player_parallel import AnalyticAgentPlayer
+from analytic_agent_player_parallel_ci import AnalyticAgentPlayer
 
 class IRLDominoGame:
     def __init__(self, variant: str = "international") -> None:

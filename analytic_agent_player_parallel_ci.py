@@ -12,6 +12,7 @@ from statistics import mean, median, stdev, mode
 import copy
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from scipy import stats as scipy_stats
 
 class AnalyticAgentPlayer(HumanPlayer):
     def __init__(self, position: int = 0) -> None:
@@ -51,7 +52,9 @@ class AnalyticAgentPlayer(HumanPlayer):
         if verbose:
             self.print_verbose_info(_player_hand, _unplayed_tiles, _knowledge_tracker, _player_tiles_count, _starting_player)
 
-        num_samples = 1000 if len(game_state.history) > 8 else 100 if len(game_state.history) > 4 else 25 if len(game_state.history) > 0 else 1000
+        # num_samples = 1000 if len(game_state.history) > 8 else 100 if len(game_state.history) > 4 else 25 if len(game_state.history) > 0 else 1000
+        num_samples = 24
+
         best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, num_samples, verbose=verbose)
 
         if best_move is None:
@@ -147,72 +150,59 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         move_scores = defaultdict(list)
 
-        # for _ in tqdm(range(num_samples), desc="Analyzing moves", leave=False):
-            # sample = generate_sample_from_game_state(
-            #     # PlayerPosition.SOUTH,
-            #     PlayerPosition_SOUTH,
-            #     final_south_hand,
-            #     final_remaining_tiles_without_south_tiles,
-            #     player_tiles_count,
-            #     inferred_knowledge_for_current_player
-            # )
-
-            # sample_hands = (
-            #     frozenset(final_south_hand),
-            #     frozenset(sample['E']),
-            #     frozenset(sample['N']),
-            #     frozenset(sample['W'])
-            # )
-
-            # sample_state = GameState(
-            #     player_hands=sample_hands,
-            #     # current_player=PlayerPosition.SOUTH,
-            #     current_player=PlayerPosition_SOUTH,
-            #     left_end=board_ends[0],
-            #     right_end=board_ends[1],
-            #     consecutive_passes=0
-            # )
-
-            # depth = 24
-
-            # # possible_moves = list_possible_moves(sample_state, include_stats=False)
-            # possible_moves = list_possible_moves(sample_state)
-
-            # sample_cache: dict[GameState, tuple[int, int]] = {}
-            # for move in possible_moves:
-            #     if move[0] is None:
-            #         new_state = sample_state.pass_turn()
-            #     else:
-            #         tile, is_left = move[0]
-            #         new_state = sample_state.play_hand(tile, is_left)
-
-            #     # _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
-            #     _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
-
-                # move_scores[move[0]].append(best_score)
-
-            # move, best_score = self.sample_and_search(final_south_hand, final_remaining_tiles_without_south_tiles, player_tiles_count, inferred_knowledge_for_current_player, board_ends)
-            # sample_scores = self.sample_and_search(final_south_hand, final_remaining_tiles_without_south_tiles, player_tiles_count, inferred_knowledge_for_current_player, board_ends)
-            # for move, score in sample_scores:
-            #     move_scores[move].append(score)
-
         # Use ProcessPoolExecutor to parallelize the execution
+        total_samples = 0
+        max_samples = 100
+        batch_size = 8
+        confidence_level = 0.95
+        min_samples = 24
+        # if len(possible_moves) <= 1:
+        #     max_samples = min_samples
+
         with ProcessPoolExecutor() as executor:
-            futures = [
-                executor.submit(
-                    self.sample_and_search,
-                    final_south_hand,
-                    final_remaining_tiles_without_south_tiles,
-                    player_tiles_count,
-                    inferred_knowledge_for_current_player,
-                    board_ends
-                )
-                for _ in range(num_samples)
-            ]
-            for future in tqdm(as_completed(futures), total=num_samples, desc="Analyzing moves", leave=False):
-                sample_scores = future.result()
-                for move, score in sample_scores:
-                    move_scores[move].append(score)
+            
+            while total_samples < max_samples:
+                futures = [
+                    executor.submit(
+                        self.sample_and_search,
+                        final_south_hand,
+                        final_remaining_tiles_without_south_tiles,
+                        player_tiles_count,
+                        inferred_knowledge_for_current_player,
+                        board_ends
+                    )
+                    for _ in range(min(batch_size, max_samples - total_samples))
+                ]
+                for future in tqdm(as_completed(futures), total=len(futures), desc=f"Analyzing moves (total: {total_samples})", leave=False):
+                    sample_scores = future.result()
+                    for move, score in sample_scores:
+                        move_scores[move].append(score)
+                
+                total_samples += len(futures)
+
+                # Calculate confidence intervals
+                move_stats = {}
+                for move, scores in move_scores.items():
+                    n = len(scores)
+                    mean_score = mean(scores)
+                    std_dev = stdev(scores) if n > 1 else 0
+                    ci = scipy_stats.t.interval(confidence=confidence_level, df=n-1, loc=mean_score, scale=std_dev/n**0.5)
+                    move_stats[move] = {"mean": mean_score, "ci_lower": ci[0], "ci_upper": ci[1]}
+
+                if not move_scores or len(move_scores) == 1:
+                    # If there's only one move or a pass, we're done after min_samples
+                    max_samples = min_samples
+                    continue
+                
+                # Print statistics after each batch
+                if verbose:
+                    self.print_move_statistics(move_scores, total_samples)
+
+                # Check if we can determine the best move
+                sorted_moves = sorted(move_stats.items(), key=lambda x: x[1]["mean"], reverse=True)
+                best_move = sorted_moves[0][0]
+                if len(sorted_moves) > 1 and all(move_stats[best_move]["ci_lower"] > stats["ci_upper"] for move, stats in sorted_moves[1:]):
+                    break
 
         if not move_scores:
             if verbose:
@@ -220,7 +210,7 @@ class AnalyticAgentPlayer(HumanPlayer):
             return None
 
         if verbose:
-            self.print_move_statistics(move_scores, num_samples)
+            self.print_move_statistics(move_scores, total_samples)
 
         best_move = max(move_scores, key=lambda x: mean(move_scores[x]))
         return best_move
@@ -231,31 +221,33 @@ class AnalyticAgentPlayer(HumanPlayer):
         # Calculate statistics for each move
         move_statistics = {}
         for move, scores in move_scores.items():
-            if len(scores) > 1:
+            if len(scores) > 1:                
+                n = len(scores)
+                mean_score = mean(scores)
+                std_dev = stdev(scores)
+                confidence_interval = scipy_stats.t.interval(confidence=0.95, df=n-1, loc=mean_score, scale=std_dev/n**0.5)
                 move_statistics[move] = {
-                    "count": len(scores),
-                    "mean": mean(scores),
-                    "std_dev": stdev(scores),
+                    "count": n,
+                    "mean": mean_score,
+                    "std_dev": std_dev,
                     "median": median(scores),
                     "mode": mode(scores),
                     "min": min(scores),
-                    "max": max(scores)
+                    "max": max(scores),
+                    "ci_lower": confidence_interval[0],
+                    "ci_upper": confidence_interval[1]
                 }
             else:
                 move_statistics[move] = {
                     "count": len(scores),
-                    # "mean": scores[0] if scores else None,
-                    # "std_dev": 0,
-                    # "median": scores[0] if scores else None,
-                    # "mode": scores[0] if scores else None,
-                    # "min": scores[0] if scores else None,
-                    # "max": scores[0] if scores else None
                     "mean": scores[0],
                     "std_dev": 0,
                     "median": scores[0],
                     "mode": scores[0],
                     "min": scores[0],
-                    "max": scores[0]
+                    "max": scores[0],
+                    "ci_lower": scores[0],
+                    "ci_upper": scores[0]
                 }
 
         # Sort moves by their mean score, descending order
@@ -278,6 +270,7 @@ class AnalyticAgentPlayer(HumanPlayer):
             print(f"  Mode Score: {stats['mode']:.4f}")
             print(f"  Min Score: {stats['min']:.4f}")
             print(f"  Max Score: {stats['max']:.4f}")
+            print(f"  95% Confidence Interval (mean): ({stats['ci_lower']:.4f}, {stats['ci_upper']:.4f})")
 
         # Identify the best move based on the highest mean score
         best_move = max(move_statistics, key=lambda x: move_statistics[x]["mean"])
