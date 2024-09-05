@@ -81,9 +81,22 @@ class AnalyticAgentPlayer(HumanPlayer):
             print(f"  {PlayerPosition_names[player]}: {count}")
         print("----------------------------\n")
 
-    def sample_and_search(self, final_south_hand: set[DominoTile], final_remaining_tiles_without_south_tiles: set[DominoTile], player_tiles_count: dict[PlayerPosition, int], inferred_knowledge_for_current_player: dict[PlayerPosition, set[DominoTile]], board_ends: tuple[int|None,int|None]) -> list[tuple[move, float]]:
+    def list_possible_moves_from_hand(self, hand: set[DominoTile], board_ends: tuple[int|None,int|None]) -> list[tuple[move, int | None, float | None]]:
+        possible_moves: list[tuple[move, int | None, float | None]] = []
+        for tile in hand:
+            if board_ends[0] is None and board_ends[1] is None:
+                possible_moves.append(((tile, True), None, None))  # Arbitrary choice of left end for first move
+            else:
+                if board_ends[0] in (tile.top, tile.bottom):
+                    possible_moves.append(((tile, True), None, None))
+                if board_ends[1] in (tile.top, tile.bottom):
+                    possible_moves.append(((tile, False), None, None))
+        if not possible_moves:
+            possible_moves.append((None, None, None))  # Represent a pass move
+        return possible_moves
+
+    def sample_and_search(self, final_south_hand: set[DominoTile], final_remaining_tiles_without_south_tiles: set[DominoTile], player_tiles_count: dict[PlayerPosition, int], inferred_knowledge_for_current_player: dict[PlayerPosition, set[DominoTile]], board_ends: tuple[int|None,int|None], possible_moves: list[tuple[tuple[DominoTile, bool] | None, int | None, float | None]]|None = None) -> list[tuple[move, float]]:
         sample = generate_sample_from_game_state(
-            # PlayerPosition.SOUTH,
             PlayerPosition_SOUTH,
             final_south_hand,
             final_remaining_tiles_without_south_tiles,
@@ -100,7 +113,6 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         sample_state = GameState(
             player_hands=sample_hands,
-            # current_player=PlayerPosition.SOUTH,
             current_player=PlayerPosition_SOUTH,
             left_end=board_ends[0],
             right_end=board_ends[1],
@@ -110,7 +122,8 @@ class AnalyticAgentPlayer(HumanPlayer):
         depth = 24
 
         # possible_moves = list_possible_moves(sample_state, include_stats=False)
-        possible_moves = list_possible_moves(sample_state)
+        if possible_moves is None:
+            possible_moves = list_possible_moves(sample_state)
         move_scores: list[tuple[move, float]] = []
 
         sample_cache: dict[GameState, tuple[int, int]] = {}
@@ -152,12 +165,11 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         # Use ProcessPoolExecutor to parallelize the execution
         total_samples = 0
-        max_samples = 100
+        max_samples = 1000
         batch_size = 8
         confidence_level = 0.95
         min_samples = 24
-        # if len(possible_moves) <= 1:
-        #     max_samples = min_samples
+        possible_moves = self.list_possible_moves_from_hand(final_south_hand, board_ends)
 
         with ProcessPoolExecutor() as executor:
             
@@ -169,7 +181,8 @@ class AnalyticAgentPlayer(HumanPlayer):
                         final_remaining_tiles_without_south_tiles,
                         player_tiles_count,
                         inferred_knowledge_for_current_player,
-                        board_ends
+                        board_ends,
+                        possible_moves
                     )
                     for _ in range(min(batch_size, max_samples - total_samples))
                 ]
@@ -198,10 +211,16 @@ class AnalyticAgentPlayer(HumanPlayer):
                 if verbose:
                     self.print_move_statistics(move_scores, total_samples)
 
-                # Check if we can determine the best move
+                # Check if we can determine the best move and update possible_moves
                 sorted_moves = sorted(move_stats.items(), key=lambda x: x[1]["mean"], reverse=True)
                 best_move = sorted_moves[0][0]
-                if len(sorted_moves) > 1 and all(move_stats[best_move]["ci_lower"] > stats["ci_upper"] for move, stats in sorted_moves[1:]):
+                best_move_stats = move_stats[best_move]
+                
+                # Keep only moves with overlapping confidence intervals
+                possible_moves = [(move, False, False) for move, stats in sorted_moves if stats["ci_upper"] >= best_move_stats["ci_lower"]]
+                
+                # If only one move remains, we're done
+                if len(possible_moves) == 1:
                     break
 
         if not move_scores:
