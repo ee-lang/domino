@@ -93,7 +93,7 @@ def list_possible_moves_from_hand(hand: set[DominoTile], board_ends: tuple[int|N
         else:
             if board_ends[0] in (tile.top, tile.bottom):
                 possible_moves.append(((tile, True), None, None))
-            if board_ends[1] in (tile.top, tile.bottom):
+            if board_ends[0]!= board_ends[1] and board_ends[1] in (tile.top, tile.bottom):
                 possible_moves.append(((tile, False), None, None))
     if not possible_moves:
         possible_moves.append((None, None, None))  # Represent a pass move

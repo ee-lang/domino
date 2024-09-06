@@ -26,7 +26,7 @@ class IRLDominoGame:
         # Input the agent's hand (Player 0)
         print("Enter your hand (comma-separated, e.g., '1-2,3-4,5-6'): ")
         hand_input = input().split(',')
-        self.player_hands[0] = [tuple(map(int, tile.split('-'))) for tile in hand_input]
+        self.player_hands[0] = [tuple(sorted(map(int, tile.split('-')))) for tile in hand_input]
         
         # Initialize game state
         self.game_state = DominoGameState(
@@ -68,7 +68,8 @@ class IRLDominoGame:
             return None
         try:
             tile, side = move_input.split(',')
-            piece = tuple(map(int, tile.split('-')))
+            values = list(map(int, tile.split('-')))
+            piece = (min(values), max(values))
             return (piece, side.strip().lower())
         except ValueError:
             print("Invalid move format. Please try again.")
@@ -106,6 +107,8 @@ class IRLDominoGame:
         
         if player == 0 and move is not None:
             self.player_hands[0].remove(move[0])
+        print(f"Player {player} played {move}")
+        print(f"Player {player} hand: {self.player_hands[player]}")
         
         print(f"Move applied. New board state: {new_ends}")
         print(f"Tiles remaining per player: {new_tile_counts}")
