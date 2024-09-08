@@ -51,9 +51,9 @@ class AnalyticAgentPlayer(HumanPlayer):
             self.print_verbose_info(_player_hand, _unplayed_tiles, _knowledge_tracker, _player_tiles_count, _starting_player)
 
         # num_samples = 1000 if len(game_state.history) > 8 else 100 if len(game_state.history) > 4 else 25 if len(game_state.history) > 0 else 1000
-        num_samples = 24
+        # num_samples = 24
 
-        best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, num_samples, verbose=verbose)
+        best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, verbose=verbose)
 
         if best_move is None:
             return None
@@ -140,7 +140,7 @@ class AnalyticAgentPlayer(HumanPlayer):
 
     def get_best_move(self, final_south_hand: set[DominoTile], remaining_tiles: set[DominoTile], 
                       knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], 
-                      board_ends: tuple[int|None,int|None], num_samples: int = 1000, verbose: bool = False) -> tuple[DominoTile, bool] | None:
+                      board_ends: tuple[int|None,int|None], verbose: bool = False) -> tuple[DominoTile, bool] | None:
 
         inferred_knowledge: dict[PlayerPosition, set[DominoTile]] = {
             # player: set() for player in PlayerPosition
@@ -165,13 +165,13 @@ class AnalyticAgentPlayer(HumanPlayer):
         total_samples = 0
         batch_size = 16
         confidence_level = 0.95
-        min_samples = 30 * batch_size
-        max_samples = 100 * batch_size
+        min_samples = 3 * batch_size
+        max_samples = 75 * batch_size
         possible_moves = list_possible_moves_from_hand(final_south_hand, board_ends)
 
         # Add timer and time limit
         start_time = time.time()
-        time_limit = 120  # 30 seconds time limit
+        time_limit = 60  # 30 seconds time limit
 
         with ProcessPoolExecutor() as executor:
             

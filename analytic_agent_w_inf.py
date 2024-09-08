@@ -17,20 +17,24 @@ class AnalyticAgentPlayer(HumanPlayer):
         super().__init__()
         self.move_history: list[tuple[int, tuple[tuple[int, int], str]|None]] = []
         self.tile_count_history: dict[int, list[int]] = defaultdict(list)
-        # self.round_scores: list[int] = []
-        self.first_game = True
         self.position = position
+        self.unlikely_tiles: dict[int, set[DominoTile]] = {i: set() for i in range(4)}
 
     def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]], verbose: bool = True) -> tuple[tuple[int,int], str] | None:
         # if self.first_game:
         if game_state.first_round:
             # Check if the move is forced
             if game_state.variant in {'international','venezuelan'} and len(game_state.history)==0:
-                self.first_game = False
                 print('Playing mandatory (6,6) opening on the first game.')
                 return (6,6),'l'
-            else:
-                self.first_game = False
+
+        if len(game_state.history) > 1:  # Ensure there are at least two moves in history
+            # for i in range(len(game_state.history) - 1, max(0, len(game_state.history) - 4), -1):  # Process the last three moves in reverse order
+            for i in range(3):  # Process the last three moves in reverse order
+                last_move = game_state.history[-(i+1)]  # Access moves in reverse order
+                player_pos_from_current_player_pov = (last_move[0] - self.position) % 4
+                retro_game_state = game_state.rollback(i)
+                self.update_unlikely_tiles(retro_game_state, player_pos_from_current_player_pov, actual_move=last_move, tiles_not_in_players_hand=player_hand)
 
         unplayed_tiles = self.get_unplayed_tiles(game_state, player_hand)
         _unplayed_tiles = DominoTile.loi_to_domino_tiles(unplayed_tiles)
@@ -62,6 +66,9 @@ class AnalyticAgentPlayer(HumanPlayer):
             side = 'l' if is_left else 'r'
             return (tile.top, tile.bottom), side
 
+    def update_unlikely_tiles(self, game_state: DominoGameState, player_from_south_pov: int, actual_move: tuple[tuple[int,int],str], tiles_not_in_players_hand: list[tuple[int,int]]) -> None:
+        pass
+
     def print_verbose_info(self, player_hand: list[DominoTile], unplayed_tiles: list[DominoTile], knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], starting_player: PlayerPosition) -> None:
         print("\n--- Verbose Information ---")
         # print(f"Starting player: {starting_player.name}")
@@ -78,20 +85,6 @@ class AnalyticAgentPlayer(HumanPlayer):
             # print(f"  {player.name}: {count}")
             print(f"  {PlayerPosition_names[player]}: {count}")
         print("----------------------------\n")
-
-    # def list_possible_moves_from_hand(self, hand: set[DominoTile], board_ends: tuple[int|None,int|None]) -> list[tuple[move, int | None, float | None]]:
-    #     possible_moves: list[tuple[move, int | None, float | None]] = []
-    #     for tile in hand:
-    #         if board_ends[0] is None and board_ends[1] is None:
-    #             possible_moves.append(((tile, True), None, None))  # Arbitrary choice of left end for first move
-    #         else:
-    #             if board_ends[0] in (tile.top, tile.bottom):
-    #                 possible_moves.append(((tile, True), None, None))
-    #             if board_ends[1] in (tile.top, tile.bottom):
-    #                 possible_moves.append(((tile, False), None, None))
-    #     if not possible_moves:
-    #         possible_moves.append((None, None, None))  # Represent a pass move
-    #     return possible_moves
 
     def sample_and_search(self, final_south_hand: set[DominoTile], final_remaining_tiles_without_south_tiles: set[DominoTile], player_tiles_count: dict[PlayerPosition, int], inferred_knowledge_for_current_player: dict[PlayerPosition, set[DominoTile]], board_ends: tuple[int|None,int|None], possible_moves: list[tuple[tuple[DominoTile, bool] | None, int | None, float | None]]|None = None) -> list[tuple[move, float]]:
         sample = generate_sample_from_game_state(
