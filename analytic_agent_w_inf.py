@@ -1,7 +1,7 @@
 from DominoPlayer import HumanPlayer, available_moves, stats
 from collections import defaultdict
 from DominoGameState import DominoGameState
-from domino_data_types import DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, move
+from domino_data_types import DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, PlayerTiles, move
 from get_best_move2 import get_best_move_alpha_beta
 from domino_utils import history_to_domino_tiles_history, list_possible_moves, list_possible_moves_from_hand
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
@@ -55,9 +55,9 @@ class AnalyticAgentPlayer(HumanPlayer):
             self.print_verbose_info(_player_hand, _unplayed_tiles, _knowledge_tracker, _player_tiles_count, _starting_player)
 
         # num_samples = 1000 if len(game_state.history) > 8 else 100 if len(game_state.history) > 4 else 25 if len(game_state.history) > 0 else 1000
-        num_samples = 24
+        # num_samples = 24
 
-        best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, num_samples, verbose=verbose)
+        best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, verbose=verbose)
 
         if best_move is None:
             return None
@@ -67,7 +67,119 @@ class AnalyticAgentPlayer(HumanPlayer):
             return (tile.top, tile.bottom), side
 
     def update_unlikely_tiles(self, game_state: DominoGameState, player_from_south_pov: int, actual_move: tuple[tuple[int,int],str], tiles_not_in_players_hand: list[tuple[int,int]]) -> None:
+        unplayed_tiles = self.get_unplayed_tiles(game_state, [])
+        _unplayed_tiles = DominoTile.loi_to_domino_tiles(unplayed_tiles)
+        _tiles_not_in_players_hand = DominoTile.loi_to_domino_tiles(tiles_not_in_players_hand)
+        # Generate all possible tiles that could have been played (except for the first move of the game)
+        # The tile can't be in the tiles_not_in_players_hand or among the played tiles
+        possible_tiles = self.generate_possible_tiles(game_state.ends, _unplayed_tiles, _tiles_not_in_players_hand)
+        # Filter out the tiles that are not in the player's hand (i.e. suits where the player passed)
         pass
+
+        # For each possible tile that theoretically could have been played
+        for tile in possible_tiles:
+            # Sample a hand for every player (including south)
+            # Constraint: south cannot have tiles from tiles_not_in_players_hand
+            # Constraint: south has to have the actual move
+            # Constraint: south has to have the tile we are comparing against
+            pass
+            # sample = generate_sample_from_game_state_from_another_perspective(...)
+
+        # Calculate statistics for the samples
+        # If a tile has significantly better expected score than the actual , add it to the unlikely_tiles set for the player
+
+        pass
+    
+    def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_with_tiles: dict[PlayerPosition, list[DominoTile]], player_tiles: PlayerTiles) -> dict[PlayerPosition, dict[DominoTile, float]]:
+        """
+        Calculate the probability of each tile being with each player from another player's perspective.
+
+        Args:
+            unplayed_tiles (list[DominoTile]): List of tiles that are not yet played.
+            not_with_tiles (dict[PlayerPosition, list[DominoTile]]): Dictionary of tiles known not to be with each player.
+            player_tiles (PlayerTiles): Number of tiles each player has.
+
+        Returns:
+            dict[PlayerPosition, dict[DominoTile, float]]: Probability of each tile being with each player.
+        """
+        from collections import defaultdict
+
+        probabilities = {player: defaultdict(float) for player in PlayerPosition}
+
+        # Step 1: Determine possible tiles for each player
+        possible_tiles = {}
+        for player in PlayerPosition:
+            # Exclude tiles that are known not to be with the player
+            possible = set(unplayed_tiles) - set(not_with_tiles.get(player, []))
+            possible_tiles[player] = possible
+
+        # Step 2: Calculate total number of possible tile assignments
+        total_possible_assignments = sum(len(tiles) for tiles in possible_tiles.values())
+
+        if total_possible_assignments == 0:
+            # If no possible assignments, return zero probabilities
+            return probabilities
+
+        # Step 3: Assign initial probabilities based on the proportion of tiles each player can have
+        for player in PlayerPosition:
+            num_tiles = player_tiles[player]
+            num_possible = len(possible_tiles[player])
+            if num_possible == 0 or num_tiles == 0:
+                continue
+            probability_per_tile = num_tiles / num_possible
+            for tile in possible_tiles[player]:
+                probabilities[player][tile] += probability_per_tile
+
+        # Step 4: Normalize probabilities so that the sum of probabilities for each tile across all players does not exceed 1
+        for tile in unplayed_tiles:
+            total_prob = sum(probabilities[player][tile] for player in PlayerPosition)
+            if total_prob > 1.0:
+                for player in PlayerPosition:
+                    if tile in probabilities[player]:
+                        probabilities[player][tile] /= total_prob
+
+        # Step 5: Ensure that probabilities are between 0 and 1
+        for player in PlayerPosition:
+            for tile in probabilities[player]:
+                probabilities[player][tile] = min(probabilities[player][tile], 1.0)
+
+        return probabilities
+
+    def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: list[DominoTile], known_with_tiles: dict[PlayerPosition, list[DominoTile]], not_with_tiles: dict[PlayerPosition, list[DominoTile]], player_tiles: PlayerTiles)-> dict[str, list[DominoTile]]:
+        sample: dict[str, list[DominoTile]] = {player: [] for player in PlayerPosition}
+
+        for player in range(4):
+            sample[player] = known_with_tiles.get(player, [])
+
+        assert any(len(sample[player]) > player_tiles[player] for player in PlayerPosition), 'Sample cannot have more tiles than the player has'
+
+        known_tiles_set = set()  # Create a set to hold all known tiles
+        for tiles in known_with_tiles.values():
+            known_tiles_set.update(tiles)  # Add known tiles to the set
+
+        local_unplayed_tiles = [tile for tile in unplayed_tiles if tile not in known_tiles_set]  # Filter unplayed tiles
+
+        tile_probabilities = probability_from_another_perspective(local_unplayed_tiles, not_with_tiles, player_tiles)
+
+        # TODO: Use tile_probabilities to generate the sample
+
+        return sample
+
+    def generate_possible_tiles(self, board_ends: tuple[int,int], unplayed_tiles: set[DominoTile], tiles_not_possible: set[DominoTile]) -> set[DominoTile]:
+        possible_tiles = set()
+               
+        if board_ends != (-1, -1):  # Except first move of the game
+            left_end, right_end = board_ends
+            for tile in unplayed_tiles:
+                if tile.top == left_end or tile.bottom == left_end:
+                    possible_tiles.add(tile)
+                if tile.top == right_end or tile.bottom == right_end:
+                    possible_tiles.add(tile)
+        
+        # Remove played tiles and tiles not in player's hand
+        possible_tiles = possible_tiles - tiles_not_possible
+        
+        return possible_tiles
 
     def print_verbose_info(self, player_hand: list[DominoTile], unplayed_tiles: list[DominoTile], knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], starting_player: PlayerPosition) -> None:
         print("\n--- Verbose Information ---")
@@ -110,9 +222,8 @@ class AnalyticAgentPlayer(HumanPlayer):
             consecutive_passes=0
         )
 
-        depth = 24
+        depth = 99 # Set it high enough, that it is never reached in practice, so the score is an integer
 
-        # possible_moves = list_possible_moves(sample_state, include_stats=False)
         if possible_moves is None:
             possible_moves = list_possible_moves(sample_state)
         move_scores: list[tuple[move, float]] = []
@@ -125,15 +236,13 @@ class AnalyticAgentPlayer(HumanPlayer):
                 tile, is_left = move[0]
                 new_state = sample_state.play_hand(tile, is_left)
 
-            # _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
             _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
             move_scores.append((move[0], best_score))
-        # return move[0], best_score
         return move_scores
 
     def get_best_move(self, final_south_hand: set[DominoTile], remaining_tiles: set[DominoTile], 
                       knowledge_tracker: CommonKnowledgeTracker, player_tiles_count: dict[PlayerPosition, int], 
-                      board_ends: tuple[int|None,int|None], num_samples: int = 1000, verbose: bool = False) -> tuple[DominoTile, bool] | None:
+                      board_ends: tuple[int|None,int|None], verbose: bool = False) -> tuple[DominoTile, bool] | None:
 
         inferred_knowledge: dict[PlayerPosition, set[DominoTile]] = {
             # player: set() for player in PlayerPosition
@@ -158,13 +267,13 @@ class AnalyticAgentPlayer(HumanPlayer):
         total_samples = 0
         batch_size = 16
         confidence_level = 0.95
-        min_samples = 30 * batch_size
-        max_samples = 100 * batch_size
+        min_samples = 3 * batch_size
+        max_samples = 75 * batch_size
         possible_moves = list_possible_moves_from_hand(final_south_hand, board_ends)
 
         # Add timer and time limit
         start_time = time.time()
-        time_limit = 120  # 30 seconds time limit
+        time_limit = 60  # 30 seconds time limit
 
         with ProcessPoolExecutor() as executor:
             

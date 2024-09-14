@@ -14,7 +14,12 @@ def next_player(pos: PlayerPosition)-> PlayerPosition:
 
 PlayerPosition_names = ['SOUTH', 'EAST', 'NORTH', 'WEST']
 
+PLAYERS = ['S', 'E', 'N', 'W']
+PLAYERS_INDEX = {'S': 0, 'E': 1, 'N': 2, 'W': 3}
+
 PlayerTiles = namedtuple('PlayerTiles', ['N', 'E', 'W'])
+
+PlayerTiles4 = namedtuple('PlayerTiles4', ['S', 'N', 'E', 'W'])
 
 # @dataclass(frozen=True)
 @dataclass
