@@ -2,7 +2,8 @@ from DominoPlayer import HumanPlayer, available_moves, stats
 from collections import defaultdict
 from DominoGameState import DominoGameState
 from domino_data_types import DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, move
-from get_best_move2 import get_best_move_alpha_beta
+# from get_best_move2 import get_best_move_alpha_beta
+from get_best_move_venezuelan import get_best_move_alpha_beta
 from domino_utils import history_to_domino_tiles_history, list_possible_moves, list_possible_moves_from_hand
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
