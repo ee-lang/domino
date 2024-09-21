@@ -50,9 +50,6 @@ class AnalyticAgentPlayer(HumanPlayer):
         if verbose:
             self.print_verbose_info(_player_hand, _unplayed_tiles, _knowledge_tracker, _player_tiles_count, _starting_player)
 
-        # num_samples = 1000 if len(game_state.history) > 8 else 100 if len(game_state.history) > 4 else 25 if len(game_state.history) > 0 else 1000
-        # num_samples = 24
-
         best_move = self.get_best_move(set(_player_hand), _remaining_tiles, _knowledge_tracker, _player_tiles_count, _board_ends, verbose=verbose)
 
         if best_move is None:
@@ -79,19 +76,6 @@ class AnalyticAgentPlayer(HumanPlayer):
             print(f"  {PlayerPosition_names[player]}: {count}")
         print("----------------------------\n")
 
-    # def list_possible_moves_from_hand(self, hand: set[DominoTile], board_ends: tuple[int|None,int|None]) -> list[tuple[move, int | None, float | None]]:
-    #     possible_moves: list[tuple[move, int | None, float | None]] = []
-    #     for tile in hand:
-    #         if board_ends[0] is None and board_ends[1] is None:
-    #             possible_moves.append(((tile, True), None, None))  # Arbitrary choice of left end for first move
-    #         else:
-    #             if board_ends[0] in (tile.top, tile.bottom):
-    #                 possible_moves.append(((tile, True), None, None))
-    #             if board_ends[1] in (tile.top, tile.bottom):
-    #                 possible_moves.append(((tile, False), None, None))
-    #     if not possible_moves:
-    #         possible_moves.append((None, None, None))  # Represent a pass move
-    #     return possible_moves
 
     def sample_and_search(self, final_south_hand: set[DominoTile], final_remaining_tiles_without_south_tiles: set[DominoTile], player_tiles_count: dict[PlayerPosition, int], inferred_knowledge_for_current_player: dict[PlayerPosition, set[DominoTile]], board_ends: tuple[int|None,int|None], possible_moves: list[tuple[tuple[DominoTile, bool] | None, int | None, float | None]]|None = None) -> list[tuple[move, float]]:
         sample = generate_sample_from_game_state(
@@ -117,9 +101,8 @@ class AnalyticAgentPlayer(HumanPlayer):
             consecutive_passes=0
         )
 
-        depth = 24
+        depth = 2 * (28 + 4)
 
-        # possible_moves = list_possible_moves(sample_state, include_stats=False)
         if possible_moves is None:
             possible_moves = list_possible_moves(sample_state)
         move_scores: list[tuple[move, float]] = []
@@ -134,6 +117,7 @@ class AnalyticAgentPlayer(HumanPlayer):
 
             # _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
             _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
+            assert best_score % 1 == 0.0, f"Score is not an integer: {best_score}, state: {new_state}"
             move_scores.append((move[0], best_score))
         # return move[0], best_score
         return move_scores
@@ -163,15 +147,15 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         # Use ProcessPoolExecutor to parallelize the execution
         total_samples = 0
-        batch_size = 16
+        batch_size = 24
         confidence_level = 0.95
-        min_samples = 3 * batch_size
+        min_samples = 10 * batch_size
         max_samples = 75 * batch_size
         possible_moves = list_possible_moves_from_hand(final_south_hand, board_ends)
 
         # Add timer and time limit
         start_time = time.time()
-        time_limit = 60  # 30 seconds time limit
+        time_limit = 90  # 30 seconds time limit
 
         with ProcessPoolExecutor() as executor:
             
@@ -191,6 +175,7 @@ class AnalyticAgentPlayer(HumanPlayer):
                 for future in tqdm(as_completed(futures), total=len(futures), desc=f"Analyzing moves (total: {total_samples})", leave=False):
                     sample_scores = future.result()
                     for move, score in sample_scores:
+                        assert score % 1 == 0.0, f"Score is not an integer: {score}"
                         move_scores[move].append(score)
                 
                 total_samples += len(futures)
@@ -325,14 +310,8 @@ class AnalyticAgentPlayer(HumanPlayer):
         for i, count in enumerate(game_state.player_tile_counts):
             self.tile_count_history[i].append(count)
 
-    # def record_round_score(self, scores: list[int]) -> None:
-    #     self.round_scores.append(scores)
-
     def get_move_history(self) -> list[tuple[int, tuple[tuple[int, int], str]|None]]:
         return self.move_history
 
     def get_tile_count_history(self) -> dict[int, list[int]]:
         return dict(self.tile_count_history)
-
-    # def get_round_scores(self) -> list[int]:
-    #     return self.round_scores
