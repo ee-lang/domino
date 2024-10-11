@@ -2,8 +2,8 @@ from DominoPlayer import HumanPlayer, available_moves, stats
 from collections import defaultdict
 from DominoGameState import DominoGameState
 from domino_data_types import DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, move
-# from get_best_move2 import get_best_move_alpha_beta
-from get_best_move_venezuelan import get_best_move_alpha_beta
+from get_best_move2 import get_best_move_alpha_beta
+# from get_best_move_venezuelan import get_best_move_alpha_beta
 from domino_utils import history_to_domino_tiles_history, list_possible_moves, list_possible_moves_from_hand
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
 from domino_common_knowledge import CommonKnowledgeTracker
@@ -194,23 +194,24 @@ class AnalyticAgentPlayer(HumanPlayer):
                 if time.time() - start_time > time_limit:
                     print(f"Time limit of {time_limit} seconds exceeded. Terminating early.")
                     break
+                
+                # Print statistics after each batch
+                if verbose:
+                    self.print_move_statistics(move_scores, total_samples)
 
                 if not move_scores or len(move_scores) == 1:
                     # If there's only one move or a pass, we're done after min_samples
                     max_samples = min_samples
                     continue
-                
-                # Print statistics after each batch
-                if verbose:
-                    self.print_move_statistics(move_scores, total_samples)
 
                 # Check if we can determine the best move and update possible_moves
                 sorted_moves = sorted(move_stats.items(), key=lambda x: x[1]["mean"], reverse=True)
                 best_move = sorted_moves[0][0]
                 best_move_stats = move_stats[best_move]
                 
-                # Keep only moves with overlapping confidence intervals
-                possible_moves = [(move, False, False) for move, stats in sorted_moves if stats["ci_upper"] >= best_move_stats["ci_lower"]]
+                # Keep only moves with overlapping confidence intervals only if we have at least min_samples for every move
+                if all(len(scores) >= min_samples for scores in move_scores.values()):
+                    possible_moves = [(move, False, False) for move, stats in sorted_moves if stats["ci_upper"] >= best_move_stats["ci_lower"]]
                 
                 # If only one move remains, we're done after min_samples
                 if len(possible_moves) == 1:
