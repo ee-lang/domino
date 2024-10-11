@@ -2,6 +2,7 @@ from collections import defaultdict, namedtuple
 from dataclasses import dataclass
 import itertools
 from math import comb
+import random
 from domino_data_types import PLAYERS, DominoTile, PlayerPosition, PlayerPosition_names, PlayerTiles4, PLAYERS_INDEX
 
 # type TileWithPlayer = tuple[DominoTile, PlayerPosition]
@@ -151,60 +152,61 @@ def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_w
 
     return probabilities
 
+def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: list[DominoTile], known_with_tiles: dict[str, list[DominoTile]], not_with_tiles: dict[PlayerPosition, set[DominoTile]], player_tiles: PlayerTiles4)-> dict[str, list[DominoTile]]:
+    sample: dict[str, list[DominoTile]] = {player: [] for player in PLAYERS}
 
+    for player in PLAYERS:
+        sample[player] = known_with_tiles.get(player, [])
 
-# def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_with_tiles: dict[PlayerPosition, list[DominoTile]], player_tiles: PlayerTiles) -> dict[PlayerPosition, dict[DominoTile, float]]:
-#     """
-#     Calculate the probability of each tile being with each player from another player's perspective.
+    assert all(len(sample[PLAYERS[player]]) <= player_tiles[player] for player in range(4)), 'Sample cannot have more tiles than the player has'
 
-#     Args:
-#         unplayed_tiles (list[DominoTile]): List of tiles that are not yet played.
-#         not_with_tiles (dict[PlayerPosition, list[DominoTile]]): Dictionary of tiles known not to be with each player.
-#         player_tiles (PlayerTiles): Number of tiles each player has.
+    known_tiles_set = set()  # Create a set to hold all known tiles
+    for tiles in known_with_tiles.values():
+        known_tiles_set.update(tiles)  # Add known tiles to the set
 
-#     Returns:
-#         dict[PlayerPosition, dict[DominoTile, float]]: Probability of each tile being with each player.
-#     """
-#     from collections import defaultdict
+    remaining_counts = {
+        player: getattr(player_tiles, player) - len(sample[player])
+        for player in PLAYERS
+    }
 
-#     probabilities = {player: defaultdict(float) for player in range(4)}
+    local_not_with_tiles = {k:set(t for t in v) for k,v in not_with_tiles.items()}
+    local_unplayed_tiles = [tile for tile in unplayed_tiles if tile not in known_tiles_set]  # Filter unplayed tiles
 
-#     # Step 1: Determine possible tiles for each player
-#     possible_tiles = {}
-#     for player in range(4):
-#         # Exclude tiles that are known not to be with the player
-#         possible = set(unplayed_tiles) - set(not_with_tiles.get(player, []))
-#         possible_tiles[player] = possible
+    while local_unplayed_tiles:
 
-#     # Step 2: Calculate total number of possible tile assignments
-#     total_possible_assignments = sum(len(tiles) for tiles in possible_tiles.values())
+        # Check if there are at least two players with tiles available
+        players_with_tiles = [p for p in PLAYERS if remaining_counts[p] > 0]
+        if len(players_with_tiles) < 2:
+            # If only one player can receive tiles, assign all remaining tiles to that player
+            last_player = players_with_tiles[0]
+            sample[last_player].extend(local_unplayed_tiles)
+            return sample            
+        
+        # print('sample',sample)
+        tile_probabilities = probability_from_another_perspective(local_unplayed_tiles, local_not_with_tiles, PlayerTiles4(**remaining_counts))
+        # for player in PLAYERS:
+        #     print(f"{player}:")
+        #     for tile, prob in tile_probabilities[PLAYERS_INDEX[player]].items():
+        #         print(f"  {tile}: {prob:.4f}")
+        #     print()
+        
+        # Choose a random tile uniformly from the local unplayed tiles
+        chosen_tile = random.choice(local_unplayed_tiles)
+        
+        # Choose a player for the tile based on probabilities
+        player_probs = [tile_probabilities[player][chosen_tile] for player in range(4)]
+        chosen_player = random.choices(PLAYERS, weights=player_probs)[0]
+        
+        # Add the tile to the chosen player's sample
+        sample[chosen_player].append(chosen_tile)
+        
+        # Update the remaining tiles and player tile counts
+        local_unplayed_tiles.remove(chosen_tile)
+        remaining_counts[chosen_player] -= 1
+        
+        # Update not_with_tiles
+        for player in PLAYERS:
+            if player in local_not_with_tiles and chosen_tile in local_not_with_tiles[player]:
+                local_not_with_tiles[player].remove(chosen_tile)
 
-#     if total_possible_assignments == 0:
-#         # If no possible assignments, return zero probabilities
-#         return probabilities
-
-#     # Step 3: Assign initial probabilities based on the proportion of tiles each player can have
-#     for player in range(4):
-#         num_tiles = player_tiles[player]
-#         num_possible = len(possible_tiles[player])
-#         if num_possible == 0 or num_tiles == 0:
-#             continue
-#         probability_per_tile = num_tiles / num_possible
-#         for tile in possible_tiles[player]:
-#             probabilities[player][tile] += probability_per_tile
-
-#     # Step 4: Normalize probabilities so that the sum of probabilities for each tile across all players equals 1
-#     for tile in unplayed_tiles:
-#         total_prob = sum(probabilities[player][tile] for player in range(4))
-#         if total_prob > 0:
-#             for player in range(4):
-#                 if tile in probabilities[player]:
-#                     probabilities[player][tile] /= total_prob
-
-#     # Step 5: Ensure that probabilities are between 0 and 1
-#     for player in range(4):
-#         for tile in probabilities[player]:
-#             probabilities[player][tile] = min(probabilities[player][tile], 1.0)
-
-#     return probabilities
-
+    return sample

@@ -92,6 +92,8 @@ class AnalyticAgentPlayer(HumanPlayer):
             'W': set(),
         }
 
+        _player_tiles_count = PlayerTiles4(**game_state.player_tile_counts)
+
         # For each possible tile that theoretically could have been played
         for tile in possible_tiles:
             # Sample a hand for every player (including south)
