@@ -115,7 +115,8 @@ def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_w
         # Exclude tiles that are known not to be with the player
         possible = set(unplayed_tiles) - not_with_tiles.get(PLAYERS[player], set())
         possible_tiles[player] = possible
-        assert len(possible) > 1, f'Player {player} has no choice in tile: {possible}'
+        # TODO: Check if this is necessary, as it may be better to just assign a probability of 1 to the tile
+        # assert len(possible) > 1, f'Player {player} has no choice in tile: {possible}'
     
     # Step 2: Count the number of outcomes for each tile being with each player
     for tile in unplayed_tiles:

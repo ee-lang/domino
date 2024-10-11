@@ -1,7 +1,8 @@
+import random
 from DominoPlayer import HumanPlayer, available_moves, stats
 from collections import defaultdict
 from DominoGameState import DominoGameState
-from domino_data_types import DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, PlayerTiles, move
+from domino_data_types import PLAYERS, PLAYERS_INDEX, DominoTile, PlayerPosition, GameState, PlayerPosition_SOUTH, PlayerPosition_names, PlayerTiles, PlayerTiles4, move
 from get_best_move2 import get_best_move_alpha_beta
 from domino_utils import history_to_domino_tiles_history, list_possible_moves, list_possible_moves_from_hand
 from domino_game_tracker import domino_game_state_our_perspective, generate_sample_from_game_state
@@ -10,6 +11,7 @@ from statistics import mean, median, stdev, mode
 import copy, time
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from inference import probability_from_another_perspective
 from scipy import stats as scipy_stats
 
 class AnalyticAgentPlayer(HumanPlayer):
@@ -74,7 +76,21 @@ class AnalyticAgentPlayer(HumanPlayer):
         # The tile can't be in the tiles_not_in_players_hand or among the played tiles
         possible_tiles = self.generate_possible_tiles(game_state.ends, _unplayed_tiles, _tiles_not_in_players_hand)
         # Filter out the tiles that are not in the player's hand (i.e. suits where the player passed)
-        pass
+        # TODO: Implement this
+
+        # Build common knowledge
+        common_knowledge_with_tiles: dict[str, list[DominoTile]] = {
+            'S': [actual_move],
+            'E': [],
+            'N': [],
+            'W': [],
+        }
+        common_knowledge_not_with_tiles: dict[str, set[DominoTile]] = {
+            'S': set(_tiles_not_in_players_hand),
+            'E': set(),
+            'N': set(),
+            'W': set(),
+        }
 
         # For each possible tile that theoretically could have been played
         for tile in possible_tiles:
@@ -82,86 +98,75 @@ class AnalyticAgentPlayer(HumanPlayer):
             # Constraint: south cannot have tiles from tiles_not_in_players_hand
             # Constraint: south has to have the actual move
             # Constraint: south has to have the tile we are comparing against
-            pass
-            # sample = generate_sample_from_game_state_from_another_perspective(...)
+            sample = self.generate_sample_from_game_state_from_another_perspective(
+                _unplayed_tiles,
+                common_knowledge_with_tiles,
+                common_knowledge_not_with_tiles,
+                _player_tiles_count
+            )
 
         # Calculate statistics for the samples
         # If a tile has significantly better expected score than the actual , add it to the unlikely_tiles set for the player
 
         pass
     
-    def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_with_tiles: dict[PlayerPosition, list[DominoTile]], player_tiles: PlayerTiles) -> dict[PlayerPosition, dict[DominoTile, float]]:
-        """
-        Calculate the probability of each tile being with each player from another player's perspective.
 
-        Args:
-            unplayed_tiles (list[DominoTile]): List of tiles that are not yet played.
-            not_with_tiles (dict[PlayerPosition, list[DominoTile]]): Dictionary of tiles known not to be with each player.
-            player_tiles (PlayerTiles): Number of tiles each player has.
+    def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: list[DominoTile], known_with_tiles: dict[str, list[DominoTile]], not_with_tiles: dict[PlayerPosition, set[DominoTile]], player_tiles: PlayerTiles4)-> dict[str, list[DominoTile]]:
+        sample: dict[str, list[DominoTile]] = {player: [] for player in PLAYERS}
 
-        Returns:
-            dict[PlayerPosition, dict[DominoTile, float]]: Probability of each tile being with each player.
-        """
-        from collections import defaultdict
-
-        probabilities = {player: defaultdict(float) for player in PlayerPosition}
-
-        # Step 1: Determine possible tiles for each player
-        possible_tiles = {}
-        for player in PlayerPosition:
-            # Exclude tiles that are known not to be with the player
-            possible = set(unplayed_tiles) - set(not_with_tiles.get(player, []))
-            possible_tiles[player] = possible
-
-        # Step 2: Calculate total number of possible tile assignments
-        total_possible_assignments = sum(len(tiles) for tiles in possible_tiles.values())
-
-        if total_possible_assignments == 0:
-            # If no possible assignments, return zero probabilities
-            return probabilities
-
-        # Step 3: Assign initial probabilities based on the proportion of tiles each player can have
-        for player in PlayerPosition:
-            num_tiles = player_tiles[player]
-            num_possible = len(possible_tiles[player])
-            if num_possible == 0 or num_tiles == 0:
-                continue
-            probability_per_tile = num_tiles / num_possible
-            for tile in possible_tiles[player]:
-                probabilities[player][tile] += probability_per_tile
-
-        # Step 4: Normalize probabilities so that the sum of probabilities for each tile across all players does not exceed 1
-        for tile in unplayed_tiles:
-            total_prob = sum(probabilities[player][tile] for player in PlayerPosition)
-            if total_prob > 1.0:
-                for player in PlayerPosition:
-                    if tile in probabilities[player]:
-                        probabilities[player][tile] /= total_prob
-
-        # Step 5: Ensure that probabilities are between 0 and 1
-        for player in PlayerPosition:
-            for tile in probabilities[player]:
-                probabilities[player][tile] = min(probabilities[player][tile], 1.0)
-
-        return probabilities
-
-    def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: list[DominoTile], known_with_tiles: dict[PlayerPosition, list[DominoTile]], not_with_tiles: dict[PlayerPosition, list[DominoTile]], player_tiles: PlayerTiles)-> dict[str, list[DominoTile]]:
-        sample: dict[str, list[DominoTile]] = {player: [] for player in PlayerPosition}
-
-        for player in range(4):
+        for player in PLAYERS:
             sample[player] = known_with_tiles.get(player, [])
 
-        assert any(len(sample[player]) > player_tiles[player] for player in PlayerPosition), 'Sample cannot have more tiles than the player has'
+        assert all(len(sample[PLAYERS[player]]) <= player_tiles[player] for player in range(4)), 'Sample cannot have more tiles than the player has'
 
         known_tiles_set = set()  # Create a set to hold all known tiles
         for tiles in known_with_tiles.values():
             known_tiles_set.update(tiles)  # Add known tiles to the set
 
+        remaining_counts = {
+            player: getattr(player_tiles, player) - len(sample[player])
+            for player in PLAYERS
+        }
+
+        local_not_with_tiles = {k:set(t for t in v) for k,v in not_with_tiles.items()}
         local_unplayed_tiles = [tile for tile in unplayed_tiles if tile not in known_tiles_set]  # Filter unplayed tiles
 
-        tile_probabilities = probability_from_another_perspective(local_unplayed_tiles, not_with_tiles, player_tiles)
+        while local_unplayed_tiles:
 
-        # TODO: Use tile_probabilities to generate the sample
+            # Check if there are at least two players with tiles available
+            players_with_tiles = [p for p in PLAYERS if remaining_counts[p] > 0]
+            if len(players_with_tiles) < 2:
+                # If only one player can receive tiles, assign all remaining tiles to that player
+                last_player = players_with_tiles[0]
+                sample[last_player].extend(local_unplayed_tiles)
+                return sample            
+            
+            # print('sample',sample)
+            tile_probabilities = probability_from_another_perspective(local_unplayed_tiles, local_not_with_tiles, PlayerTiles4(**remaining_counts))
+            # for player in PLAYERS:
+            #     print(f"{player}:")
+            #     for tile, prob in tile_probabilities[PLAYERS_INDEX[player]].items():
+            #         print(f"  {tile}: {prob:.4f}")
+            #     print()
+            
+            # Choose a random tile uniformly from the local unplayed tiles
+            chosen_tile = random.choice(local_unplayed_tiles)
+            
+            # Choose a player for the tile based on probabilities
+            player_probs = [tile_probabilities[player][chosen_tile] for player in range(4)]
+            chosen_player = random.choices(PLAYERS, weights=player_probs)[0]
+            
+            # Add the tile to the chosen player's sample
+            sample[chosen_player].append(chosen_tile)
+            
+            # Update the remaining tiles and player tile counts
+            local_unplayed_tiles.remove(chosen_tile)
+            remaining_counts[chosen_player] -= 1
+            
+            # Update not_with_tiles
+            for player in PLAYERS:
+                if player in local_not_with_tiles and chosen_tile in local_not_with_tiles[player]:
+                    local_not_with_tiles[player].remove(chosen_tile)
 
         return sample
 
@@ -310,23 +315,24 @@ class AnalyticAgentPlayer(HumanPlayer):
                 if time.time() - start_time > time_limit:
                     print(f"Time limit of {time_limit} seconds exceeded. Terminating early.")
                     break
+                
+                # Print statistics after each batch
+                if verbose:
+                    self.print_move_statistics(move_scores, total_samples)
 
                 if not move_scores or len(move_scores) == 1:
                     # If there's only one move or a pass, we're done after min_samples
                     max_samples = min_samples
                     continue
-                
-                # Print statistics after each batch
-                if verbose:
-                    self.print_move_statistics(move_scores, total_samples)
 
                 # Check if we can determine the best move and update possible_moves
                 sorted_moves = sorted(move_stats.items(), key=lambda x: x[1]["mean"], reverse=True)
                 best_move = sorted_moves[0][0]
                 best_move_stats = move_stats[best_move]
                 
-                # Keep only moves with overlapping confidence intervals
-                possible_moves = [(move, False, False) for move, stats in sorted_moves if stats["ci_upper"] >= best_move_stats["ci_lower"]]
+                # Keep only moves with overlapping confidence intervals only if we have at least min_samples for every move
+                if all(len(scores) >= min_samples for scores in move_scores.values()):
+                    possible_moves = [(move, False, False) for move, stats in sorted_moves if stats["ci_upper"] >= best_move_stats["ci_lower"]]
                 
                 # If only one move remains, we're done after min_samples
                 if len(possible_moves) == 1:
