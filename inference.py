@@ -3,7 +3,9 @@ from dataclasses import dataclass
 import itertools
 from math import comb
 import random
-from domino_data_types import PLAYERS, DominoTile, PlayerPosition, PlayerPosition_names, PlayerTiles4, PLAYERS_INDEX
+from domino_data_types import PLAYERS, DominoTile, GameState, PlayerPosition, PlayerPosition_names, PlayerTiles4, PLAYERS_INDEX, move
+from domino_utils import list_possible_moves
+from get_best_move2 import get_best_move_alpha_beta
 
 # type TileWithPlayer = tuple[DominoTile, PlayerPosition]
 type TilesWithPlayers = tuple[int, int, int, int]
@@ -112,10 +114,10 @@ def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_w
 
     # Step 1: Determine possible tiles for each player
     possible_tiles: dict[PlayerPosition, set[DominoTile]] = {}
-    for player in range(4):
+    for player_index in range(4):
         # Exclude tiles that are known not to be with the player
-        possible = set(unplayed_tiles) - not_with_tiles.get(PLAYERS[player], set())
-        possible_tiles[player] = possible
+        possible = set(unplayed_tiles) - not_with_tiles.get(PLAYERS[player_index], set())
+        possible_tiles[player_index] = possible
         # TODO: Check if this is necessary, as it may be better to just assign a probability of 1 to the tile
         # assert len(possible) > 1, f'Player {player} has no choice in tile: {possible}'
     
@@ -129,14 +131,14 @@ def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_w
                 not_with_tiles[player].remove(tile)
                 updated_players.append(player)
         # For each player, generate the scenarios and count the outcomes as if the tile is assigned to them
-        for player in range(4):
+        for player_index in range(4):
             local_outcomes = 0
-            if tile in possible_tiles[player]:
-                player_tiles_local = PlayerTiles4(**{p: getattr(player_tiles, p) - (1 if player == PLAYERS_INDEX[p] else 0) for p in PLAYERS})
+            if tile in possible_tiles[player_index]:
+                player_tiles_local = PlayerTiles4(**{p: getattr(player_tiles, p) - (1 if player_index == PLAYERS_INDEX[p] else 0) for p in PLAYERS})
                 tile_scenarios = generate_scenarios(player_tiles_local, not_with_tiles)
                 for scenario in tile_scenarios:                    
                     local_outcomes += count_scenario_outcomes(scenario, player_tiles_local)
-            outcomes[player][tile] = local_outcomes
+            outcomes[player_index][tile] = local_outcomes
         # Update the not_with_tiles dictionary
         for player in updated_players:
             not_with_tiles[player].add(tile)
@@ -144,15 +146,15 @@ def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_w
     # Step 3: Calculate the probability of each tile being with each player
     for tile in unplayed_tiles:
         total_outcomes = sum(outcomes[player][tile] for player in range(4))
-        for player in range(4):
+        for player_index in range(4):
             if total_outcomes > 0:
-                probabilities[player][tile] = outcomes[player][tile] / total_outcomes
+                probabilities[player_index][tile] = outcomes[player_index][tile] / total_outcomes
             else:
-                probabilities[player][tile] = 0
+                probabilities[player_index][tile] = 0
 
     return probabilities
 
-def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: list[DominoTile], known_with_tiles: dict[str, list[DominoTile]], not_with_tiles: dict[PlayerPosition, set[DominoTile]], player_tiles: PlayerTiles4)-> dict[str, list[DominoTile]]:
+def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: list[DominoTile], known_with_tiles: dict[str, list[DominoTile]], not_with_tiles: dict[str, set[DominoTile]], player_tiles: PlayerTiles4)-> dict[str, list[DominoTile]]:
     sample: dict[str, list[DominoTile]] = {player: [] for player in PLAYERS}
 
     for player in PLAYERS:
@@ -210,3 +212,53 @@ def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: lis
                 local_not_with_tiles[player].remove(chosen_tile)
 
     return sample
+
+def sample_and_search4(unplayed_tiles: list[DominoTile], player_tiles_count: dict[PlayerPosition, int], known_with_tiles: dict[str, set[DominoTile]], not_with_tiles: dict[str, set[DominoTile]], board_ends: tuple[int|None,int|None], current_player: PlayerPosition, possible_moves: list[tuple[tuple[DominoTile, bool] | None, int | None, float | None]]|None = None) -> list[tuple[move, float]]:
+    # sample = generate_sample_from_game_state(
+    #     PlayerPosition_SOUTH,
+    #     final_south_hand,
+    #     final_remaining_tiles_without_south_tiles,
+    #     player_tiles_count,
+    #     inferred_knowledge_for_current_player
+    # )
+
+    # TODO: This is not correct, as it does not take into account the known_with_tiles and not_with_tiles
+    sample = generate_sample_from_game_state_from_another_perspective(
+        unplayed_tiles,
+        {},
+        {},
+        PlayerTiles4(**{PLAYERS[k]:v for k,v in player_tiles_count.items()})
+    )
+
+    sample_hands = (
+        frozenset(sample['S']),
+        frozenset(sample['E']),
+        frozenset(sample['N']),
+        frozenset(sample['W'])
+    )
+
+    sample_state = GameState(
+        player_hands=sample_hands,
+        current_player=current_player,
+        left_end=board_ends[0],
+        right_end=board_ends[1],
+        consecutive_passes=0
+    )
+
+    depth = 99 # Set it high enough, that it is never reached in practice, so the score is an integer
+
+    if possible_moves is None:
+        possible_moves = list_possible_moves(sample_state)
+    move_scores: list[tuple[move, float]] = []
+
+    sample_cache: dict[GameState, tuple[int, int]] = {}
+    for move in possible_moves:
+        if move[0] is None:
+            new_state = sample_state.pass_turn()
+        else:
+            tile, is_left = move[0]
+            new_state = sample_state.play_hand(tile, is_left)
+
+        _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
+        move_scores.append((move[0], best_score))
+    return move_scores
