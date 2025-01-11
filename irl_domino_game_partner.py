@@ -1,6 +1,7 @@
 import argparse
 from DominoGameState import DominoGameState
-from analytic_agent_player_parallel_ci import AnalyticAgentPlayer
+# from analytic_agent_player_parallel_ci import AnalyticAgentPlayer
+from analytic_agent_w_inf import AnalyticAgentPlayer
 
 class IRLDominoGame:
     def __init__(self, variant: str = "international") -> None:
@@ -55,8 +56,10 @@ class IRLDominoGame:
             
             if current_player in [0, 2]:  # Agent's turn
                 agent = self.agent_south if current_player == 0 else self.agent_north
-                recommended_move = agent.next_move(self.game_state, self.player_hands[current_player])
-                print(f"Recommended move for Player {current_player}: {recommended_move}")
+                show_recommendation = input("Would you like to see the recommended move? [Y/n]: ").lower()
+                if show_recommendation != 'n':  # Default to yes for any input except 'n'
+                    recommended_move = agent.next_move(self.game_state, self.player_hands[current_player])
+                    print(f"Recommended move for Player {current_player}: {recommended_move}")
                 
                 while True:
                     move_input = input(f"Enter Player {current_player}'s move (e.g., '1-2,l' for left, '3-4,r' for right, or 'pass'): ")
