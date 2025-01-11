@@ -17,8 +17,10 @@ class DominoGameState:
 		new_history = self.history[:-step]
 		new_played_set = set()
 		new_ends = (-1, -1)
-		new_player_tile_counts = [7, 7, 7, 7]  # Assuming initial tile count is 7 for each player
+		initial_tile_count = 10 if self.variant == "cuban" else 7
+		new_player_tile_counts = [initial_tile_count] * 4
 
+		# Process all moves in history to build the new state
 		for player, move in new_history:
 			if move is not None:
 				tile, side = move
@@ -33,6 +35,13 @@ class DominoGameState:
 					new_ends = (new_ends[0], tile[1] if tile[0] == new_ends[1] else tile[0])
 
 		new_next_player = (new_history[-1][0] + 1) % 4 if new_history else 0
+
+		# The sum of player tiles should be total tiles minus played tiles
+		total_tiles = initial_tile_count * 4
+		expected_unplayed = total_tiles - len(new_played_set)
+		actual_unplayed = sum(new_player_tile_counts)
+
+		assert expected_unplayed == actual_unplayed, f"Mismatch between expected unplayed tiles ({expected_unplayed}) and sum of player tiles ({actual_unplayed})"
 
 		return DominoGameState(
 			played_set=new_played_set,
