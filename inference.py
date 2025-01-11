@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import itertools
 from math import comb
 import random
-from domino_data_types import PLAYERS, DominoTile, GameState, PlayerPosition, PlayerPosition_names, PlayerTiles4, PLAYERS_INDEX, move
+from domino_data_types import PLAYERS, DominoTile, GameState, PlayerPosition, PlayerPosition_SOUTH, PlayerPosition_names, PlayerTiles4, PLAYERS_INDEX, move
 from domino_utils import list_possible_moves
 from get_best_move2 import get_best_move_alpha_beta
 
@@ -105,9 +105,13 @@ def probability_from_another_perspective(unplayed_tiles: list[DominoTile], not_w
     Returns:
         dict[PlayerPosition, dict[DominoTile, float]]: Probability of each tile being with each player.
 
-    Assumes that each player has more than one tile that they can play. Tiles that are known not to be with a player are not considered choices.
+    Assumes that each player has more than one tile that they can play. Tiles that are known to be with a player are not considered choices.
     """
-    assert len(unplayed_tiles) == (player_tiles.S + player_tiles.N + player_tiles.E + player_tiles.W)
+    # Assert that the total number of unplayed tiles equals the sum of tiles remaining in each player's hand
+    assert len(unplayed_tiles) == (player_tiles.S + player_tiles.N + player_tiles.E + player_tiles.W), \
+        f"Number of unplayed tiles ({len(unplayed_tiles)}) does not match sum of player tiles ({player_tiles.S + player_tiles.N + player_tiles.E + player_tiles.W})\n" \
+        f"Unplayed tiles: {unplayed_tiles}\n" \
+        f"Player tiles: S={player_tiles.S}, N={player_tiles.N}, E={player_tiles.E}, W={player_tiles.W}"
 
     probabilities: dict[PlayerPosition, dict[DominoTile, float]] = {player: defaultdict(float) for player in range(4)}
     outcomes: dict[PlayerPosition, dict[DominoTile, int]] = {player: defaultdict(int) for player in range(4)}
@@ -158,9 +162,20 @@ def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: lis
     sample: dict[str, list[DominoTile]] = {player: [] for player in PLAYERS}
 
     for player in PLAYERS:
-        sample[player] = known_with_tiles.get(player, [])
+        sample[player] = known_with_tiles.get(player, [])[:]
 
-    assert all(len(sample[PLAYERS[player]]) <= player_tiles[player] for player in range(4)), 'Sample cannot have more tiles than the player has'
+    assert all(len(sample[player]) <= getattr(player_tiles, player) for player in PLAYERS), (
+        'Sample cannot have more tiles than the player has.\n'
+        f'Player S Sample: {sample["S"]}, player_tiles.S: {player_tiles.S}\n'
+        f'Player N Sample: {sample["N"]}, player_tiles.N: {player_tiles.N}\n'
+        f'Player E Sample: {sample["E"]}, player_tiles.E: {player_tiles.E}\n'
+        f'Player W Sample: {sample["W"]}, player_tiles.W: {player_tiles.W}\n'
+        f'Sample: {sample}\n'
+        f'Player tiles: {player_tiles}\n'
+        f'Known with tiles: {known_with_tiles}\n'
+        f'Not with tiles: {not_with_tiles}\n'
+        f'Unplayed tiles: {unplayed_tiles}'
+    )
 
     known_tiles_set = set()  # Create a set to hold all known tiles
     for tiles in known_with_tiles.values():
@@ -173,6 +188,17 @@ def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: lis
 
     local_not_with_tiles = {k:set(t for t in v) for k,v in not_with_tiles.items()}
     local_unplayed_tiles = [tile for tile in unplayed_tiles if tile not in known_tiles_set]  # Filter unplayed tiles
+
+    # Assert that the number of unplayed tiles matches the sum of remaining counts
+    total_remaining = sum(remaining_counts.values())
+    assert len(local_unplayed_tiles) == total_remaining, \
+        f"Mismatch between unplayed tiles and remaining counts:\n" \
+        f"Unplayed tiles ({len(local_unplayed_tiles)}): {local_unplayed_tiles}\n" \
+        f"Original unplayed tiles ({len(unplayed_tiles)}): {unplayed_tiles}\n" \
+        f"Remaining counts (sum={total_remaining}): {remaining_counts}\n" \
+        f"Known with tiles: {known_with_tiles}\n" \
+        f"Not with tiles: {local_not_with_tiles}\n" \
+        f"Original not with tiles: {not_with_tiles}"
 
     while local_unplayed_tiles:
 
@@ -213,52 +239,91 @@ def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: lis
 
     return sample
 
-def sample_and_search4(unplayed_tiles: list[DominoTile], player_tiles_count: dict[PlayerPosition, int], known_with_tiles: dict[str, set[DominoTile]], not_with_tiles: dict[str, set[DominoTile]], board_ends: tuple[int|None,int|None], current_player: PlayerPosition, possible_moves: list[tuple[tuple[DominoTile, bool] | None, int | None, float | None]]|None = None) -> list[tuple[move, float]]:
-    # sample = generate_sample_from_game_state(
-    #     PlayerPosition_SOUTH,
-    #     final_south_hand,
-    #     final_remaining_tiles_without_south_tiles,
-    #     player_tiles_count,
-    #     inferred_knowledge_for_current_player
-    # )
+def sample_and_search4(
+    unplayed_tiles: list[DominoTile],
+    player_tiles: PlayerTiles4,
+    known_with_tiles: dict[str, list[DominoTile]],
+    not_with_tiles: dict[str, set[DominoTile]],
+    board_ends: tuple[int|None, int|None],
+    current_player: PlayerPosition,
+    possible_moves: list[tuple[tuple[DominoTile, bool] | None, int | None, float | None]]|None = None
+) -> list[tuple[move, float]]:
+    """
+    Sample a possible tile distribution and search for best moves using alpha-beta search.
 
-    # TODO: This is not correct, as it does not take into account the known_with_tiles and not_with_tiles
+    Args:
+        unplayed_tiles: List of tiles that haven't been played yet
+        player_tiles: Number of tiles each player has
+        known_with_tiles: Dictionary mapping players to tiles known to be with them
+        not_with_tiles: Dictionary mapping players to tiles known not to be with them
+        board_ends: Current board ends (left, right)
+        current_player: Current player's position
+        possible_moves: Optional pre-computed list of possible moves
+
+    Returns:
+        List of tuples containing (move, score) pairs where move is (tile, is_left) or None for pass
+    """
+
+    # Assert that the number of unplayed tiles matches the sum of player tiles
+    assert len(unplayed_tiles) == sum(player_tiles), f"Mismatch between unplayed tiles ({len(unplayed_tiles)}) and sum of player tiles ({sum(player_tiles)})\nUnplayed tiles: {unplayed_tiles}\nPlayer tiles counts: {player_tiles}"
+
+    # Step 1: Generate a sample distribution of tiles
     sample = generate_sample_from_game_state_from_another_perspective(
         unplayed_tiles,
-        {},
-        {},
-        PlayerTiles4(**{PLAYERS[k]:v for k,v in player_tiles_count.items()})
+        known_with_tiles,
+        not_with_tiles,
+        player_tiles
     )
 
+    # Assert that all known tiles are in the correct player's sample
+    for player, known_tiles in known_with_tiles.items():
+        for tile in known_tiles:
+            assert tile in sample[player], f"Known tile {tile} for player {player} not found in their sampled hand: {sample[player]}"
+
+    # Step 2: Convert sample into GameState format
     sample_hands = (
         frozenset(sample['S']),
         frozenset(sample['E']),
         frozenset(sample['N']),
         frozenset(sample['W'])
-    )
+    )    
 
     sample_state = GameState(
         player_hands=sample_hands,
-        current_player=current_player,
+        # current_player=current_player,
+        current_player=PlayerPosition_SOUTH,
         left_end=board_ends[0],
         right_end=board_ends[1],
         consecutive_passes=0
     )
 
-    depth = 99 # Set it high enough, that it is never reached in practice, so the score is an integer
-
+    # Step 3: If possible_moves not provided, generate them
     if possible_moves is None:
         possible_moves = list_possible_moves(sample_state)
-    move_scores: list[tuple[move, float]] = []
 
+    # Step 4: Evaluate each move using alpha-beta search
+    move_scores: list[tuple[move, float]] = []
     sample_cache: dict[GameState, tuple[int, int]] = {}
-    for move in possible_moves:
+    
+    # Use high depth to ensure we reach terminal states
+    depth = 99
+
+    for move in possible_moves:        
+        # Create new state after move
         if move[0] is None:
             new_state = sample_state.pass_turn()
         else:
             tile, is_left = move[0]
             new_state = sample_state.play_hand(tile, is_left)
 
-        _, best_score, _ = get_best_move_alpha_beta(new_state, depth, sample_cache, best_path_flag=False)
-        move_scores.append((move[0], best_score))
+        # Get score for this move
+        _, score, _ = get_best_move_alpha_beta(
+            new_state, 
+            depth,
+            sample_cache,
+            best_path_flag=False
+        )
+        
+        move_scores.append((move[0], score))
+
     return move_scores

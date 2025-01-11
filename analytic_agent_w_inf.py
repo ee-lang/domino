@@ -11,7 +11,7 @@ from statistics import mean, median, stdev, mode
 import copy, time
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from inference import probability_from_another_perspective
+from inference import generate_sample_from_game_state_from_another_perspective, probability_from_another_perspective, sample_and_search4
 from scipy import stats as scipy_stats
 
 class AnalyticAgentPlayer(HumanPlayer):
@@ -23,7 +23,7 @@ class AnalyticAgentPlayer(HumanPlayer):
         self.unlikely_tiles: dict[int, set[DominoTile]] = {i: set() for i in range(4)}
 
     def next_move(self, game_state: DominoGameState, player_hand: list[tuple[int,int]], verbose: bool = True) -> tuple[tuple[int,int], str] | None:
-        # if self.first_game:
+        # Handle first round special case
         if game_state.first_round:
             # Check if the move is forced
             if game_state.variant in {'international','venezuelan'} and len(game_state.history)==0:
@@ -32,11 +32,14 @@ class AnalyticAgentPlayer(HumanPlayer):
 
         if len(game_state.history) > 1:  # Ensure there are at least two moves in history
             # for i in range(len(game_state.history) - 1, max(0, len(game_state.history) - 4), -1):  # Process the last three moves in reverse order
-            for i in range(3):  # Process the last three moves in reverse order
-                last_move = game_state.history[-(i+1)]  # Access moves in reverse order
+            for i in range(1,min(4,len(game_state.history))):  # Process the last three moves in reverse order
+                last_move = game_state.history[-(i)]  # Access moves in reverse order
                 player_pos_from_current_player_pov = (last_move[0] - self.position) % 4
                 retro_game_state = game_state.rollback(i)
-                self.update_unlikely_tiles(retro_game_state, player_pos_from_current_player_pov, actual_move=last_move, tiles_not_in_players_hand=player_hand)
+                # Extract just the move part (tile and direction) from last_move
+                move_only = last_move[1]  # This gets just the (tile, direction) part
+                assert move_only is not None, 'Move is None'
+                self.update_unlikely_tiles(retro_game_state, player_pos_from_current_player_pov, actual_move=move_only, tiles_not_in_players_hand=player_hand)
 
         unplayed_tiles = self.get_unplayed_tiles(game_state, player_hand)
         _unplayed_tiles = DominoTile.loi_to_domino_tiles(unplayed_tiles)
@@ -69,18 +72,34 @@ class AnalyticAgentPlayer(HumanPlayer):
             return (tile.top, tile.bottom), side
 
     def update_unlikely_tiles(self, game_state: DominoGameState, player_from_south_pov: int, actual_move: tuple[tuple[int,int],str], tiles_not_in_players_hand: list[tuple[int,int]]) -> None:
+
+        print("=== update_unlikely_tiles parameters ===")
+        print(f"game_state: {game_state}")
+        print(f"player_from_south_pov: {player_from_south_pov}")
+        print(f"actual_move: {actual_move}")
+        print(f"tiles_not_in_players_hand: {tiles_not_in_players_hand}")
+        print("=====================================")
+
+        # Get unplayed tiles, excluding the actual move that was just played
+        # since we're analyzing from the perspective right before this move
         unplayed_tiles = self.get_unplayed_tiles(game_state, [])
+        actual_tile = DominoTile.new_tile(actual_move[0][0], actual_move[0][1])
         _unplayed_tiles = DominoTile.loi_to_domino_tiles(unplayed_tiles)
+        
+        # Don't add the actual tile back to unplayed tiles - it's already accounted for
+        # in the game state's player tile counts
+        
         _tiles_not_in_players_hand = DominoTile.loi_to_domino_tiles(tiles_not_in_players_hand)
+        
         # Generate all possible tiles that could have been played (except for the first move of the game)
         # The tile can't be in the tiles_not_in_players_hand or among the played tiles
-        possible_tiles = self.generate_possible_tiles(game_state.ends, _unplayed_tiles, _tiles_not_in_players_hand)
+        possible_tiles = self.generate_possible_tiles(game_state.ends, set(_unplayed_tiles), set(_tiles_not_in_players_hand))
         # Filter out the tiles that are not in the player's hand (i.e. suits where the player passed)
         # TODO: Implement this
 
         # Build common knowledge
         common_knowledge_with_tiles: dict[str, list[DominoTile]] = {
-            'S': [actual_move],
+            'S': [DominoTile.new_tile(actual_move[0][0], actual_move[0][1])],
             'E': [],
             'N': [],
             'W': [],
@@ -92,85 +111,81 @@ class AnalyticAgentPlayer(HumanPlayer):
             'W': set(),
         }
 
-        _player_tiles_count = PlayerTiles4(**game_state.player_tile_counts)
+        _player_tiles_count = PlayerTiles4(**{PLAYERS[i]: game_state.player_tile_counts[i] for i in range(4)})
+
+        # Assert that the number of unplayed tiles matches the sum of player tile counts
+        assert len(_unplayed_tiles) == sum(game_state.player_tile_counts), \
+            f"Game state is inconsistent:\n" \
+            f"Number of unplayed tiles ({len(_unplayed_tiles)}) does not match\n" \
+            f"Sum of player tile counts ({sum(game_state.player_tile_counts)})\n" \
+            f"Game state: {game_state}"
 
         # For each possible tile that theoretically could have been played
+        stats: dict[DominoTile, list[float]] = {}
         for tile in possible_tiles:
-            # Sample a hand for every player (including south)
-            # Constraint: south cannot have tiles from tiles_not_in_players_hand
-            # Constraint: south has to have the actual move
-            # Constraint: south has to have the tile we are comparing against
-            sample = self.generate_sample_from_game_state_from_another_perspective(
-                _unplayed_tiles,
-                common_knowledge_with_tiles,
-                common_knowledge_not_with_tiles,
-                _player_tiles_count
-            )
+            if tile == actual_tile:
+                continue
+            print(f"Testing tile: {tile}")
+            no_of_samples = 8
+            # samples: list[float] = []
+            for i in range(no_of_samples):
+                print(f"Sample {i+1} of {no_of_samples}")
+                # Sample a hand for every player (including south)
+                # Constraint: south cannot have tiles from tiles_not_in_players_hand
+                # Constraint: south has to have the actual move
+                # Constraint: south has to have the tile we are comparing against
+            
+                # Only proceed if the tile is legal for South to have
+                if tile not in _tiles_not_in_players_hand and len(common_knowledge_with_tiles['S']) < _player_tiles_count.S:
+                    # Add the tile being tested to South's known tiles
+                    common_knowledge_with_tiles['S'].append(tile)
+
+                    # Assert no duplicates in South's tiles
+                    assert len(common_knowledge_with_tiles['S']) == len(set(common_knowledge_with_tiles['S'])), \
+                        f"Duplicate tiles found in South's hand: {common_knowledge_with_tiles['S']}, current tile: {tile}"
+                    
+                    result = sample_and_search4(
+                        _unplayed_tiles,
+                        _player_tiles_count,
+                        common_knowledge_with_tiles,
+                        common_knowledge_not_with_tiles,
+                        game_state.ends,
+                        player_from_south_pov
+                    )
+
+                    # Remove the test tile after generating the sample
+                    common_knowledge_with_tiles['S'].remove(tile)
+
+                    # Extract scores from the search results
+                    for move, score in result:
+                        print(f"Move: {move}, score: {score}")
+                        if move is not None and (move[0] == tile or move[0] == actual_tile):
+                            # samples.append(score)
+                            if move[0] not in stats:
+                                stats[move[0]] = []
+                            stats[move[0]].append(score)
 
         # Calculate statistics for the samples
         # If a tile has significantly better expected score than the actual , add it to the unlikely_tiles set for the player
+        print("\n(Unlikely) Sample Statistics:")
+
+        for tile, samples in stats.items():
+            n = len(samples)
+            mean_score = mean(samples)
+            std_dev = stdev(samples) if n > 1 else 0
+            confidence_interval = scipy_stats.t.interval(confidence=0.95, df=n-1, loc=mean_score, scale=std_dev/n**0.5) if n > 1 else (mean_score, mean_score)
+
+            print(f"\nTile: {tile}")
+            print(f"  Count: {n}")
+            print(f"  Mean: {mean_score:.2f}")
+            print(f"  Std Dev: {std_dev:.2f}")
+            print(f"  Min: {min(samples):.2f}")
+            print(f"  Max: {max(samples):.2f}")
+            print(f"  95% CI Lower: {confidence_interval[0]:.2f}")
+            print(f"  95% CI Upper: {confidence_interval[1]:.2f}")
 
         pass
     
-
-    def generate_sample_from_game_state_from_another_perspective(unplayed_tiles: list[DominoTile], known_with_tiles: dict[str, list[DominoTile]], not_with_tiles: dict[PlayerPosition, set[DominoTile]], player_tiles: PlayerTiles4)-> dict[str, list[DominoTile]]:
-        sample: dict[str, list[DominoTile]] = {player: [] for player in PLAYERS}
-
-        for player in PLAYERS:
-            sample[player] = known_with_tiles.get(player, [])
-
-        assert all(len(sample[PLAYERS[player]]) <= player_tiles[player] for player in range(4)), 'Sample cannot have more tiles than the player has'
-
-        known_tiles_set = set()  # Create a set to hold all known tiles
-        for tiles in known_with_tiles.values():
-            known_tiles_set.update(tiles)  # Add known tiles to the set
-
-        remaining_counts = {
-            player: getattr(player_tiles, player) - len(sample[player])
-            for player in PLAYERS
-        }
-
-        local_not_with_tiles = {k:set(t for t in v) for k,v in not_with_tiles.items()}
-        local_unplayed_tiles = [tile for tile in unplayed_tiles if tile not in known_tiles_set]  # Filter unplayed tiles
-
-        while local_unplayed_tiles:
-
-            # Check if there are at least two players with tiles available
-            players_with_tiles = [p for p in PLAYERS if remaining_counts[p] > 0]
-            if len(players_with_tiles) < 2:
-                # If only one player can receive tiles, assign all remaining tiles to that player
-                last_player = players_with_tiles[0]
-                sample[last_player].extend(local_unplayed_tiles)
-                return sample            
-            
-            # print('sample',sample)
-            tile_probabilities = probability_from_another_perspective(local_unplayed_tiles, local_not_with_tiles, PlayerTiles4(**remaining_counts))
-            # for player in PLAYERS:
-            #     print(f"{player}:")
-            #     for tile, prob in tile_probabilities[PLAYERS_INDEX[player]].items():
-            #         print(f"  {tile}: {prob:.4f}")
-            #     print()
-            
-            # Choose a random tile uniformly from the local unplayed tiles
-            chosen_tile = random.choice(local_unplayed_tiles)
-            
-            # Choose a player for the tile based on probabilities
-            player_probs = [tile_probabilities[player][chosen_tile] for player in range(4)]
-            chosen_player = random.choices(PLAYERS, weights=player_probs)[0]
-            
-            # Add the tile to the chosen player's sample
-            sample[chosen_player].append(chosen_tile)
-            
-            # Update the remaining tiles and player tile counts
-            local_unplayed_tiles.remove(chosen_tile)
-            remaining_counts[chosen_player] -= 1
-            
-            # Update not_with_tiles
-            for player in PLAYERS:
-                if player in local_not_with_tiles and chosen_tile in local_not_with_tiles[player]:
-                    local_not_with_tiles[player].remove(chosen_tile)
-
-        return sample
 
     def generate_possible_tiles(self, board_ends: tuple[int,int], unplayed_tiles: set[DominoTile], tiles_not_possible: set[DominoTile]) -> set[DominoTile]:
         possible_tiles = set()
