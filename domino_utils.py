@@ -1,5 +1,7 @@
-# from domino_game_analyzer import DominoTile
+from typing import Dict, Set
+# from domino_game_analyzer import DominoTile  # Removed redundant import
 from domino_data_types import DominoTile, GameState, PlayerPosition, move
+from DominoGameState import DominoGameState
 
 def history_to_domino_tiles_history(move_list: list[tuple[int, tuple[tuple[int, int], str]|None]]) -> list[tuple[DominoTile, bool]|None]:
     result: list[tuple[DominoTile, bool]|None] = []
@@ -8,7 +10,9 @@ def history_to_domino_tiles_history(move_list: list[tuple[int, tuple[tuple[int, 
             (tile_tuple, side) = move_details
             domino_tile = DominoTile.new_tile(tile_tuple[0], tile_tuple[1])
             is_left = side == 'l'
-        result.append((domino_tile, is_left) if move_details is not None else None)
+            result.append((domino_tile, is_left))
+        else:
+            result.append(None)
     return result
 
 
@@ -98,3 +102,41 @@ def list_possible_moves_from_hand(hand: set[DominoTile], board_ends: tuple[int|N
     if not possible_moves:
         possible_moves.append((None, None, None))  # Represent a pass move
     return possible_moves
+
+def get_impossible_tiles(game_state: DominoGameState) -> dict[PlayerPosition, set[DominoTile]]:
+    """
+    Returns a dictionary mapping each player to the set of tiles they cannot have based on the current game state.
+    
+    This function identifies impossible tiles for each player based on:
+    1. Tiles that have been played
+    2. Tiles that could have been played but weren't (when a player passed)
+    
+    :param game_state: The current state of the game.
+    :return: A dictionary where keys are player positions and values are sets of DominoTile instances that the players cannot possess.
+    """
+    impossible_tiles: dict[PlayerPosition, set[DominoTile]] = {
+        pos: set() for pos in range(4)
+    }
+    
+    # 1. Add tiles that have been played
+    for player in range(4):
+        for tile_tuple in game_state.played_set:
+            impossible_tiles[player].add(DominoTile.new_tile(tile_tuple[0], tile_tuple[1]))
+    
+    # 2. For each pass in history, add tiles that could have been played
+    for i, move in enumerate(game_state.history):
+        if move[1] is None:  # This was a pass
+            player = move[0]
+            rollback_steps = len(game_state.history) - i
+            prev_state = game_state.rollback(rollback_steps)
+            if prev_state.ends != (-1, -1):  # Not the first move
+                left, right = prev_state.ends
+                # Add all tiles that could connect to either end
+                for top in range(7):
+                    for bottom in range(top, 7):
+                        tile = DominoTile.new_tile(top, bottom)
+                        if (left != -1 and (tile.top == left or tile.bottom == left)) or \
+                           (right != -1 and left != right and (tile.top == right or tile.bottom == right)):
+                            impossible_tiles[player].add(tile)
+    
+    return impossible_tiles
